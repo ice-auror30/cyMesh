@@ -1,0 +1,4 @@
+[submodule "jni/serval-dna"]
+	path = jni/serval-dna
+	url = ../serval-dna.git
+	ignore = dirty
