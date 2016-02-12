@@ -63,6 +63,9 @@ public class ContactsActivity extends Activity implements OnClickListener {
 		mButton = (ViewGroup) findViewById(R.id.contacts_ui_lookup_serval_contact);
 		mButton.setOnClickListener(this);
 
+		mButton = (ViewGroup) findViewById(R.id.contacts_ui_lookup_serval_neighbor);
+		mButton.setOnClickListener(this);
+
 	}
 
 	@Override
@@ -87,6 +90,12 @@ public class ContactsActivity extends Activity implements OnClickListener {
 			mIntent = new Intent(this, org.servalproject.PeerList.class);
 			startActivityForResult(mIntent, PEER_LIST_RETURN);
 			break;
+		case R.id.contacts_ui_lookup_serval_neighbor:
+			// show the peer list screen
+			mIntent = new Intent(this, org.servalproject.NeighborList.class);
+			startActivityForResult(mIntent, PEER_LIST_RETURN);
+			break;
+
 		default:
 			Log.w(TAG, "unknown view called onClick method");
 		}

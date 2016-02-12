@@ -54,7 +54,8 @@
     <string name="show_conversation_hint_message">Type message</string>
     
     <!-- contacts strings -->    
-    <string name="contacts_ui_btn_lookup_peer">List Phones\nOn The Mesh</string>    
+    <string name="contacts_ui_btn_lookup_peer">List Phones\nOn The Mesh</string>
+    <string name="contacts_ui_btn_lookup_neighbor">List Immediate\nNeighbors</string>
     <string name="contacts_ui_btn_lookup_contacts">Show Android\nContact List</string>
     <string name="contacts_header">Contacts</string>
     

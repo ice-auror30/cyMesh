@@ -199,6 +199,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".NeighborList"
+            android:label="Serval BatPhone - Neighbor List"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            >
+            <intent-filter>
+                <action android:name="org.servalproject.PICK_FROM_NEIGHBOR_LIST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 	    <receiver android:name="org.servalproject.batphone.BatPhone">
 	        <intent-filter android:priority="1">
 	        	<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
