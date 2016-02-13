@@ -172,7 +172,29 @@
 			
 		</TableRow>
 
-</TableLayout> 
+		<TableRow
+			android:id="@+id/tableRow4a"
+			style="@style/smainTableRow">
+
+			<ImageView
+				android:id="@+id/sharingSensorLabel"
+				android:contentDescription="@string/sharingLabel"
+				android:src="@drawable/ic_launcher_sharing"
+				style="@style/smainTableIcon" />
+
+		</TableRow>
+
+		<TableRow
+			android:id="@+id/tableRow4b"
+			style="@style/smainTableRow">
+			<TextView
+				android:id="@+id/sharingSensorText"
+				style="@style/smainTableRowText"
+				android:text="@string/sharingSensorLabel" />
+
+		</TableRow>
+
+	</TableLayout>
 
 	<RelativeLayout android:layout_width="fill_parent"
 		android:layout_height="wrap_content"

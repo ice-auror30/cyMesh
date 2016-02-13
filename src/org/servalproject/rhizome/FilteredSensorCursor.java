@@ -6,12 +6,17 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilteredCursor extends AbstractCursor {
+/**
+ * Filter for sensor files only
+ * @uathor Serval Project
+ * @author Jason Wong <jlwong@iastate.edu>
+ */
+public class FilteredSensorCursor extends AbstractCursor {
 	final String columns[];
 	final Cursor existing;
 	final List<Integer> rows;
 
-	public FilteredCursor(Cursor existing) {
+	public FilteredSensorCursor(Cursor existing) {
 		this.existing = existing;
 		this.columns = existing.getColumnNames();
 		int name_col = existing.getColumnIndex("name");
@@ -26,7 +31,7 @@ public class FilteredCursor extends AbstractCursor {
 
 			long fileSize = existing.getLong(size_col);
 
-			if (name.startsWith("s3ns0r") || fileSize == 0 || name.startsWith(".")
+			if (!name.startsWith("s3ns0r") || fileSize == 0 || name.startsWith(".")
 					|| name.endsWith(".smapp")
 					|| name.endsWith(".smapl")
 					|| name.startsWith("smaps-photo-")) {

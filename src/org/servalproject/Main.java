@@ -143,6 +143,10 @@ public class Main extends Activity implements OnClickListener {
 			startActivity(new Intent(getApplicationContext(),
 					Networks.class));
 			break;
+		case R.id.sharingSensorLabel:
+			startActivity(new Intent(getApplicationContext(),
+					org.servalproject.rhizome.ShareSensorActivity.class));
+			break;
 		}
 	}
 
@@ -174,6 +178,7 @@ public class Main extends Activity implements OnClickListener {
 				R.id.sharingLabel,
 				R.id.helpLabel,
 				R.id.servalLabel,
+				R.id.sharingSensorLabel
 		};
 		for (int i = 0; i < listenTo.length; i++) {
 			this.findViewById(listenTo[i]).setOnClickListener(this);

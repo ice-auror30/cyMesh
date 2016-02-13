@@ -48,11 +48,12 @@ import org.servalproject.servaldna.BundleId;
 import org.servalproject.servaldna.ServalDCommand;
 
 /**
- * Rhizome list activity.  Presents the contents of the Rhizome store as a list of names.
+ * Rhizome list activity.  Presents the contents of the Rhizome sensor store as a list of names.
  *
  * @author Andrew Bettison <andrew@servalproject.com>
+ *     @author Jason Wong <jlwong@iastate.edu>
  */
-public class RhizomeList extends ListActivity implements DialogInterface.OnDismissListener {
+public class SensorList extends ListActivity implements DialogInterface.OnDismissListener {
 
 	static final int DIALOG_DETAILS_ID = 0;
 	String service;
@@ -136,7 +137,7 @@ public class RhizomeList extends ListActivity implements DialogInterface.OnDismi
 		try {
 			Cursor c = ServalD.rhizomeList(RhizomeManifest_File.SERVICE, null, null, null);
 			// hack to hide Serval Maps files from the list.
-			c = new FilteredCursor(c);
+			c = new FilteredSensorCursor(c);
 			adapter = new SimpleCursorAdapter(this, R.layout.rhizome_list_item,
 					c,
 					new String[] {
@@ -144,29 +145,6 @@ public class RhizomeList extends ListActivity implements DialogInterface.OnDismi
 					}, new int[] {
 						R.id.text
 					});
-			setListAdapter(adapter);
-		} catch (Exception e) {
-			Log.e("RhizomeList", e.getMessage(), e);
-			ServalBatPhoneApplication.context.displayToastMessage(e
-					.getMessage());
-		}
-	}
-
-	/**
-	 * Form a list of all files in the Rhizome database.
-	 */
-	private void listSensorFiles() {
-		try {
-			Cursor c = ServalD.rhizomeList(RhizomeManifest_File.SERVICE, null, null, null);
-			// hack to hide Serval Maps files from the list.
-			c = new FilteredSensorCursor(c);
-			adapter = new SimpleCursorAdapter(this, R.layout.rhizome_list_item,
-					c,
-					new String[] {
-							"name"
-					}, new int[] {
-					R.id.text
-			});
 			setListAdapter(adapter);
 		} catch (Exception e) {
 			Log.e("RhizomeList", e.getMessage(), e);

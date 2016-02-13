@@ -25,8 +25,11 @@
     <!-- RHIZOME -->
 
         <!-- activity labels -->
+
+        <string name="rhizome_share_sensor_appname">Serval Share Sensor</string>
         <string name="rhizome_main_appname">Serval Share Files</string>
         <string name="rhizome_list_appname">Serval Find Shared Files</string>
+        <string name="rhizome_sensor_list_appname">Serval Find Sensor Files</string>
         <string name="rhizome_saved_appname">Serval Saved Files</string>
         
         <!-- for the intents and services -->
@@ -37,6 +40,7 @@
  		<string name="rhizome_share_file_toast">File shared via Serval Mesh</string>
         
         <!-- for the UI -->
+        <string name="sensor_header">Share Sensor Data</string>
         <string name="rhizome_header">Share Files</string>
         <string name="share_button">Share</string>
         <string name="find_button">Find</string>

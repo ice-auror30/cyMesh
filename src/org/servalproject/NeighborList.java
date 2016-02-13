@@ -47,7 +47,9 @@ import java.util.List;
  *
  * @author Jeremy Lakeman <jeremy@servalproject.org>
  *
- *         Peer List fetches a list of known peers from the PeerListService.
+ *     	   Revised by Jason Wong <jlwong@iastate.edu>
+ *
+ *         Neighbor List fetches a list of known peers 1 hop away from the PeerListService.
  *         When a peer is received from the service this activity will attempt
  *         to resolve the peer by calling ServalD in an async task.
  */
@@ -85,9 +87,9 @@ public class NeighborList extends ListActivity {
 		for(Peer peer: peers){
 			if(peer != null && peer.getHopCount()==1){
 				peers.remove(peer);
+				Log.i("REMOVED_NEIGHBORS",Integer.toString(peer.getHopCount()));
 			}
 		}
-
 
 		listAdapter = new PeerListAdapter<Peer>(this, peers);
 		listAdapter.setNotifyOnChange(false);
@@ -147,6 +149,8 @@ public class NeighborList extends ListActivity {
 				return;
 			if(p.getHopCount()==1) {
 				peers.add(p);
+			}else{
+				Log.i("IGNORED_NEIGHBORS",Integer.toString(p.getHopCount()));
 			}
 		}
 

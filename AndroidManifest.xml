@@ -267,8 +267,19 @@
 	    
 
         <!-- Rhizome application activities -->
-        <activity android:name=".rhizome.RhizomeMain" 
+        <activity android:name=".rhizome.ShareSensorActivity"
+            android:label="@string/rhizome_share_sensor_appname"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            />
+        <activity android:name=".rhizome.RhizomeMain"
             android:label="@string/rhizome_main_appname"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            />
+
+        <activity android:name=".rhizome.SensorList"
+            android:label="@string/rhizome_sensor_list_appname"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
             />
