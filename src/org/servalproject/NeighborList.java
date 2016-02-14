@@ -72,6 +72,9 @@ public class NeighborList extends ListActivity {
 	private boolean returnResult = false;
 
 	private List<Peer> peers = new ArrayList<Peer>();
+	private List<Peer> neighbors = new ArrayList<Peer>();
+
+	private int neighborHopCount = Integer.MAX_VALUE;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +88,16 @@ public class NeighborList extends ListActivity {
 		}
 
 		for(Peer peer: peers){
-			if(peer != null && peer.getHopCount()==1){
-				peers.remove(peer);
-				Log.i("REMOVED_NEIGHBORS",Integer.toString(peer.getHopCount()));
+			if(peer.getHopCount() < neighborHopCount){
+				neighborHopCount = peer.getHopCount();
+			}
+		}
+
+		neighbors.clear();
+
+		for(Peer peer: peers){
+			if(peer.getHopCount() == neighborHopCount){
+				neighbors.add(peer);
 			}
 		}
 
@@ -147,11 +157,22 @@ public class NeighborList extends ListActivity {
 		if (!peers.contains(p)){
 			if (!p.isReachable())
 				return;
-			if(p.getHopCount()==1) {
-				peers.add(p);
-			}else{
-				Log.i("IGNORED_NEIGHBORS",Integer.toString(p.getHopCount()));
+
+			peers.add(p);
+
+			if(p.getHopCount() < neighborHopCount){
+				neighborHopCount = p.getHopCount();
+				neighbors.clear();
+
+				for(Peer peer: peers){
+					if(peer.getHopCount() == neighborHopCount){
+						neighbors.add(peer);
+					}
+				}
+			}else if(p.getHopCount() < neighborHopCount){
+				neighbors.add(p);
 			}
+
 		}
 
 		Collections.sort(peers, new PeerComparator());
