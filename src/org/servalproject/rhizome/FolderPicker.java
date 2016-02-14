@@ -101,12 +101,27 @@ public class FolderPicker extends Dialog implements OnItemClickListener, OnClick
 		updateAdapter();
 	}
 
+	public FolderPicker(Context context, int themeId, String filePath, boolean acceptFiles){
+		super(context, themeId);
+		mAcceptFiles = acceptFiles;
+		mFilePath = new Folder(filePath);
+		mFolders = null;
+		mStorageFolder = null;
+		mOkButton = null;
+		mSharedPreferences = null;
+		mfolderPreference = null;
+	}
+
 	public void setOnClickListener(OnClickListener listener) {
 		mListener = listener;
 	}
 
 	public File getPath() {
 		return mAcceptFiles ? mFilePath : mPath;
+	}
+
+	public String getAbsolutePath(){
+		return mAcceptFiles ? mFilePath.getPath() : mPath.getPath();
 	}
 
 	@Override

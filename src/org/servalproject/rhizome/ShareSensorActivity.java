@@ -40,9 +40,11 @@ import android.widget.TextView;
 
 import org.servalproject.R;
 import org.servalproject.ServalBatPhoneApplication;
+import org.servalproject.account.AccountService;
 import org.servalproject.servald.ServalD;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.ServalDFailureException;
+import org.servalproject.servaldna.SubscriberId;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -72,23 +74,45 @@ public class ShareSensorActivity extends Activity implements OnClickListener {
 
 		switch (view.getId()) {
 		case R.id.sensor_share:
-			DialogInterface.OnClickListener fileConfirm = new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface di, int which) {
-					if (which == DialogInterface.BUTTON_POSITIVE) {
-						ShareFileActivity
-								.addFile(ShareSensorActivity.this,
-										((FolderPicker) di)
-												.getPath(), true);
-					}
-				}
-			};
+			SubscriberId sid = null;
+			try {
+				//sid = AccountService.getContactSid(getContentResolver(), this.getIntent().getData());
 
-			FolderPicker shareDialog = new FolderPicker(
-					ShareSensorActivity.this, fileConfirm,
-					android.R.style.Theme, settings,
-					"rhizome_share_dialog_last_folder", true);
-			shareDialog.show();
+				//String filePath = "/storage/emulated/0/" + "s3ns0rData.txt";
+				//FolderPicker sensorFile = new FolderPicker(ShareSensorActivity.this, android.R.style.Theme, filePath,true);
+				//ShareFileActivity.addFile(ShareSensorActivity.this, sensorFile.getPath(), true);
+
+				///storage/emulated/0/
+
+				DialogInterface.OnClickListener fileConfirm = new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface di, int which) {
+						if (which == DialogInterface.BUTTON_POSITIVE) {
+
+							Log.i("PICKER", "PICKER" + ((FolderPicker) di).getAbsolutePath());
+							ShareFileActivity
+									.addFile(ShareSensorActivity.this,
+											((FolderPicker) di)
+													.getPath(), true);
+
+						}
+					}
+				};
+
+				FolderPicker shareDialog = new FolderPicker(
+						ShareSensorActivity.this, fileConfirm,
+						android.R.style.Theme, settings,
+						"rhizome_share_dialog_last_folder", true);
+				shareDialog.show();
+
+			}catch(Exception ex){
+				ServalBatPhoneApplication.context.displayToastMessage(ex
+						.getMessage());
+				Log.e("BatPhone", ex.getMessage(), ex);
+				finish();
+
+			}
+
 			break;
 		case R.id.sensor_find:
 			ShareSensorActivity.this.startActivity(new Intent(this, SensorList.class));
