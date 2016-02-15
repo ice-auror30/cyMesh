@@ -69,7 +69,7 @@ public enum WifiMode {
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public static WifiMode getWiFiMode(Shell rootShell, String interfaceName,
-			String ipAddr) {
+									   String ipAddr) {
 		if (rootShell == null)
 			throw new NullPointerException();
 
@@ -102,7 +102,7 @@ public enum WifiMode {
 			// the interface may exist, but is currently down.
 			for (Enumeration<InetAddress> enumIpAddress = networkInterface
 					.getInetAddresses(); enumIpAddress
-					.hasMoreElements();) {
+						 .hasMoreElements();) {
 				InetAddress iNetAddress = enumIpAddress.nextElement();
 				if (!iNetAddress.isLoopbackAddress()) {
 					hasAddress = true;
@@ -120,7 +120,7 @@ public enum WifiMode {
 			return WifiMode.Off;
 		}
 
-		if (ChipsetDetection.getDetection().hasNl80211()) {
+		if (ChipsetDetection.getDetection().getWifiChipset().nl80211) {
 			try {
 				CommandCapture c = new CommandCapture(
 						coretask.DATA_FILE_PATH + "/bin/iw dev "
