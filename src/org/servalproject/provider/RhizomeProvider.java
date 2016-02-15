@@ -121,8 +121,7 @@ public class RhizomeProvider extends ContentProvider {
 			}
 
 			ServalDCommand.ManifestResult result = ServalDCommand.rhizomeAddFile(
-					payloadFile,
-					tempManifest, author, null);
+					payloadFile, tempManifest, null, author, null);
 
 			if (tempManifest != null)
 				tempManifest.delete();
@@ -152,7 +151,7 @@ public class RhizomeProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
+						String[] selectionArgs, String sortOrder) {
 		Log.v(TAG, "query for uri; " + uri +
 				", projection; " + Arrays.toString(projection) +
 				", selection; " + selection +
@@ -184,7 +183,7 @@ public class RhizomeProvider extends ContentProvider {
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
+					  String[] selectionArgs) {
 		Log.v("RhizomeProvider", "update " + uri);
 		throw new UnsupportedOperationException("Not implemented");
 	}
