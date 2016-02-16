@@ -143,6 +143,7 @@ public class PreparationWizard extends Activity implements LogOutput,
 
 			try {
 				control.testAdhoc(rootShell, this);
+				control.testAdhoc(rootShell, this);
 				complete();
 			} catch (IOException e) {
 				failed(e);
