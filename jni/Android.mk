@@ -1,4 +1,39 @@
 LOCAL_PATH:= $(call my-dir)
+################## build iwlib ###################
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := wireless_tools.29/iwlib.c
+LOCAL_CFLAGS += -Wstrict-prototypes -Wmissing-prototypes -Wshadow -Wpointer-arith -Wcast-qual -Winline -MMD -fPIC -fPIE
+LOCAL_LDFLAGS += -fPIE -pie
+LOCAL_MODULE:= blob-PIE
+LOCAL_STATIC_LIBRARIES := libcutils libc libm
+include $(BUILD_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := wireless_tools.29/iwlib.c
+LOCAL_CFLAGS += -Wstrict-prototypes -Wmissing-prototypes -Wshadow -Wpointer-arith -Wcast-qual -Winline -MMD -fPIC
+LOCAL_MODULE:= blob-NOPIE
+LOCAL_STATIC_LIBRARIES := libcutils libc libm
+include $(BUILD_STATIC_LIBRARY)
+
+################## build iwlist ###################
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := wireless_tools.29/iwlist.c wireless_tools.29/iwlib.h
+LOCAL_CFLAGS += -Wstrict-prototypes -Wmissing-prototypes -Wshadow -Wpointer-arith -Wcast-qual -Winline -MMD -fPIC -fPIE
+LOCAL_LDFLAGS += -fPIE -pie
+LOCAL_MODULE:= listiw-PIE
+LOCAL_STATIC_LIBRARIES := libcutils libc libm blob-PIE
+#LOCAL_MODULE_PATH := $(TARGET_OUT_OPTIONAL_EXECUTABLES) # install to system/xbin
+include $(BUILD_EXECUTABLE)
+
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := wireless_tools.29/iwlist.c wireless_tools.29/iwlib.h
+LOCAL_CFLAGS += -Wstrict-prototypes -Wmissing-prototypes -Wshadow -Wpointer-arith -Wcast-qual -Winline -MMD -fPIC
+LOCAL_MODULE:= listiw-NOPIE
+LOCAL_STATIC_LIBRARIES := libcutils libc libm blob-NOPIE
+#LOCAL_MODULE_PATH := $(TARGET_OUT_OPTIONAL_EXECUTABLES) # install to system/xbin
+include $(BUILD_EXECUTABLE)
+
+##################
 
 # Build iwconfig binary
 include $(CLEAR_VARS)

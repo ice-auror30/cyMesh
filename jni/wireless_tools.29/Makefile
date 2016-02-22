@@ -17,11 +17,11 @@ RANLIB = ranlib
 ## Uncomment this to build tools using static version of the library.
 ## Mostly useful for embedded platforms without ldd, or to create
 ## a local version (non-root).
-# BUILD_STATIC = y
+BUILD_STATIC = y
 
 ## Uncomment this to build without using libm (less efficient).
 ## This is mostly useful for embedded platforms without maths.
-# BUILD_NOLIBM = y
+BUILD_NOLIBM = y
 
 ## Uncomment this to strip binary from symbols. This reduce binary size.
 ## by a few percent but make debug worse...
@@ -30,7 +30,7 @@ RANLIB = ranlib
 ## Uncomment this to build with only essential functionality.
 ## This leaves out the less used features and cut in half the tools.
 ## This is mostly useful for embedded platforms without limited feature needs.
-# BUILD_WE_ESSENTIAL = y
+BUILD_WE_ESSENTIAL = y
 
 # ***************************************************************************
 # ***** Most users should not need to change anything beyond this point *****

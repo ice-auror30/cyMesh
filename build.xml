@@ -156,6 +156,8 @@ Could not compute version code.
         <copy file="${basedir}/libs/armeabi/ifconfig-PIE" tofile="${basedir}/data/bin/ifconfig-PIE" overwrite="true" failonerror="true"/>
         <copy file="${basedir}/libs/armeabi/iw-NOPIE" tofile="${basedir}/data/bin/iw-NOPIE" overwrite="true" failonerror="true"/>
         <copy file="${basedir}/libs/armeabi/iw-PIE" tofile="${basedir}/data/bin/iw-PIE" overwrite="true" failonerror="true"/>
+        <copy file="${basedir}/libs/armeabi/listiw-NOPIE" tofile="${basedir}/data/bin/listiw-NOPIE" overwrite="true" failonerror="true"/>
+        <copy file="${basedir}/libs/armeabi/listiw-PIE" tofile="${basedir}/data/bin/listiw-PIE" overwrite="true" failonerror="true"/>
         <delete file="${basedir}/assets/serval.zip"/>
 	<zip basedir="${basedir}/data" destfile="${basedir}/assets/serval.zip" level="9"/>
 	<exec executable="sh" dir="${basedir}" failifexecutionfails="false">
