@@ -36,6 +36,7 @@ public class Peer implements IPeer {
 	public final SubscriberId sid;
     private SubscriberId transmitter;
     private int hop_count;
+	private double rssi;
 
 	// did / name resolved from looking up the sid
 	public String did;
@@ -94,6 +95,14 @@ public class Peer implements IPeer {
     public int getHopCount(){
         return this.hop_count;
     }
+
+	public void setRSSI(double rssi){
+		this.rssi=rssi;
+	}
+
+	public double getRSSI(){
+		return this.rssi;
+	}
 
 	@Override
 	public boolean equals(Object o) {

@@ -22,6 +22,7 @@ package org.servalproject.servaldna;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -419,6 +420,79 @@ public class ServalDCommand
 
 		ManifestResult result = new ManifestResult();
 		result.setResult(command(result, args.toArray(new String[args.size()])));
+		return result;
+	}
+
+
+	public static class Ping extends JniResult{
+		public long time;
+		public long unknown;
+		public long hop_count;
+		public String encrypted;
+		public String signed;
+
+		@Override
+		public void putString(String value) {
+			if (columnName.equals("encrypted"))
+				this.encrypted = value;
+			if (columnName.equals("signed"))
+				this.signed = value;
+
+		}
+
+		@Override
+		public void putLong(long value) {
+			if (columnName.equals("time"))
+				this.time = value;
+			if (columnName.equals("unknown"))
+				this.unknown = value;
+			if (columnName.equals("hopcount"))
+				this.hop_count = value;
+		}
+	}
+
+	public static Ping mdpPing(SubscriberId recipient)
+			throws ServalDFailureException
+	{
+		List<String> args = new LinkedList<String>();
+		args.add("mdp");
+		args.add("ping");
+		args.add(recipient.toHex());
+		Ping result = new Ping();
+		result.setResult(command(result, args.toArray(new String[args.size()])));
+
+		return result;
+	}
+
+	public static class RouteTable extends JniResult{
+		public List<String> dest = new ArrayList<String>();
+		public List<String> reachable = new ArrayList<String>();
+		public List<String> interfaces = new ArrayList<String>();
+		public List<String> nexthop = new ArrayList<String>();
+
+		@Override
+		public void putString(String value) {
+			if (columnName.contains("dest"))
+				this.dest.add(value);
+			if (columnName.contains("reachable"))
+				this.reachable.add(value);
+			if (columnName.contains("interface"))
+				this.interfaces.add(value);
+			if (columnName.contains("nexthop"))
+				this.nexthop.add(value);
+
+		}
+	}
+
+	public static RouteTable routeTable()
+			throws ServalDFailureException
+	{
+		List<String> args = new LinkedList<String>();
+		args.add("route");
+		args.add("print");
+		RouteTable result = new RouteTable();
+		result.setResult(command(result, args.toArray(new String[args.size()])));
+
 		return result;
 	}
 
