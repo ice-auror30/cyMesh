@@ -199,7 +199,7 @@
 				android:text="@string/sharingSensorLabel" />
 
 			<TextView
-				android:id="@+id/helpText"
+				android:id="@+id/getCameraText"
 				style="@style/smainTableRowText"
 				android:text="@string/getCameraLabel" />
 
