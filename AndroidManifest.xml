@@ -317,12 +317,12 @@
         </activity>
 
         <activity android:name=".sensors.WiFiDirect.WiFiDirectActivity"
-            android:label="@string/wifi_app_name">
-            <intent-filter>
+            android:label="@string/wifi_app_name" android:launchMode="singleTask" >
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
 
 		<service android:label="@string/rhizome_share_file_permission_label"
