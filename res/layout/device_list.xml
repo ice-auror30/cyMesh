@@ -14,15 +14,13 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:gravity="center_vertical"
-        android:background="@android:color/holo_blue_light" />
+        android:gravity="center_vertical"/>
 
     <!-- Self information -->
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:background="?android:attr/activatedBackgroundIndicator"
+        android:layout_height="50dp"
         android:padding="3dip">
         <ImageView
             android:id="@+id/icon"
@@ -60,8 +58,7 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:gravity="center_vertical"
-        android:background="@android:color/holo_blue_light" />
+        android:gravity="center_vertical" />
 
     <!-- Available peers -->
     <ListView
@@ -75,6 +72,6 @@
         android:id="@id/android:empty"
         android:layout_width="match_parent"
         android:layout_gravity="center"
-        android:layout_height="match_parent"
+        android:layout_height="103dp"
         android:text="@string/empty_message" />
 </LinearLayout>
