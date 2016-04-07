@@ -81,7 +81,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.get_camera_main);
         dummySurface = (SurfaceView) findViewById(R.id.cameraView);
         rc = new RecordClick();
 
