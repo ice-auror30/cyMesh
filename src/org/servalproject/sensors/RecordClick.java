@@ -37,10 +37,10 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
 
     private void initRecorder() {
         recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-        recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
+//        recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        recorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+  //      recorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
         recorder.setOrientationHint(90);
 
        /* CamcorderProfile cpHigh = CamcorderProfile
