@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.wifidirect.WiFiDirect;
+package org.servalproject.sensors.WiFiDirect;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,7 +26,8 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
-import com.example.android.wifidirect.R;
+import org.servalproject.R;
+
 
 /**
  * A BroadcastReceiver that notifies of important wifi p2p events.

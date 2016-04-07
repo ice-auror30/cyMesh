@@ -1,6 +1,6 @@
 // Copyright 2011 Google Inc. All Rights Reserved.
 
-package com.example.android.wifidirect.WiFiDirect;
+package org.servalproject.sensors.WiFiDirect;
 
 import android.app.IntentService;
 import android.content.ContentResolver;

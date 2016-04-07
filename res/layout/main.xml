@@ -176,11 +176,11 @@
 			android:id="@+id/tableRow4a"
 			style="@style/smainTableRow">
 
-			<!--<ImageView
+			<ImageView
 				android:id="@+id/sharingSensorLabel"
 				android:contentDescription="@string/sharingLabel"
 				android:src="@drawable/ic_launcher_sharing"
-				style="@style/smainTableIcon" />-->
+				style="@style/smainTableIcon" />
 
 			<ImageView
 				android:id="@+id/getCameraLabel"
@@ -194,10 +194,10 @@
 			android:id="@+id/tableRow4b"
 			style="@style/smainTableRow">
 
-			<!--<TextView
+			<TextView
 				android:id="@+id/sharingSensorText"
 				style="@style/smainTableRowText"
-				android:text="@string/sharingSensorLabel" />-->
+				android:text="@string/sharingSensorLabel" />
 
 			<TextView
 				android:id="@+id/getCameraText"

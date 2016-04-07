@@ -182,7 +182,8 @@ public class Main extends Activity implements OnClickListener {
 				R.id.sharingLabel,
 				R.id.helpLabel,
 				R.id.servalLabel,
-				R.id.sharingSensorLabel
+				R.id.sharingSensorLabel,
+				R.id.getCameraLabel
 		};
 		for (int i = 0; i < listenTo.length; i++) {
 			this.findViewById(listenTo[i]).setOnClickListener(this);

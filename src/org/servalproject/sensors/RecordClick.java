@@ -1,4 +1,4 @@
-package com.example.android.wifidirect.CameraAndServices;
+package org.servalproject.sensors;
 
 import android.app.Service;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.android.wifidirect.WiFiDirect.WiFiDirectActivity;
+import org.servalproject.sensors.WiFiDirect.WiFiDirectActivity;
 
 import java.io.File;
 import java.io.IOException;

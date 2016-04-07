@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.wifidirect.WiFiDirect;
+package org.servalproject.sensors.WiFiDirect;
 
 import android.app.ListFragment;
 import android.app.ProgressDialog;
@@ -33,7 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.android.wifidirect.R;
+import org.servalproject.R;
 
 import java.util.ArrayList;
 import java.util.List;

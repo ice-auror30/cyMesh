@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package com.example.android.wifidirect.WiFiDirect;
+package org.servalproject.sensors.WiFiDirect;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -31,10 +29,8 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.os.RemoteException;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -44,11 +40,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.android.wifidirect.CameraAndServices.NetworkActionService;
-import com.example.android.wifidirect.CameraAndServices.RecordClick;
-import com.example.android.wifidirect.R;
-import com.example.android.wifidirect.WiFiDirect.DeviceListFragment.DeviceActionListener;
-
+import org.servalproject.R;
+import org.servalproject.sensors.RecordClick;
 /**
  * An activity that uses WiFi Direct APIs to discover and connect with available
  * devices. WiFi Direct APIs are asynchronous and rely on callback mechanism
@@ -56,7 +49,7 @@ import com.example.android.wifidirect.WiFiDirect.DeviceListFragment.DeviceAction
  * The application should also register a BroadcastReceiver for notification of
  * WiFi state related events.
  */
-public class WiFiDirectActivity extends Activity implements ChannelListener, DeviceActionListener {
+public class WiFiDirectActivity extends Activity implements ChannelListener, DeviceListFragment.DeviceActionListener {
 
     public static final String TAG = "wifidirectdemo";
     private WifiP2pManager manager;
@@ -308,7 +301,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
         }
     }*/
 
-    public void sayHello(View v) {
+   /* public void sayHello(View v) {
         if (!mBound) return;
         // Create and send a message to the service, using a supported 'what' value
         Message msg = Message.obtain(null, NetworkActionService.MSG_SAY_HELLO, 0, 0);
@@ -320,6 +313,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
         }
     }
 
+*/
     class IncomingHandler extends Handler {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -346,14 +340,15 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
     /**
      * Class for interacting with the main interface of the service.
      */
-    private ServiceConnection mConnection = new ServiceConnection() {
+    /*private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             // This is called when the connection with the service has been
             // established, giving us the object we can use to
             // interact with the service.  We are communicating with the
             // service using a Messenger, so here we get a client-side
             // representation of that from the raw IBinder object.
-            mService = new Messenger(service);
+
+
             Message msg = Message.obtain(null, NetworkActionService.CLIENTMESSENGER, 0, 0);
             msg.replyTo = mMessenger;
             try {
@@ -372,4 +367,5 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
             mBound = false;
         }
     };
+    */
 }
