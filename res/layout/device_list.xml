@@ -20,7 +20,7 @@
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="?android:attr/listPreferredItemHeight"
         android:padding="3dip">
         <ImageView
             android:id="@+id/icon"
@@ -64,7 +64,7 @@
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
         android:layout_weight="1"
         android:drawSelectorOnTop="false" />
 
