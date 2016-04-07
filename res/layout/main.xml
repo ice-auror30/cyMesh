@@ -182,11 +182,11 @@
 				android:src="@drawable/ic_launcher_sharing"
 				style="@style/smainTableIcon" />
 
-			<ImageView
+			<!--<ImageView
 				android:id="@+id/getCameraLabel"
 				android:contentDescription="@string/sharingLabel"
 				android:src="@drawable/ic_launcher_sharing"
-				style="@style/smainTableIcon" />
+				style="@style/smainTableIcon" />-->
 
 		</TableRow>
 
@@ -198,10 +198,10 @@
 				style="@style/smainTableRowText"
 				android:text="@string/sharingSensorLabel" />
 
-			<TextView
+			<!--<TextView
 				android:id="@+id/getCameraText"
 				style="@style/smainTableRowText"
-				android:text="@string/getCameraLabel" />
+				android:text="@string/getCameraLabel" />-->
 
 		</TableRow>
 
