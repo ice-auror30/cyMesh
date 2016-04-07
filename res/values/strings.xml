@@ -104,7 +104,6 @@
 	<string name="adhoctesttitle">HERE BE DRAGONS!</string>
     <string name="adhoctestmessage">Connecting to an Ad Hoc Wi-Fi network is not supported by Android. Doing this requires root permission, is unlikely to work and has the potential to damage your device and void your warranty.</string>
 	<string name="testbutton">Test</string>
-    <string name="version">Ice Cream Sandwich</string>
 	<string name="adhocconnecttitle">Ad Hoc Wi-Fi</string>
 	<string name="adhocconnectmessage">Channel: %2$d\nAddress: %3$s</string>
 	<string name="connectbutton">Connect</string>
