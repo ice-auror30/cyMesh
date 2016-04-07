@@ -148,6 +148,8 @@
     <string name="meshms_delivered">delivered</string>
     <string name="meshms_read">read</string>
 
+    <string name="wifi_app_name">Testing WiFi</string>
+
     <string name="enable_p2p_button">P2P On/Off</string>
     <string name="discover_peers_button">Discover</string>
     <string name="connect_peer_button">Connect</string>
