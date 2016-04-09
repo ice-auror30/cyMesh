@@ -142,9 +142,13 @@
 		<activity android:name=".ui.SettingsMeshMSScreenActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
-            />     
-            
-    <activity android:name=".ui.AccountsSettingsActivity"
+            />
+        <activity android:name="VisualizationActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            />
+
+        <activity android:name=".ui.AccountsSettingsActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
             />   
