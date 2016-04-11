@@ -88,6 +88,9 @@ public class NetworkAPI {
         }
     }
 
+    /**
+     * Register a callback to be called when a mew message is received.
+     */
     public void registerMeshListener(IMeshListener l) {
         meshListeners.add(l);
     }
@@ -105,11 +108,30 @@ public class NetworkAPI {
     /////////////
     // Rhizome //
     /////////////
-    public boolean sendFile(Peer to, File toSend) {
-        return sendFile(to, toSend, null);
+
+    /**
+     * WIP Implementation of sending a file.
+     *
+     * @param toSend The path of the file to send
+     * @return true on success, false otherwise
+     */
+    public boolean sendFile(File toSend) {
+        return sendFile(toSend, null);
     }
 
-    public boolean sendFile(Peer to, File toSend, File manifest) {
+    /**
+     * WIP Implementation of sending a file.
+     *
+     * Note that there is no peer to send to, this is because
+     * rhizome puts the file on all devices in the mesh. We may
+     * want to accept the peer id here in case we don't use
+     * rhizome.
+     *
+     * @param toSend The path of the file to send
+     * @param manifest The path of the manifest
+     * @return true on success, false otherwise
+     */
+    public boolean sendFile(File toSend, File manifest) {
         try {
             KeyringIdentity identity = app.server.getIdentity();
             ServalDCommand.rhizomeAddFile(toSend, manifest, null, identity.sid, null);
