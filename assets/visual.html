@@ -1,3 +1,7 @@
+<script src="file:///android_asset/bootstrap/js/jquery.min.js"></script>
+<script src="file:///android_asset/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="file:///android_asset/bootstrap/css/bootstrap.min.css">
+
 <!-- START SIGMA IMPORTS -->
 <script src="file:///android_asset/sigma/sigma.core.js"></script>
 <script src="file:///android_asset/sigma/conrad.js"></script>
@@ -48,13 +52,6 @@
 <!-- END SIGMA IMPORTS -->
 <div id="container">
     <style>
-        #graph-container {
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        position: absolute;
-        }
         #notice {
         bottom: 1em;
         right: 1em;
@@ -63,12 +60,71 @@
         .hidden {
         display: none;
         }
+        #container {
+        height: 80%;
+        margin: auto;
+        }
+
+        #graph-container {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+        height: 80%;
+        width: 100%;
+        }
+
+        #footer{
+        padding: 10px;
+        height: 100%;
+        width: 100%;
+        background-color:#000;
+        }
+
+        .btn-group-wrap {
+        text-align: center;
+        }
+
+        div.btn-group {
+        margin: 0 auto;
+        text-align: center;
+        width: inherit;
+        display: inline-block;
+        }
     </style>
     <div id="graph-container"><div id="notice" class="hidden">layout in progress...</div></div>
 </div>
-<script src="../plugins/sigma.plugins.animate/sigma.plugins.animate.js"></script>
-<script src="../plugins/sigma.layouts.forceLink/worker.js"></script>
-<script src="../plugins/sigma.layouts.forceLink/supervisor.js"></script>
+
+<div id="footer">
+    <div class="btn-group-wrap">
+        <div id="member-info"><button id="member" class="btn btn-primary" type="button">
+            Select a node <span class="badge">...</span>
+        </button></div>
+
+        <div class="btn-group" role="group" aria-label="...">
+            <button type="button" class="btn btn-default">Camera</button>
+            <button type="button" class="btn btn-default">Audio</button>
+            <button type="button" class="btn btn-default">GPS</button>
+
+            <div class="btn-group dropup" role="group">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <li><a href="#">Call</a></li>
+                    <li><a href="#">Text</a></li>
+                    <li><a href="#">Request Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="file:///android_asset/plugins/sigma.plugins.animate/sigma.plugins.animate.js"></script>
+<script src="file:///android_asset/plugins/sigma.layouts.forceLink/worker.js"></script>
+<script src="file:///android_asset/plugins/sigma.layouts.forceLink/supervisor.js"></script>
 <script>
 /**
  * Just a simple example to show how to use the sigma.layouts.forceLink
@@ -80,6 +136,7 @@
  * regroup the nodes of each cluster.
  */
 function initNetwork(jsonString){
+    var member = "null";
     var i,
         s,
         o,
@@ -102,7 +159,8 @@ function initNetwork(jsonString){
       x: Math.random(),
       y: Math.random(),
       size: 100,
-      color: counter.color
+      color: counter.color,
+      extra: '#'
     });
   }
 
@@ -123,7 +181,9 @@ function initNetwork(jsonString){
       settings: {
         animationsTime: 100,
         minNodeSize: 18,
-        maxNodeSize: 18
+        maxNodeSize: 18,
+        minEdgeSize: 5,
+        maxEdgeSize: 5
       }
     });
 
@@ -153,5 +213,17 @@ function initNetwork(jsonString){
 
     // Start the ForceLink algorithm:
     sigma.layouts.startForceLink();
+
+    s.refresh();
+
+    // Bind the events:
+    s.bind('clickNode doubleClickNode rightClickNode', function(e) {
+        console.log(e.type, e.data.node.label, e.data.captor, e.data.node.extra);
+        member = e.data.node.label;
+        $("#member").html(e.data.node.label + " <span class=\"badge\">" + e.data.node.extra + "</span>");
+
+    });
 }
+
+
 </script>
