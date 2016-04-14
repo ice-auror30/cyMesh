@@ -116,11 +116,11 @@
             Select a node <span class="badge">...</span>
         </button></div>
     </div>
-    <div class="btn-group-wrap">
+    <div id="buttons" class="btn-group-wrap hidden">
 
 
         <div class="btn-group" role="group" aria-label="...">
-            <button  id="cambutton" type="button" class="btn btn-default btn2">Camera</button>
+            <button  id="videobutton" type="button" class="btn btn-default btn2">Video</button>
             <button  id="audiobutton" type="button" class="btn btn-default btn2">Audio</button>
             <button  id="sensorsbutton" type="button" class="btn btn-default btn2">Sensors</button>
 
@@ -132,7 +132,6 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                     <li id="callbutton"><a href="#">Call</a></li>
                     <li id="textbutton"><a href="#">Text</a></li>
-                    <li id="helpbutton"><a href="#">Request Help</a></li>
                 </ul>
             </div>
         </div>
@@ -251,8 +250,14 @@ function initNetwork(jsonString, firstRun){
     // Bind the events:
     s.bind('clickNode doubleClickNode rightClickNode', function(e) {
         console.log(e.type, e.data.node.label, e.data.captor, e.data.node.extra);
-        member = e.data.node.label;
+        member = e.data.node.id;
         $("#member").html(e.data.node.label + " <span class=\"badge\">" + e.data.node.extra + "</span>");
+        var el = document.getElementById('buttons');
+        if(e.data.node.color == "#0040ff"){
+            el.className = 'btn-group-wrap hidden';
+        }else{
+            el.className = 'btn-group-wrap';
+        }
 
     });
 
@@ -262,8 +267,8 @@ function initNetwork(jsonString, firstRun){
 
 
 $(document).ready(function() {
-	$( "#cambutton" ).click(function() {
-	    console.log(Android.requestSensor(member));
+	$( "#videobutton" ).click(function() {
+	    console.log(Android.requestVideo(member));
 	});
 
 	$( "#audiobutton" ).click(function() {
@@ -271,20 +276,21 @@ $(document).ready(function() {
 	});
 
 	$( "#sensorsbutton" ).click(function() {
-
+        console.log(Android.requestSensor(member));
 	});
 
 	$( "#callbutton" ).click(function() {
-
+	    s.graph.clear();
+	    s.refresh();
+        console.log(Android.startCall(member));
 	});
 
 	$( "#textbutton" ).click(function() {
-
+	    s.graph.clear();
+	    s.refresh();
+        console.log(Android.startChat(member));
 	});
 
-	$( "#helpbutton" ).click(function() {
-
-	});
 });
 
 </script>
