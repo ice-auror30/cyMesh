@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.JavascriptInterface;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +15,8 @@ import org.json.JSONObject;
 import org.servalproject.servaldna.ServalDCommand;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by jasonwong on 3/16/16.
@@ -25,6 +28,9 @@ public class VisualizationActivity extends Activity {
 
     JavaScriptInterface JSInterface;
 
+    HashSet<String> nodes = new HashSet<String>();
+    HashSet<String> edges = new HashSet<String>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +38,54 @@ public class VisualizationActivity extends Activity {
         wv = (WebView)findViewById(R.id.webview);
 
         wv.getSettings().setJavaScriptEnabled(true);
-        // register class containing methods to be exposed to JavaScript
 
+        final String jsonStr = parseRoutingTable();
+
+        JSInterface = new JavaScriptInterface(this);
+        wv.addJavascriptInterface(JSInterface, "Android");
+
+        wv.loadUrl("file:///android_asset/visual.html");
+
+        wv.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                wv.loadUrl("javascript:initNetwork('" + jsonStr + ",\"true\"')");
+            }
+        });
+
+    }
+
+    public class JavaScriptInterface {
+        Context mContext;
+
+        /** Instantiate the interface and set the context */
+        JavaScriptInterface(Context c) {
+            mContext = c;
+        }
+
+        @JavascriptInterface
+        public String requestSensor(String sid)
+        {
+            return "OUCH: " + sid;
+        }
+
+        @JavascriptInterface
+        public String requestAudio(String sid)
+        {
+            return "HAHA: " + sid;
+        }
+
+        @JavascriptInterface
+        public String updateNetwork() {
+            return parseRoutingTable();
+        }
+
+    }
+
+    private String parseRoutingTable(){
         JSONArray jsonArrayNodes = new JSONArray();
         JSONArray jsonArrayEdges = new JSONArray();
 
+        //read route table
         try {
             ServalDCommand.RouteTable rt = ServalDCommand.routeTable();
             List<String> sids = rt.sids;
@@ -60,6 +109,7 @@ public class VisualizationActivity extends Activity {
                     }else{
                         node.put("color", "#0040ff");
                     }
+                    nodes.add(sids.get(i));
 
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
@@ -79,6 +129,8 @@ public class VisualizationActivity extends Activity {
                         e.printStackTrace();
                     }
                     jsonArrayEdges.put(edge);
+
+                    edges.add(sids.get(i) + " " + priorhops.get(i));
                 }
             }
 
@@ -99,35 +151,6 @@ public class VisualizationActivity extends Activity {
             e.printStackTrace();
         }
 
-        final String jsonStr = networkObj.toString();
-
-        JSInterface = new JavaScriptInterface(this);
-        wv.addJavascriptInterface(JSInterface, "JSInterface");
-
-        wv.loadUrl("file:///android_asset/visual.html");
-
-        wv.setWebViewClient(new WebViewClient() {
-            public void onPageFinished(WebView view, String url) {
-                wv.loadUrl("javascript:initNetwork('" + jsonStr + "')");
-            }
-        });
-
-    }
-
-
-    public class JavaScriptInterface {
-        Context mContext;
-
-        /** Instantiate the interface and set the context */
-        JavaScriptInterface(Context c) {
-            mContext = c;
-        }
-
-        public void changeActivity()
-        {
-            Intent i = new Intent(VisualizationActivity.this, Main.class);
-            startActivity(i);
-            finish();
-        }
+        return networkObj.toString();
     }
 }

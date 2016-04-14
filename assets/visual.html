@@ -61,7 +61,7 @@
         display: none;
         }
         #container {
-        height: 80%;
+        height: calc(100% - 124px);
         margin: auto;
         }
 
@@ -71,12 +71,12 @@
         left: 0;
         right: 0;
         position: absolute;
-        height: 80%;
+        height: calc(100% - 124px);
         width: 100%;
         }
 
         #footer{
-        padding: 10px;
+        padding: 8px;
         height: 100%;
         width: 100%;
         background-color:#000;
@@ -86,36 +86,53 @@
         text-align: center;
         }
 
+        #member-butt{
+        text-align: center;
+        padding-bottom:8px;
+        }
+
         div.btn-group {
         margin: 0 auto;
         text-align: center;
         width: inherit;
         display: inline-block;
         }
+
+        .btn2{
+        height:55px;
+        width: 90px;
+        }
+
+        .btn3{
+        height:45px;
+        }
     </style>
     <div id="graph-container"><div id="notice" class="hidden">layout in progress...</div></div>
 </div>
 
 <div id="footer">
-    <div class="btn-group-wrap">
-        <div id="member-info"><button id="member" class="btn btn-primary" type="button">
+    <div id="member-butt">
+        <div id="member-info"><button id="member" class="btn btn-primary btn3" type="button">
             Select a node <span class="badge">...</span>
         </button></div>
+    </div>
+    <div class="btn-group-wrap">
+
 
         <div class="btn-group" role="group" aria-label="...">
-            <button type="button" class="btn btn-default">Camera</button>
-            <button type="button" class="btn btn-default">Audio</button>
-            <button type="button" class="btn btn-default">GPS</button>
+            <button  id="cambutton" type="button" class="btn btn-default btn2">Camera</button>
+            <button  id="audiobutton" type="button" class="btn btn-default btn2">Audio</button>
+            <button  id="sensorsbutton" type="button" class="btn btn-default btn2">Sensors</button>
 
             <div class="btn-group dropup" role="group">
-                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn btn-default dropdown-toggle btn2" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     More
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <li><a href="#">Call</a></li>
-                    <li><a href="#">Text</a></li>
-                    <li><a href="#">Request Help</a></li>
+                    <li id="callbutton"><a href="#">Call</a></li>
+                    <li id="textbutton"><a href="#">Text</a></li>
+                    <li id="helpbutton"><a href="#">Request Help</a></li>
                 </ul>
             </div>
         </div>
@@ -126,6 +143,17 @@
 <script src="file:///android_asset/plugins/sigma.layouts.forceLink/worker.js"></script>
 <script src="file:///android_asset/plugins/sigma.layouts.forceLink/supervisor.js"></script>
 <script>
+
+var member = "null";
+var s;
+
+function updateNetwork(){
+    var jsonString = Android.updateNetwork();
+    s.graph.clear();
+	s.refresh();
+    initNetwork(jsonString, "false");
+}
+
 /**
  * Just a simple example to show how to use the sigma.layouts.forceLink
  * plugin:
@@ -135,21 +163,18 @@
  * links is stronger inside the clusters. So, we expect the algorithm to
  * regroup the nodes of each cluster.
  */
-function initNetwork(jsonString){
-    var member = "null";
+function initNetwork(jsonString, firstRun){
     var i,
-        s,
-        o,
-        N = 1000,
-        E = 5000,
-        C = 5,
-        d = 0.5,
-        cs = [],
-        g = {
-        nodes: [],
-        edges: []
-      };
-
+    o,
+    N = 1000,
+    E = 5000,
+    C = 5,
+    d = 0.5,
+    cs = [],
+    g = {
+    nodes: [],
+    edges: []
+  };
   var jsonData = JSON.parse(jsonString);
   for (var i = 0; i < jsonData.nodes.length; i++) {
     var counter = jsonData.nodes[i];
@@ -183,7 +208,10 @@ function initNetwork(jsonString){
         minNodeSize: 18,
         maxNodeSize: 18,
         minEdgeSize: 5,
-        maxEdgeSize: 5
+        maxEdgeSize: 5,
+        zoomingRatio: 1.1,
+        zoomMin: 1.1,
+        ZoomMax: 1.1
       }
     });
 
@@ -199,17 +227,19 @@ function initNetwork(jsonString){
       nodeSiblingsAngleMin: 0.3
     });
 
-    // Bind the events:
-    fa.bind('start interpolate stop', function(e) {
-      console.log(e.type);
-      var el = document.getElementById('notice');
-      if (e.type === 'start') {
-        el.className = '';
-      }
-      else if (e.type === 'interpolate') {
-        el.className = 'hidden';
-      }
-    });
+    if(firstRun == "true"){
+        // Bind the events:
+        fa.bind('start interpolate stop', function(e) {
+          console.log(e.type);
+          var el = document.getElementById('notice');
+          if (e.type === 'start') {
+            el.className = '';
+          }
+          else if (e.type === 'interpolate') {
+            el.className = 'hidden';
+          }
+        });
+    }
 
     // Start the ForceLink algorithm:
     sigma.layouts.startForceLink();
@@ -223,7 +253,36 @@ function initNetwork(jsonString){
         $("#member").html(e.data.node.label + " <span class=\"badge\">" + e.data.node.extra + "</span>");
 
     });
+
 }
 
+//setInterval(updateNetwork,5000);
+
+
+$(document).ready(function() {
+	$( "#cambutton" ).click(function() {
+	    console.log(Android.requestSensor(member));
+	});
+
+	$( "#audiobutton" ).click(function() {
+	    console.log(Android.requestAudio(member));
+	});
+
+	$( "#sensorsbutton" ).click(function() {
+
+	});
+
+	$( "#callbutton" ).click(function() {
+
+	});
+
+	$( "#textbutton" ).click(function() {
+
+	});
+
+	$( "#helpbutton" ).click(function() {
+
+	});
+});
 
 </script>
