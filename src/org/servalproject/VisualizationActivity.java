@@ -2,21 +2,24 @@ package org.servalproject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.webkit.JavascriptInterface;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.servalproject.servald.Peer;
+import org.servalproject.servald.PeerListService;
 import org.servalproject.servaldna.ServalDCommand;
+import org.servalproject.servaldna.SubscriberId;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by jasonwong on 3/16/16.
@@ -48,7 +51,7 @@ public class VisualizationActivity extends Activity {
 
         wv.setWebViewClient(new WebViewClient() {
             public void onPageFinished(WebView view, String url) {
-                wv.loadUrl("javascript:initNetwork('" + jsonStr + ",\"true\"')");
+                wv.loadUrl("javascript:initNetwork('" + jsonStr + "')");
             }
         });
 
@@ -82,6 +85,17 @@ public class VisualizationActivity extends Activity {
     }
 
     private String parseRoutingTable(){
+        ConcurrentMap<SubscriberId, Peer> peers = PeerListService.peers;
+        for (Map.Entry<SubscriberId, Peer> entry : peers.entrySet()) {
+            String key = entry.getKey().toString();
+            String contact = entry.getValue().getDisplayName();
+            Log.i("CONCURRRENT1", "key, " + key + " value " + contact);
+        }
+        Log.i("CONCURRRENT2","NUMPEERS" + Integer.toString(peers.size()));
+
+        peers.size();
+
+
         JSONArray jsonArrayNodes = new JSONArray();
         JSONArray jsonArrayEdges = new JSONArray();
 
@@ -101,8 +115,14 @@ public class VisualizationActivity extends Activity {
 
                 JSONObject node = new JSONObject();
                 try {
+
                     node.put("id", sids.get(i));
-                    node.put("name", sids.get(i).substring(0,8));
+                    String name = "SELF";
+                    SubscriberId sid = new SubscriberId(sids.get(i));
+                    if(peers.get(sid)!= null){
+                        name = peers.get(sid).getDisplayName();
+                    }
+                    node.put("name", name);
                     node.put("phone", "555");
                     if(!"SELF".equals(flags.get(i))) {
                         node.put("color", "#000000");

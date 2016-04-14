@@ -151,7 +151,8 @@ function updateNetwork(){
     var jsonString = Android.updateNetwork();
     s.graph.clear();
 	s.refresh();
-    initNetwork(jsonString, "false");
+	var firstRun = "false";
+    initNetwork(jsonString, firstRun);
 }
 
 /**
@@ -164,6 +165,7 @@ function updateNetwork(){
  * regroup the nodes of each cluster.
  */
 function initNetwork(jsonString, firstRun){
+    a = typeof a !== 'undefined' ? a : "true";
     var i,
     o,
     N = 1000,
