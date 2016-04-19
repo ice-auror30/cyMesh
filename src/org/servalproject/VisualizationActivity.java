@@ -18,11 +18,15 @@ import org.servalproject.servald.Peer;
 import org.servalproject.servald.PeerListService;
 import org.servalproject.servald.ServalD;
 import org.servalproject.servaldna.ServalDCommand;
+import org.servalproject.servaldna.ServalDInterfaceException;
+import org.servalproject.servaldna.ServerControl;
 import org.servalproject.servaldna.SubscriberId;
+import org.servalproject.servaldna.keyring.KeyringIdentity;
+import org.servalproject.servaldna.meshms.MeshMSException;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -79,6 +83,20 @@ public class VisualizationActivity extends Activity {
         @JavascriptInterface
         public String requestVideo(String sid)
         {
+            try {
+                ServalBatPhoneApplication app = ServalBatPhoneApplication.context;
+                KeyringIdentity identity = app.server.getIdentity();
+
+                peers.get(sid);
+                SubscriberId sidObject = new SubscriberId(sid);
+
+                app.server.getRestfulClient().meshmsSendMessage(identity.sid, sidObject, "START_CAMERA");
+                return "true";
+            } catch (Exception E){
+                E.printStackTrace();
+            }
+
+
             return "TEST2: " + sid;
         }
 

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.servalproject.sensors.WiFiDirect;
 
 import android.app.Activity;
@@ -42,6 +41,10 @@ import android.widget.Toast;
 
 import org.servalproject.R;
 import org.servalproject.sensors.RecordClick;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * An activity that uses WiFi Direct APIs to discover and connect with available
  * devices. WiFi Direct APIs are asynchronous and rely on callback mechanism
@@ -83,8 +86,12 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
         super.onCreate(savedInstanceState);
         setContentView(R.layout.get_camera_main);
         dummySurface = (SurfaceView) findViewById(R.id.cameraView);
-        rc = new RecordClick();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
+        String currentDateandTime = sdf.format(new Date());
+
+
+        rc = RecordClick.getInstance(currentDateandTime);
 
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -301,19 +308,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
         }
     }*/
 
-   /* public void sayHello(View v) {
-        if (!mBound) return;
-        // Create and send a message to the service, using a supported 'what' value
-        Message msg = Message.obtain(null, NetworkActionService.MSG_SAY_HELLO, 0, 0);
-        try {
-            msg.obj = findViewById(R.id.cameraView);
-            mService.send(msg);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
 
-*/
     class IncomingHandler extends Handler {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -335,37 +330,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
             }
         }
     }
-    final Messenger mMessenger = new Messenger(new IncomingHandler());
-
     /**
-     * Class for interacting with the main interface of the service.
+     * Class for interacting with the get_camera_main interface of the service.
      */
-    /*private ServiceConnection mConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            // This is called when the connection with the service has been
-            // established, giving us the object we can use to
-            // interact with the service.  We are communicating with the
-            // service using a Messenger, so here we get a client-side
-            // representation of that from the raw IBinder object.
-
-
-            Message msg = Message.obtain(null, NetworkActionService.CLIENTMESSENGER, 0, 0);
-            msg.replyTo = mMessenger;
-            try {
-                mService.send(msg);
-            }catch(RemoteException e)
-            {
-                e.printStackTrace();
-            }
-            mBound = true;
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            // This is called when the connection with the service has been
-            // unexpectedly disconnected -- that is, its process crashed.
-            mService = null;
-            mBound = false;
-        }
-    };
-    */
 }

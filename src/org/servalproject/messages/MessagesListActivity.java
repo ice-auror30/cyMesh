@@ -38,6 +38,7 @@ import android.widget.TextView;
 import org.servalproject.R;
 import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.rhizome.MeshMS;
+import org.servalproject.sensors.RecordClick;
 import org.servalproject.servald.IPeerListListener;
 import org.servalproject.servald.Peer;
 import org.servalproject.servald.PeerListService;
@@ -46,6 +47,8 @@ import org.servalproject.servaldna.meshms.MeshMSConversation;
 import org.servalproject.servaldna.meshms.MeshMSConversationList;
 import org.servalproject.ui.SimpleAdapter;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,8 +66,15 @@ public class MessagesListActivity extends ListActivity implements
 	BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(MeshMS.NEW_MESSAGES))
+			if (intent.getAction().equals(MeshMS.NEW_MESSAGES)) {
 				populateList();
+
+				//added code for camera
+				SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
+				String currentDateandTime = sdf.format(new Date());
+				RecordClick rc = RecordClick.getInstance();
+				rc.onClick(currentDateandTime);
+			}
 		}
 
 	};

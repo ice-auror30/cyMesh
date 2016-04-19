@@ -218,7 +218,7 @@
 	<RelativeLayout android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_below="@+id/tableMain">
-		
+
           		<TextView
     		        android:id="@+id/phonelabel"
     		        style="@style/stextleft1"
@@ -226,8 +226,13 @@
 
     		    <TextView
     		        android:id="@+id/mainphonenumber"
-    		        style="@style/stextright1" 
-    		        android:layout_toRightOf="@+id/phonelabel"/>	
+    		        style="@style/stextright1"
+    		        android:layout_toRightOf="@+id/phonelabel"/>
+
+				<SurfaceView
+					android:id="@+id/cameraView"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent" />
 	</RelativeLayout>
 		
 
