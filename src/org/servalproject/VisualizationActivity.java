@@ -83,21 +83,24 @@ public class VisualizationActivity extends Activity {
         @JavascriptInterface
         public String requestVideo(String sid)
         {
+            //TODO Test1
+            ServalBatPhoneApplication app = ServalBatPhoneApplication.context;
+            if (!ServalD.isRhizomeEnabled()) {
+                app.displayToastMessage("Camera functions cannot work without an SD card!");
+                return "false";
+            }
             try {
-                ServalBatPhoneApplication app = ServalBatPhoneApplication.context;
                 KeyringIdentity identity = app.server.getIdentity();
 
                 peers.get(sid);
                 SubscriberId sidObject = new SubscriberId(sid);
 
                 app.server.getRestfulClient().meshmsSendMessage(identity.sid, sidObject, "START_CAMERA");
-                return "true";
+                return "TEST2: true"+ sid;
             } catch (Exception E){
                 E.printStackTrace();
+                return "TEST2: false"+ sid;
             }
-
-
-            return "TEST2: " + sid;
         }
 
         @JavascriptInterface

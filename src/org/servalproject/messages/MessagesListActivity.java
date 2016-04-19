@@ -28,6 +28,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,14 +43,18 @@ import org.servalproject.sensors.RecordClick;
 import org.servalproject.servald.IPeerListListener;
 import org.servalproject.servald.Peer;
 import org.servalproject.servald.PeerListService;
+import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
 import org.servalproject.servaldna.meshms.MeshMSConversation;
 import org.servalproject.servaldna.meshms.MeshMSConversationList;
 import org.servalproject.ui.SimpleAdapter;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * main activity to display the list of messages
@@ -69,15 +74,47 @@ public class MessagesListActivity extends ListActivity implements
 			if (intent.getAction().equals(MeshMS.NEW_MESSAGES)) {
 				populateList();
 
-				//added code for camera
+
 				SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
 				String currentDateandTime = sdf.format(new Date());
-				RecordClick rc = RecordClick.getInstance();
-				rc.onClick(currentDateandTime);
+
+				//TODO Test 2
+				startCamera(currentDateandTime);
+				//TODO Test 3
+				sendCapturedVideo(currentDateandTime);
+
 			}
 		}
 
 	};
+
+
+	private void startCamera(String currentDateandTime){
+
+		RecordClick rc = RecordClick.getInstance();
+		rc.onClick(currentDateandTime);
+	}
+
+	private void sendCapturedVideo(String currentDateandTime){
+		TimerTask t = new TimerTask() {
+			@Override
+			public void run() {
+				File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
+						+ Environment.DIRECTORY_DCIM + File.separator + "remoteVideo" + currentDateandTime + ".mp4");
+
+				try {
+					KeyringIdentity identity = ServalBatPhoneApplication.context.server.getIdentity();
+					ServalDCommand.rhizomeAddFile(capturedVideo, null, null, identity.sid, null);
+
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		};
+
+			Timer myTimer = new Timer();
+			myTimer.schedule(t, 6000);
+	}
 
 
 	@Override
