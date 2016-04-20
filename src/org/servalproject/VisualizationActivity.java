@@ -18,13 +18,9 @@ import org.servalproject.servald.Peer;
 import org.servalproject.servald.PeerListService;
 import org.servalproject.servald.ServalD;
 import org.servalproject.servaldna.ServalDCommand;
-import org.servalproject.servaldna.ServalDInterfaceException;
-import org.servalproject.servaldna.ServerControl;
 import org.servalproject.servaldna.SubscriberId;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
-import org.servalproject.servaldna.meshms.MeshMSException;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
@@ -214,6 +210,7 @@ public class VisualizationActivity extends Activity {
         }catch(Exception e){
             Log.e("ROUTE", e.getMessage());
         }
+
 
         //I/ROW     ( 2040): 852B967D1FF4CDC8C5033A62562B94A1291C213D4B9E8190C8A36A93C14CE807,BROADCAST,wlan0,
         // NA_NEIGH,C11D01A43D0F69A689FD1A93C9654AA48756E65C2760A006F2D04AD3B2BB7251
