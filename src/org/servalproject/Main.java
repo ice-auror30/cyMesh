@@ -148,8 +148,8 @@ public class Main extends Activity implements OnClickListener {
 					org.servalproject.rhizome.ShareSensorActivity.class));
 			break;
 		case R.id.getCameraLabel:
-			startActivity(new Intent(getApplicationContext(),
-					org.servalproject.sensors.WiFiDirect.WiFiDirectActivity.class));
+			//startActivity(new Intent(getApplicationContext(),
+					//org.servalproject.sensors.WiFiDirect.WiFiDirectActivity.class));
 			break;
 		case R.id.visualLabel:
 			startActivity(new Intent(getApplicationContext(),
