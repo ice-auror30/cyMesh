@@ -1,6 +1,5 @@
 package org.servalproject.sensors;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.SurfaceTexture;
@@ -12,7 +11,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import org.servalproject.R;
+import org.servalproject.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,11 +32,12 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
     private static RecordClick thisRC = null;
 
     private RecordClick() {
+        Log.d("RecordClickObject", "Created");
         setTimeStamp("0000_0000");
         recorder = new MediaRecorder();
         initRecorder();
 
-        cameraView = (SurfaceView) ((Activity) getApplicationContext()).findViewById(R.id.cameraView);
+        cameraView = Main.getCameraSurface();
 
 
         holder = cameraView.getHolder();
