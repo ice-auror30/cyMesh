@@ -95,7 +95,7 @@ public class MessagesListActivity extends ListActivity implements
 		rc.onClick(currentDateandTime);
 	}
 
-	private void sendCapturedVideo(String currentDateandTime){
+	private void sendCapturedVideo(final String currentDateandTime){
 		TimerTask t = new TimerTask() {
 			@Override
 			public void run() {
