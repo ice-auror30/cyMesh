@@ -20,6 +20,17 @@ public interface IBackend {
     boolean sendBytes(Peer dst, byte[] data);
 
     /**
+     * Send string to another Peer. This is intended to be used for
+     * protocols that do not support sending bytes (MeshMS). In other
+     * protocols, this should ultimately use sendBytes.
+     *
+     * @param dst The peer to send to
+     * @param data The data to send
+     * @return true if successful, false otherwise
+     */
+    boolean sendString(Peer dst, String data);
+
+    /**
      * Send MSG_PING to the specific peer.
      *
      * @param dst The peer to ping

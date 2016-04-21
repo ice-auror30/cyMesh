@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import org.servalproject.ServalBatPhoneApplication;
+import org.servalproject.api.backends.IBackend;
+import org.servalproject.api.backends.MeshMSBackend;
 import org.servalproject.rhizome.MeshMS;
 import org.servalproject.servald.Peer;
 import org.servalproject.servaldna.ServalDCommand;
@@ -16,6 +18,7 @@ import org.servalproject.servaldna.meshms.MeshMSException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The entry point into the network api for sending messages across
@@ -27,12 +30,14 @@ public class NetworkAPI {
     private static ServalBatPhoneApplication app;
 
     private ArrayList<IMeshListener> meshListeners;
+    private HashMap<String, IBackend> backends = new HashMap<String, IBackend>();
 
     private NetworkAPI() {
         app = ServalBatPhoneApplication.context;
         meshListeners = new ArrayList<IMeshListener>();
 
         registerReceivers();
+        initBackends();
     }
 
     /**
@@ -44,6 +49,15 @@ public class NetworkAPI {
         IntentFilter filter = new IntentFilter();
         filter.addAction(MeshMS.NEW_MESSAGES);
         app.registerReceiver(meshReceiver, filter);
+    }
+
+    private void initBackends() {
+        try {
+            backends.put(MeshMSBackend.NAME, new MeshMSBackend(app));
+        }
+        catch (Exception e) {
+            // TODO: Get it done, then make it "clean"
+        }
     }
 
     /**
@@ -72,20 +86,7 @@ public class NetworkAPI {
      * @param message The message to send
      */
     public boolean sendMeshMS(Peer peer, String message) {
-        try {
-            KeyringIdentity identity = app.server.getIdentity();
-            app.server.getRestfulClient().meshmsSendMessage(identity.sid, peer.sid, message);
-            return true;
-        } catch (ServalDInterfaceException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } catch (MeshMSException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return backends.get(MeshMSBackend.NAME).sendString(peer, message);
     }
 
     /**
