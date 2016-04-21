@@ -36,6 +36,7 @@ import android.widget.TextView;
 import org.servalproject.R;
 import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.account.AccountService;
+import org.servalproject.api.NetworkAPI;
 import org.servalproject.rhizome.MeshMS;
 import org.servalproject.servald.IPeerListListener;
 import org.servalproject.servald.Peer;
@@ -186,7 +187,12 @@ public class ShowConversationActivity extends ListActivity implements OnClickLis
 				@Override
 				protected Boolean doInBackground(String... args) {
 					try {
-						app.server.getRestfulClient().meshmsSendMessage(identity.sid, recipient.sid, args[0]);
+						boolean result = NetworkAPI.getInstance().sendString(recipient, args[0]);
+						if (result)
+							app.displayToastMessage("Sent Message");
+                        else
+                            app.displayToastMessage("Failed Message");
+						//app.server.getRestfulClient().meshmsSendMessage(identity.sid, recipient.sid, args[0]);
 						return true;
 					} catch (Exception e) {
 						Log.e(TAG, e.getMessage(), e);

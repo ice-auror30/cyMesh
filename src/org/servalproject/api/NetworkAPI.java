@@ -85,7 +85,7 @@ public class NetworkAPI {
      * @param peer The peer to send to
      * @param message The message to send
      */
-    public boolean sendMeshMS(Peer peer, String message) {
+    public boolean sendString(Peer peer, String message) {
         return backends.get(MeshMSBackend.NAME).sendString(peer, message);
     }
 
