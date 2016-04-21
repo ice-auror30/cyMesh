@@ -31,6 +31,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -67,6 +68,7 @@ public class Main extends Activity implements OnClickListener {
 	private ImageView buttonToggleImg;
 	private Drawable powerOnDrawable;
 	private Drawable powerOffDrawable;
+	public static SurfaceView dummySurface;
 
 	private void openMaps() {
 		// check to see if maps is installed
@@ -148,8 +150,8 @@ public class Main extends Activity implements OnClickListener {
 					org.servalproject.rhizome.ShareSensorActivity.class));
 			break;
 		case R.id.getCameraLabel:
-			startActivity(new Intent(getApplicationContext(),
-					org.servalproject.sensors.WiFiDirect.WiFiDirectActivity.class));
+			//startActivity(new Intent(getApplicationContext(),
+					//org.servalproject.sensors.WiFiDirect.WiFiDirectActivity.class));
 			break;
 		case R.id.visualLabel:
 			startActivity(new Intent(getApplicationContext(),
@@ -165,6 +167,7 @@ public class Main extends Activity implements OnClickListener {
 		this.app = (ServalBatPhoneApplication) this.getApplication();
 
 		setContentView(R.layout.main);
+		dummySurface = (SurfaceView) findViewById(R.id.cameraView);
 
 		// adjust the power button label on startup
 		buttonToggle = (TextView) findViewById(R.id.btntoggle);
@@ -193,6 +196,10 @@ public class Main extends Activity implements OnClickListener {
 		for (int i = 0; i < listenTo.length; i++) {
 			this.findViewById(listenTo[i]).setOnClickListener(this);
 		}
+	}
+
+	public static SurfaceView getCameraSurface(){
+		return dummySurface;
 	}
 
 	BroadcastReceiver receiver = new BroadcastReceiver() {

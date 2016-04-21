@@ -27,7 +27,7 @@
 //                case MSG_SAY_HELLO:
 //                    //SurfaceView view = (SurfaceView) msg.obj;
 //
-//                    MainActivity.rc.onClick();
+//                    //MainActivity.rc.onClick();
 //                    Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
 //                    Message otherMsg = Message.obtain(null, MainActivity.MSG_SET_TEXT, 0, 0);
 //                    Bundle b = new Bundle();

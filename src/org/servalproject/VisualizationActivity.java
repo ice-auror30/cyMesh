@@ -5,15 +5,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.servalproject.batphone.CallHandler;
+import org.servalproject.messages.ShowConversationActivity;
+import org.servalproject.servald.Peer;
+import org.servalproject.servald.PeerListService;
+import org.servalproject.servald.ServalD;
 import org.servalproject.servaldna.ServalDCommand;
+import org.servalproject.servaldna.SubscriberId;
+import org.servalproject.servaldna.keyring.KeyringIdentity;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by jasonwong on 3/16/16.
@@ -25,6 +35,10 @@ public class VisualizationActivity extends Activity {
 
     JavaScriptInterface JSInterface;
 
+    HashSet<String> nodes = new HashSet<String>();
+    HashSet<String> edges = new HashSet<String>();
+    ConcurrentMap<SubscriberId, Peer> peers;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +46,113 @@ public class VisualizationActivity extends Activity {
         wv = (WebView)findViewById(R.id.webview);
 
         wv.getSettings().setJavaScriptEnabled(true);
-        // register class containing methods to be exposed to JavaScript
+
+        final String jsonStr = parseRoutingTable();
+
+        JSInterface = new JavaScriptInterface(this);
+        wv.addJavascriptInterface(JSInterface, "Android");
+
+        wv.loadUrl("file:///android_asset/visual.html");
+
+        wv.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                wv.loadUrl("javascript:initNetwork('" + jsonStr + "')");
+            }
+        });
+
+    }
+
+    public class JavaScriptInterface {
+        Context mContext;
+
+        /** Instantiate the interface and set the context */
+        JavaScriptInterface(Context c) {
+            mContext = c;
+        }
+
+        @JavascriptInterface
+        public String requestSensor(String sid)
+        {
+            return "TEST1: " + sid;
+        }
+
+        @JavascriptInterface
+        public String requestVideo(String sid)
+        {
+            //TODO Test1
+            ServalBatPhoneApplication app = ServalBatPhoneApplication.context;
+            if (!ServalD.isRhizomeEnabled()) {
+                app.displayToastMessage("Camera functions cannot work without an SD card!");
+                return "false";
+            }
+            try {
+                KeyringIdentity identity = app.server.getIdentity();
+
+                peers.get(sid);
+                SubscriberId sidObject = new SubscriberId(sid);
+
+                app.server.getRestfulClient().meshmsSendMessage(identity.sid, sidObject, "START_CAMERA");
+                return "TEST2: true"+ sid;
+            } catch (Exception E){
+                E.printStackTrace();
+                return "TEST2: false"+ sid;
+            }
+        }
+
+        @JavascriptInterface
+        public String requestAudio(String sid)
+        {
+            return "TEST3: " + sid;
+        }
+
+        @JavascriptInterface
+        public void startChat(String sid)
+        {
+            ServalBatPhoneApplication app = ServalBatPhoneApplication.context;
+            if (!ServalD.isRhizomeEnabled()) {
+                app.displayToastMessage("Messaging cannot function without an sdcard");
+                return;
+            }
+
+            // Send MeshMS by SID
+            Intent intent = new Intent(
+                    app, ShowConversationActivity.class);
+            intent.putExtra("recipient", sid);
+            mContext.startActivity(intent);
+        }
+
+        @JavascriptInterface
+        public void startCall(String sid)
+        {
+            try {
+                peers.get(sid);
+
+                SubscriberId sidObject = new SubscriberId(sid);
+
+                if (peers.get(sidObject) != null) {
+                    CallHandler.dial(peers.get(sidObject));
+                    Log.i("CALLING", "calling selected peer");
+                }
+
+            }catch(Exception e){
+                Log.i("CALLINGFAIL",e.getMessage());
+            }
+        }
+
+        @JavascriptInterface
+        public String updateNetwork() {
+            return parseRoutingTable();
+        }
+
+    }
+
+    private String parseRoutingTable(){
+        peers = PeerListService.peers;
 
         JSONArray jsonArrayNodes = new JSONArray();
         JSONArray jsonArrayEdges = new JSONArray();
 
+        //read route table
         try {
             ServalDCommand.RouteTable rt = ServalDCommand.routeTable();
             List<String> sids = rt.sids;
@@ -52,14 +168,21 @@ public class VisualizationActivity extends Activity {
 
                 JSONObject node = new JSONObject();
                 try {
+
                     node.put("id", sids.get(i));
-                    node.put("name", sids.get(i).substring(0,8));
+                    String name = "SELF";
+                    SubscriberId sid = new SubscriberId(sids.get(i));
+                    if(peers.get(sid)!= null){
+                        name = peers.get(sid).getDisplayName();
+                    }
+                    node.put("name", name);
                     node.put("phone", "555");
                     if(!"SELF".equals(flags.get(i))) {
                         node.put("color", "#000000");
                     }else{
                         node.put("color", "#0040ff");
                     }
+                    nodes.add(sids.get(i));
 
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
@@ -79,12 +202,15 @@ public class VisualizationActivity extends Activity {
                         e.printStackTrace();
                     }
                     jsonArrayEdges.put(edge);
+
+                    edges.add(sids.get(i) + " " + priorhops.get(i));
                 }
             }
 
         }catch(Exception e){
             Log.e("ROUTE", e.getMessage());
         }
+
 
         //I/ROW     ( 2040): 852B967D1FF4CDC8C5033A62562B94A1291C213D4B9E8190C8A36A93C14CE807,BROADCAST,wlan0,
         // NA_NEIGH,C11D01A43D0F69A689FD1A93C9654AA48756E65C2760A006F2D04AD3B2BB7251
@@ -99,35 +225,6 @@ public class VisualizationActivity extends Activity {
             e.printStackTrace();
         }
 
-        final String jsonStr = networkObj.toString();
-
-        JSInterface = new JavaScriptInterface(this);
-        wv.addJavascriptInterface(JSInterface, "JSInterface");
-
-        wv.loadUrl("file:///android_asset/visual.html");
-
-        wv.setWebViewClient(new WebViewClient() {
-            public void onPageFinished(WebView view, String url) {
-                wv.loadUrl("javascript:initNetwork('" + jsonStr + "')");
-            }
-        });
-
-    }
-
-
-    public class JavaScriptInterface {
-        Context mContext;
-
-        /** Instantiate the interface and set the context */
-        JavaScriptInterface(Context c) {
-            mContext = c;
-        }
-
-        public void changeActivity()
-        {
-            Intent i = new Intent(VisualizationActivity.this, Main.class);
-            startActivity(i);
-            finish();
-        }
+        return networkObj.toString();
     }
 }

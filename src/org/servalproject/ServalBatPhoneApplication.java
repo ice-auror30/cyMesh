@@ -56,6 +56,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ import org.servalproject.account.AccountService;
 import org.servalproject.batphone.CallHandler;
 import org.servalproject.rhizome.MeshMS;
 import org.servalproject.rhizome.Rhizome;
+import org.servalproject.sensors.RecordClick;
 import org.servalproject.servald.ServalD;
 import org.servalproject.servaldna.BundleId;
 import org.servalproject.servaldna.ServalDCommand;
@@ -82,6 +84,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -113,6 +117,7 @@ public class ServalBatPhoneApplication extends Application {
 	private Handler backgroundHandler;
 	private HandlerThread backgroundThread;
 	public SimpleWebServer webServer;
+	//public RecordClick rc;
 
 	public static String version="Unknown";
 	public static long lastModified;
@@ -228,6 +233,10 @@ public class ServalBatPhoneApplication extends Application {
 
 				// initialise the MeshMS api to track when new messages arrive for this identity
 				meshMS = new MeshMS(ServalBatPhoneApplication.this, identity.sid);
+/*
+				SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
+				String currentDateandTime = sdf.format(new Date());
+				rc = RecordClick.getInstance(currentDateandTime);*/
 
 				// notify 3rd party software of our details
 				Intent intent = new Intent("org.servalproject.SET_PRIMARY");

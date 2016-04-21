@@ -1,3 +1,7 @@
+<script src="file:///android_asset/bootstrap/js/jquery.min.js"></script>
+<script src="file:///android_asset/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="file:///android_asset/bootstrap/css/bootstrap.min.css">
+
 <!-- START SIGMA IMPORTS -->
 <script src="file:///android_asset/sigma/sigma.core.js"></script>
 <script src="file:///android_asset/sigma/conrad.js"></script>
@@ -48,13 +52,6 @@
 <!-- END SIGMA IMPORTS -->
 <div id="container">
     <style>
-        #graph-container {
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        position: absolute;
-        }
         #notice {
         bottom: 1em;
         right: 1em;
@@ -63,13 +60,100 @@
         .hidden {
         display: none;
         }
+        #container {
+        height: calc(100% - 124px);
+        margin: auto;
+        }
+
+        #graph-container {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+        height: calc(100% - 124px);
+        width: 100%;
+        }
+
+        #footer{
+        padding: 8px;
+        height: 100%;
+        width: 100%;
+        background-color:#000;
+        }
+
+        .btn-group-wrap {
+        text-align: center;
+        }
+
+        #member-butt{
+        text-align: center;
+        padding-bottom:8px;
+        }
+
+        div.btn-group {
+        margin: 0 auto;
+        text-align: center;
+        width: inherit;
+        display: inline-block;
+        }
+
+        .btn2{
+        height:55px;
+        width: 90px;
+        }
+
+        .btn3{
+        height:45px;
+        }
     </style>
     <div id="graph-container"><div id="notice" class="hidden">layout in progress...</div></div>
 </div>
-<script src="../plugins/sigma.plugins.animate/sigma.plugins.animate.js"></script>
-<script src="../plugins/sigma.layouts.forceLink/worker.js"></script>
-<script src="../plugins/sigma.layouts.forceLink/supervisor.js"></script>
+
+<div id="footer">
+    <div id="member-butt">
+        <div id="member-info"><button id="member" class="btn btn-primary btn3" type="button">
+            Select a node <span class="badge">...</span>
+        </button></div>
+    </div>
+    <div id="buttons" class="btn-group-wrap hidden">
+
+
+        <div class="btn-group" role="group" aria-label="...">
+            <button  id="videobutton" type="button" class="btn btn-default btn2">Video</button>
+            <button  id="audiobutton" type="button" class="btn btn-default btn2">Audio</button>
+            <button  id="sensorsbutton" type="button" class="btn btn-default btn2">Sensors</button>
+
+            <div class="btn-group dropup" role="group">
+                <button class="btn btn-default dropdown-toggle btn2" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <li id="callbutton"><a href="#">Call</a></li>
+                    <li id="textbutton"><a href="#">Text</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="file:///android_asset/plugins/sigma.plugins.animate/sigma.plugins.animate.js"></script>
+<script src="file:///android_asset/plugins/sigma.layouts.forceLink/worker.js"></script>
+<script src="file:///android_asset/plugins/sigma.layouts.forceLink/supervisor.js"></script>
 <script>
+
+var member = "null";
+var s;
+
+function updateNetwork(){
+    var jsonString = Android.updateNetwork();
+    s.graph.clear();
+	s.refresh();
+	var firstRun = "false";
+    initNetwork(jsonString, firstRun);
+}
+
 /**
  * Just a simple example to show how to use the sigma.layouts.forceLink
  * plugin:
@@ -79,20 +163,19 @@
  * links is stronger inside the clusters. So, we expect the algorithm to
  * regroup the nodes of each cluster.
  */
-function initNetwork(jsonString){
+function initNetwork(jsonString, firstRun){
+    a = typeof a !== 'undefined' ? a : "true";
     var i,
-        s,
-        o,
-        N = 1000,
-        E = 5000,
-        C = 5,
-        d = 0.5,
-        cs = [],
-        g = {
-        nodes: [],
-        edges: []
-      };
-
+    o,
+    N = 1000,
+    E = 5000,
+    C = 5,
+    d = 0.5,
+    cs = [],
+    g = {
+    nodes: [],
+    edges: []
+  };
   var jsonData = JSON.parse(jsonString);
   for (var i = 0; i < jsonData.nodes.length; i++) {
     var counter = jsonData.nodes[i];
@@ -102,7 +185,8 @@ function initNetwork(jsonString){
       x: Math.random(),
       y: Math.random(),
       size: 100,
-      color: counter.color
+      color: counter.color,
+      extra: '#'
     });
   }
 
@@ -123,7 +207,12 @@ function initNetwork(jsonString){
       settings: {
         animationsTime: 100,
         minNodeSize: 18,
-        maxNodeSize: 18
+        maxNodeSize: 18,
+        minEdgeSize: 5,
+        maxEdgeSize: 5,
+        zoomingRatio: 1.1,
+        zoomMin: 1.1,
+        ZoomMax: 1.1
       }
     });
 
@@ -139,19 +228,69 @@ function initNetwork(jsonString){
       nodeSiblingsAngleMin: 0.3
     });
 
-    // Bind the events:
-    fa.bind('start interpolate stop', function(e) {
-      console.log(e.type);
-      var el = document.getElementById('notice');
-      if (e.type === 'start') {
-        el.className = '';
-      }
-      else if (e.type === 'interpolate') {
-        el.className = 'hidden';
-      }
-    });
+    if(firstRun == "true"){
+        // Bind the events:
+        fa.bind('start interpolate stop', function(e) {
+          console.log(e.type);
+          var el = document.getElementById('notice');
+          if (e.type === 'start') {
+            el.className = '';
+          }
+          else if (e.type === 'interpolate') {
+            el.className = 'hidden';
+          }
+        });
+    }
 
     // Start the ForceLink algorithm:
     sigma.layouts.startForceLink();
+
+    s.refresh();
+
+    // Bind the events:
+    s.bind('clickNode doubleClickNode rightClickNode', function(e) {
+        console.log(e.type, e.data.node.label, e.data.captor, e.data.node.extra);
+        member = e.data.node.id;
+        $("#member").html(e.data.node.label + " <span class=\"badge\">" + e.data.node.extra + "</span>");
+        var el = document.getElementById('buttons');
+        if(e.data.node.color == "#0040ff"){
+            el.className = 'btn-group-wrap hidden';
+        }else{
+            el.className = 'btn-group-wrap';
+        }
+
+    });
+
 }
+
+//setInterval(updateNetwork,5000);
+
+
+$(document).ready(function() {
+	$( "#videobutton" ).click(function() {
+	    console.log(Android.requestVideo(member));
+	});
+
+	$( "#audiobutton" ).click(function() {
+	    console.log(Android.requestAudio(member));
+	});
+
+	$( "#sensorsbutton" ).click(function() {
+        console.log(Android.requestSensor(member));
+	});
+
+	$( "#callbutton" ).click(function() {
+	    s.graph.clear();
+	    s.refresh();
+        console.log(Android.startCall(member));
+	});
+
+	$( "#textbutton" ).click(function() {
+	    s.graph.clear();
+	    s.refresh();
+        console.log(Android.startChat(member));
+	});
+
+});
+
 </script>
