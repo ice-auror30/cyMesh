@@ -32,9 +32,10 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
 
     public RecordClick(String currentDateTime) {
         Log.d("RecordClickObject", "Created");
-        setTimeStamp(currentDateTime);
+        //setTimeStamp(currentDateTime);
         recorder = new MediaRecorder();
 
+        timeStamp = currentDateTime;
         initRecorder();
 
         cameraView = Main.getCameraSurface();
@@ -98,7 +99,7 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
         }
     }
 
-    public void onClick(final String currentTime) {
+    public void onClick() {
         Log.d("OnClick","Pressed");
         TimerTask t = new TimerTask() {
             @Override
@@ -148,6 +149,11 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
             recording = false;
         }
         recorder.release();
+        recorder = new MediaRecorder();
+        initRecorder();
+        cameraView = Main.getCameraSurface();
+        holder = cameraView.getHolder();
+        holder.addCallback(this);
     }
 
     @Override

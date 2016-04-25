@@ -80,7 +80,7 @@ public class MessagesListActivity extends ListActivity implements
 				String currentDateandTime = sdf.format(new Date());
 
 				//TODO Test 2
-				startCamera(currentDateandTime);
+				//startCamera(currentDateandTime);
 				//TODO Test 3
 				//sendCapturedVideo(currentDateandTime);
 

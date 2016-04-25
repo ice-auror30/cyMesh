@@ -30,6 +30,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
@@ -45,14 +46,18 @@ import org.servalproject.rhizome.RhizomeMain;
 import org.servalproject.sensors.RecordClick;
 import org.servalproject.servald.PeerListService;
 import org.servalproject.servald.ServalD;
+import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
 import org.servalproject.ui.Networks;
 import org.servalproject.ui.ShareUsActivity;
 import org.servalproject.ui.help.HtmlHelp;
 import org.servalproject.wizard.Wizard;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  *
@@ -78,6 +83,7 @@ public class Main extends Activity implements OnClickListener{
 	public static RecordClick rc = null;
 	private static boolean firstLoad = false;
 	private static RelativeLayout lm = null;
+	private static String currentDateandTime;
 	static Context c;
 
 	private void openMaps() {
@@ -185,7 +191,7 @@ public class Main extends Activity implements OnClickListener{
 		dummySurface = (SurfaceView) findViewById(R.id.cameraView);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
-		String currentDateandTime = sdf.format(new Date());
+		currentDateandTime = sdf.format(new Date());
 		rc = new RecordClick(currentDateandTime);
 
 
@@ -226,10 +232,8 @@ public class Main extends Activity implements OnClickListener{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if(intent.getAction().equals(MeshMS.NEW_MESSAGES)) {
-				app.displayToastMessage("Msg Rcvd (From Main");
-				SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
-				String currentDateandTime = sdf.format(new Date());
-				rc.onClick(currentDateandTime);
+				rc.onClick();
+				sendCapturedVideo(currentDateandTime);
 			}
 			if(intent.getAction().equals(ServalBatPhoneApplication.ACTION_STATE)) {
 				int stateOrd = intent.getIntExtra(
@@ -288,6 +292,7 @@ public class Main extends Activity implements OnClickListener{
 			registered = true;
 		}
 
+		dummySurface.setVisibility(View.VISIBLE);
 		/*dummySurface = (SurfaceView) findViewById(R.id.cameraView);
 		stateChanged(app.getState());*/
 	}
@@ -299,7 +304,28 @@ public class Main extends Activity implements OnClickListener{
 			this.unregisterReceiver(receiver);
 			registered = false;
 		}
-		//dummySurface = null;
+		dummySurface.setVisibility(View.INVISIBLE);
+	}
+
+	private void sendCapturedVideo(final String currentDateandTime){
+		TimerTask t = new TimerTask() {
+			@Override
+			public void run() {
+				File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
+						+ Environment.DIRECTORY_DCIM + File.separator + "remoteVideo" + currentDateandTime + ".mp4");
+
+				try {
+					KeyringIdentity identity = ServalBatPhoneApplication.context.server.getIdentity();
+					ServalDCommand.rhizomeAddFile(capturedVideo, null, null, identity.sid, null);
+
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		};
+
+		Timer myTimer = new Timer();
+		myTimer.schedule(t, 8000);
 	}
 
 }
