@@ -170,17 +170,20 @@ public class VisualizationActivity extends Activity {
                 try {
 
                     node.put("id", sids.get(i));
-                    String name = "SELF";
+                    node.put("extra",sids.get(i).substring(0,8));
+                    String name = "";
                     SubscriberId sid = new SubscriberId(sids.get(i));
-                    if(peers.get(sid)!= null){
+                    if(!"SELF".equals(flags.get(i)) && peers.get(sid)!= null){
                         name = peers.get(sid).getDisplayName();
+                    }else{
+                        name = "SELF";
                     }
                     node.put("name", name);
                     node.put("phone", "555");
                     if(!"SELF".equals(flags.get(i))) {
                         node.put("color", "#000000");
                     }else{
-                        node.put("color", "#0040ff");
+                        node.put("color", "#ff0000");
                     }
                     nodes.add(sids.get(i));
 
