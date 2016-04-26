@@ -12,7 +12,7 @@ import android.os.IBinder;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class audioRecorder extends Service {
+public class audioRecorderService extends Service {
 
     //Media recorder used to capture audio
     MediaRecorder mRecorder;
@@ -25,9 +25,9 @@ public class audioRecorder extends Service {
     static String mFileName;
 
     //Set singleton Instance to null
-    private static audioRecorder mInstance = null;
+    private static audioRecorderService mInstance = null;
 
-    private audioRecorder() {
+    private audioRecorderService() {
 
         //Intialize file path.
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -41,9 +41,9 @@ public class audioRecorder extends Service {
      * Singleton Format
      * @return This object
      */
-    public static synchronized audioRecorder getInstance() {
+    public static synchronized audioRecorderService getInstance() {
         if (mInstance == null) {
-            mInstance = new audioRecorder();
+            mInstance = new audioRecorderService();
         }
         return mInstance;
     }
