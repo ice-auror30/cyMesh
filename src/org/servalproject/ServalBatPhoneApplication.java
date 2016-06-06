@@ -333,7 +333,10 @@ public class ServalBatPhoneApplication extends Application {
 		coretask.setPath(appData.getAbsolutePath());
 		ServalDCommand.setInstancePath(new File(appData, "var/serval-node").getAbsolutePath());
 
-		installRequired();
+		//Seems like this method is prone to failure when using ant and build.xml... let's just not check this
+		//installRequired();
+		//And set the state directly.
+		setState(State.Starting);
 
 		if (state != State.NotInstalled)
 			runOnBackgroundThread(startup);
