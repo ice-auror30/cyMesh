@@ -2,3 +2,4 @@
 	path = jni/serval-dna
 	url = https://git.ece.iastate.edu/dec1618/serval-dna.git
 	ignore = dirty
+	branch = development

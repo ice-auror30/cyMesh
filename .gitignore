@@ -1,6 +1,8 @@
 /bin/
 /.idea/workspace.xml
 /.idea/tasks.xml
+/.idea/encodings.xml
+/.idea/misc.xml
 /gen/
 /obj/
 /libs/
