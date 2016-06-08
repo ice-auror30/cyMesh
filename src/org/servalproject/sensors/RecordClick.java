@@ -33,7 +33,6 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
     public RecordClick(String currentDateTime) {
         Log.d("RecordClickObject", "Created");
         //setTimeStamp(currentDateTime);
-        recorder = new MediaRecorder();
 
         timeStamp = currentDateTime;
         initRecorder();
@@ -52,6 +51,7 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
     }
 
     private void initRecorder() {
+        recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
         recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
@@ -110,8 +110,9 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
                     recorder.reset();
                     recording = false;
 
+                    //Release recorder resources - we'll make a new MediaRecorder if we need to record again
                     recorder.release();
-                    // Let's initRecorder so we can record again
+
                     Log.d("Camera","Stopped");
                     recorded = true;
                 }
