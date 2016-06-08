@@ -12,6 +12,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import org.servalproject.Main;
+import org.servalproject.ServalBatPhoneApplication;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,9 +31,13 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
     SurfaceView cameraView;
     static String timeStamp = null;
 
-    public RecordClick(String currentDateTime) {
+    private final ServalBatPhoneApplication app;
+    public static final String RECORDING_FINISHED="org.servalproject.recordclick.FINISHED";
+
+    public RecordClick(String currentDateTime, ServalBatPhoneApplication app) {
         Log.d("RecordClickObject", "Created");
         //setTimeStamp(currentDateTime);
+        this.app = app;
 
         timeStamp = currentDateTime;
         initRecorder();
@@ -115,6 +120,8 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
 
                     Log.d("Camera","Stopped");
                     recorded = true;
+
+                    app.sendBroadcast(new Intent(RECORDING_FINISHED));
                 }
             }
         };

@@ -192,7 +192,7 @@ public class Main extends Activity implements OnClickListener{
 
 		SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
 		currentDateandTime = sdf.format(new Date());
-		rc = new RecordClick(currentDateandTime);
+		rc = new RecordClick(currentDateandTime, app);
 
 
 		// adjust the power button label on startup
@@ -233,13 +233,15 @@ public class Main extends Activity implements OnClickListener{
 		public void onReceive(Context context, Intent intent) {
 			if(intent.getAction().equals(MeshMS.NEW_MESSAGES)) {
 				rc.onClick();
-				sendCapturedVideo(currentDateandTime);
 			}
 			if(intent.getAction().equals(ServalBatPhoneApplication.ACTION_STATE)) {
 				int stateOrd = intent.getIntExtra(
 						ServalBatPhoneApplication.EXTRA_STATE, 0);
 				State state = State.values()[stateOrd];
 				stateChanged(state);
+			}
+			if(intent.getAction().equals(RecordClick.RECORDING_FINISHED)) {
+				sendCapturedVideo(currentDateandTime);
 			}
 		}
 	};
@@ -288,6 +290,7 @@ public class Main extends Activity implements OnClickListener{
 			IntentFilter filter = new IntentFilter();
 			filter.addAction(ServalBatPhoneApplication.ACTION_STATE);
 			filter.addAction(MeshMS.NEW_MESSAGES);
+			filter.addAction(RecordClick.RECORDING_FINISHED);
 			this.registerReceiver(receiver, filter);
 			registered = true;
 		}
@@ -308,24 +311,16 @@ public class Main extends Activity implements OnClickListener{
 	}
 
 	private void sendCapturedVideo(final String currentDateandTime){
-		TimerTask t = new TimerTask() {
-			@Override
-			public void run() {
-				File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
-						+ Environment.DIRECTORY_DCIM + File.separator + "remoteVideo" + currentDateandTime + ".mp4");
+		File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
+				+ Environment.DIRECTORY_DCIM + File.separator + "remoteVideo" + currentDateandTime + ".mp4");
 
-				try {
-					KeyringIdentity identity = ServalBatPhoneApplication.context.server.getIdentity();
-					ServalDCommand.rhizomeAddFile(capturedVideo, null, null, identity.sid, null);
+		try {
+			KeyringIdentity identity = ServalBatPhoneApplication.context.server.getIdentity();
+			ServalDCommand.rhizomeAddFile(capturedVideo, null, null, identity.sid, null);
 
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		};
-
-		Timer myTimer = new Timer();
-		myTimer.schedule(t, 8000);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 }
