@@ -65,6 +65,7 @@ public class MessagesListActivity extends ListActivity implements
 	private ServalBatPhoneApplication app;
 	private final String TAG = "MessagesListActivity";
 	private KeyringIdentity identity;
+	private RecordClick rc;
 
 	private SimpleAdapter<MeshMSConversation> adapter;
 
@@ -79,9 +80,9 @@ public class MessagesListActivity extends ListActivity implements
 				String currentDateandTime = sdf.format(new Date());
 
 				//TODO Test 2
-				startCamera(currentDateandTime);
+				//startCamera(currentDateandTime);
 				//TODO Test 3
-				sendCapturedVideo(currentDateandTime);
+				//sendCapturedVideo(currentDateandTime);
 
 			}
 		}
@@ -91,8 +92,11 @@ public class MessagesListActivity extends ListActivity implements
 
 	private void startCamera(String currentDateandTime){
 
-		RecordClick rc = RecordClick.getInstance();
-		rc.onClick(currentDateandTime);
+		//rc = RecordClick.getInstance();
+		//rc.onClick(currentDateandTime);
+
+		rc.smallStart();
+		app.displayToastMessage("Camera Started");
 	}
 
 	private void sendCapturedVideo(final String currentDateandTime){

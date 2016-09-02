@@ -12,11 +12,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import org.servalproject.Main;
+import org.servalproject.ServalBatPhoneApplication;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 /**
  * Created by Brad on 2/17/2016.
@@ -29,26 +31,20 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
     SurfaceView cameraView;
     static String timeStamp = null;
 
-    private static RecordClick thisRC = null;
+    private final ServalBatPhoneApplication app;
+    public static final String RECORDING_FINISHED="org.servalproject.recordclick.FINISHED";
 
-    private RecordClick() {
+    public RecordClick(String currentDateTime, ServalBatPhoneApplication app) {
         Log.d("RecordClickObject", "Created");
-        setTimeStamp("0000_0000");
-        recorder = new MediaRecorder();
+        //setTimeStamp(currentDateTime);
+        this.app = app;
+
+        timeStamp = currentDateTime;
         initRecorder();
 
         cameraView = Main.getCameraSurface();
-
-
         holder = cameraView.getHolder();
         holder.addCallback(this);
-    }
-
-    public static synchronized RecordClick getInstance(){
-        if(thisRC == null){
-            thisRC = new RecordClick();
-        }
-        return thisRC;
     }
 
     public static void setTimeStamp(String currentTime){
@@ -60,6 +56,7 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
     }
 
     private void initRecorder() {
+        recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
         recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
@@ -72,7 +69,8 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
         recorder.setProfile(cpHigh);*/
         Log.d("Camera", "Initialized");
 
-
+        Log.d("Camera", Environment.getExternalStorageDirectory() + File.separator
+                        + Environment.DIRECTORY_DCIM + File.separator + "remoteVideo" + timeStamp + ".mp4");
         recorder.setOutputFile(Environment.getExternalStorageDirectory() + File.separator
                 + Environment.DIRECTORY_DCIM + File.separator + "remoteVideo" + timeStamp + ".mp4");
         //recorder.setMaxDuration(5000); // 5 seconds
@@ -96,7 +94,17 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
         }
     }
 
-    public void onClick(final String currentTime) {
+    public void smallStart(){
+        try {
+            Log.d("Camera", "Trying to Start");
+            recording = true;
+            recorder.start();
+        }catch(Exception E){
+            E.printStackTrace();
+        }
+    }
+
+    public void onClick() {
         Log.d("OnClick","Pressed");
         TimerTask t = new TimerTask() {
             @Override
@@ -107,10 +115,13 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
                     recorder.reset();
                     recording = false;
 
+                    //Release recorder resources - we'll make a new MediaRecorder if we need to record again
                     recorder.release();
-                    // Let's initRecorder so we can record again
+
                     Log.d("Camera","Stopped");
                     recorded = true;
+
+                    app.sendBroadcast(new Intent(RECORDING_FINISHED));
                 }
             }
         };
@@ -130,11 +141,14 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
-        prepareRecorder();
+        //cameraView = Main.getCameraSurface();
+        //holder = cameraView.getHolder();
+        //holder.addCallback(this);
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
                                int height) {
+        prepareRecorder();
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -143,6 +157,11 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
             recording = false;
         }
         recorder.release();
+        recorder = new MediaRecorder();
+        initRecorder();
+        cameraView = Main.getCameraSurface();
+        holder = cameraView.getHolder();
+        holder.addCallback(this);
     }
 
     @Override
@@ -158,6 +177,9 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
             recorder.start();
 
         return START_STICKY;
+    }
+    public void onPause(){
+        //cameraView = null;
     }
 
     @Override
