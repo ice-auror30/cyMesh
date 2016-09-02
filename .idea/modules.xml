@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/batphone.iml" filepath="$PROJECT_DIR$/batphone.iml" />
+      <module fileurl="file://$PROJECT_DIR$/batphone-real.iml" filepath="$PROJECT_DIR$/batphone-real.iml" />
     </modules>
   </component>
 </project>
-
