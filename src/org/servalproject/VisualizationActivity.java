@@ -201,6 +201,10 @@ public class VisualizationActivity extends Activity {
                     }else{
                         name = "SELF";
                     }
+                    if(name.contains("routerzz")){
+                        name = "router";
+                    }
+
                     data.put("name", name);
                     data.put("phone", "555");
                     if(!"SELF".equals(flags.get(i))) {

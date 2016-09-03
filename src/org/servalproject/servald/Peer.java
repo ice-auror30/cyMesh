@@ -59,7 +59,7 @@ public class Peer implements IPeer {
 			return name;
 		if (did != null && !did.equals(""))
 			return did;
-		return sid.abbreviation();
+		return "routerzz" + sid.abbreviation();
 	}
 
 	@Override
