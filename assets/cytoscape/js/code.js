@@ -1,54 +1,6 @@
+var cy;
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset=utf-8 />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
-
-    <title>Cola.js/Cytoscape.js</title>
-
-    <link href="file:///android_asset/cytoscape/jquery.qtip.min.css" rel="stylesheet" type="text/css" />
-    <link href="file:///android_asset/cytoscape/style.css" rel="stylesheet" />
-    <script src="file:///android_asset/cytoscape/js/lodash.min.js"></script>
-    <script src="file:///android_asset/cytoscape/js/jquery.min.js"></script>
-    <script src="file:///android_asset/cytoscape/js/bootstrap.min.js"></script>
-    <script src="file:///android_asset/cytoscape/js/bootstrap-slider.min.js"></script>
-    <script src="file:///android_asset/cytoscape/js/cola.v3.min.js"></script>
-    <script src="file:///android_asset/cytoscape/js/cytoscape.js"></script>
-    <script src="file:///android_asset/cytoscape/js/jquery.qtip.min.js"></script>
-    <script src="file:///android_asset/cytoscape/js/cytoscape-qtip.js"></script>
-    <script src="file:///android_asset/cytoscape/js/cytoscape-cola.js"></script>
-
-    <script>
-    function tester(action,sid){
-    	if(action == "video") {
-    	    console.log("YAYA VIDEO" + sid);
-            console.log(Android.requestVideo(sid));
-        }
-
-        if(action == "audio") {
-            console.log(Android.requestAudio(sid));
-        }
-
-        if(action == "sensor") {
-            console.log("YAYA SENSOR" + sid);
-            console.log(Android.requestSensor(sid));
-        }
-
-        if(action == "call") {
-            console.log("YAYA CALL" + sid);
-            console.log(Android.startCall(sid));
-        }
-
-        if(action == "text") {
-            console.log(Android.startChat(sid));
-        }
-    }
-	var cy;
-	var layout;
-
-function initNetwork(network){
-    var jsonData = JSON.parse(network);
+$(function() { // on dom ready
 
     cy = cytoscape({
         container: document.getElementById('cy'),
@@ -203,7 +155,93 @@ function initNetwork(network){
             }
         }],
 
-        elements: jsonData
+        elements: [{
+            "data": {
+                "id": "605755",
+                "idInt": 605755,
+                "name": "PCNA"
+            },
+            "group": "nodes",
+            "removed": false,
+            "selected": false,
+            "selectable": true,
+            "locked": false,
+            "grabbed": false,
+            "grabbable": true
+		}, {
+            "data": {
+                "id": "611408",
+                "idInt": 611408,
+                "name": "FEN1"
+            },
+            "group": "nodes",
+            "removed": false,
+            "selected": false,
+            "selectable": true,
+            "locked": false,
+            "grabbed": false,
+            "grabbable": true
+		}, {
+            "data": {
+                "id": "612341",
+                "idInt": 612341,
+                "name": "RAD9A"
+            },
+            "group": "nodes",
+            "removed": false,
+            "selected": false,
+            "selectable": true,
+            "locked": false,
+            "grabbed": false,
+            "grabbable": true}, {
+            "data": {
+                "source": "612341",
+                "target": "611408",
+                "weight": 100,
+                "id": "e589"
+            },
+            "position": {},
+            "group": "edges",
+            "removed": false,
+            "selected": false,
+            "selectable": true,
+            "locked": true,
+            "grabbed": false,
+            "grabbable": true,
+            "classes": ""
+        },{
+            "data": {
+                "source": "612341",
+                "target": "605755",
+                "weight": 100,
+                "id": "e587"
+            },
+            "position": {},
+            "group": "edges",
+            "removed": false,
+            "selected": false,
+            "selectable": true,
+            "locked": true,
+            "grabbed": false,
+            "grabbable": true,
+            "classes": ""
+        },{
+            "data": {
+                "source": "611408",
+                "target": "605755",
+                "weight": 200,
+                "id": "e586"
+            },
+            "position": {},
+            "group": "edges",
+            "removed": false,
+            "selected": false,
+            "selectable": true,
+            "locked": true,
+            "grabbed": false,
+            "grabbable": true,
+            "classes": ""
+        }]
     });
 
     var params = {
@@ -214,7 +252,7 @@ function initNetwork(network){
         randomize: true,
         maxSimulationTime: 1500
     };
-    layout = makeLayout();
+    var layout = makeLayout();
     var running = false;
 
     cy.on('layoutstart', function() {
@@ -321,26 +359,19 @@ function initNetwork(network){
 
     cy.nodes().forEach(function(n) {
         var g = n.data('name');
-        var sid = n.data('id');
 
         n.qtip({
             content: [{
-                name: "Video",
-                url: '#',
-                act: 'video',
-                id: sid
+                name: 'GeneCard',
+                url: 'http://www.genecards.org/cgi-bin/carddisp.pl?gene=' + g
             }, {
-                name: 'Sensors',
-                url: '#',
-                act: 'sensors',
-                id: sid
+                name: 'UniProt search',
+                url: 'http://www.uniprot.org/uniprot/?query=' + g + '&fil=organism%3A%22Homo+sapiens+%28Human%29+%5B9606%5D%22&sort=score'
             }, {
-                name: 'Call',
-                url: '#',
-                act: 'call',
-                id: sid
+                name: 'GeneMANIA',
+                url: 'http://genemania.org/search/human/' + g
             }].map(function(link) {
-                return '<a onclick="tester(\'' + link.act + '\',\'' + link.id +  '\')" href="' + link.url + '">' + link.name + '</a>';
+                return '<a target="_blank" href="' + link.url + '">' + link.name + '</a>';
             }).join('<br />\n'),
             position: {
                 my: 'top center',
@@ -362,11 +393,8 @@ function initNetwork(network){
         cy.resize();
     });
 
-}
+}); // on dom ready
 
-	</script>
-</head>
-<body>
-<div id="cy"></div>
-</body>
-</html>
+$(function() {
+    FastClick.attach(document.body);
+});

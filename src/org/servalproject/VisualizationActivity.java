@@ -149,7 +149,117 @@ public class VisualizationActivity extends Activity {
     private String parseRoutingTable(){
         peers = PeerListService.peers;
 
-        JSONArray jsonArrayNodes = new JSONArray();
+        JSONArray jsonArrayNetwork = new JSONArray();
+
+        /*JSONObject node = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+
+            data.put("id", "123");
+            data.put("name", "JAS");
+
+            node.put("data", data);
+            node.put("group","nodes");
+            node.put("removed",false);
+            node.put("selected",false);
+            node.put("selectable",true);
+            node.put("locked",false);
+            node.put("grabbed",false);
+            node.put("grabbable",true);
+            jsonArrayNetwork.put(node);
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }*/
+
+        int uniqueID = 100;
+
+        try {
+            ServalDCommand.RouteTable rt = ServalDCommand.routeTable();
+            List<String> sids = rt.sids;
+            List<String> flags = rt.flags;
+            List<String> interfaces = rt.interfaces;
+            List<String> nexthops = rt.nexthops;
+            List<String> priorhops = rt.priorhops;
+
+            Log.i("ROW_SIZES", Integer.toString(sids.size()) + "," + Integer.toString(flags.size()) + "," + Integer.toString(interfaces.size()) + "," + Integer.toString(nexthops.size()) + "," + Integer.toString(priorhops.size()));
+            for(int i = 0; i < sids.size(); i++){
+
+                Log.i("ROW", sids.get(i) + "," + flags.get(i) + "," + interfaces.get(i) + "," + nexthops.get(i) + "," + priorhops.get(i));
+
+                JSONObject node = new JSONObject();
+                JSONObject data = new JSONObject();
+                try {
+
+                    data.put("id", sids.get(i));
+                    data.put("extra",sids.get(i).substring(0,8));
+                    String name = "";
+                    SubscriberId sid = new SubscriberId(sids.get(i));
+                    if(!"SELF".equals(flags.get(i)) && peers.get(sid)!= null){
+                        name = peers.get(sid).getDisplayName();
+                    }else{
+                        name = "SELF";
+                    }
+                    data.put("name", name);
+                    data.put("phone", "555");
+                    if(!"SELF".equals(flags.get(i))) {
+                        data.put("color", "#000000");
+                    }else{
+                        data.put("color", "#ff0000");
+                    }
+                    nodes.add(sids.get(i));
+                    node.put("data", data);
+                    node.put("group","nodes");
+                    node.put("removed",false);
+                    node.put("selected",false);
+                    node.put("selectable",true);
+                    node.put("locked",false);
+                    node.put("grabbed",false);
+                    node.put("grabbable",true);
+
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                jsonArrayNetwork.put(node);
+
+                if(!"SELF".equals(flags.get(i))){
+                    JSONObject edge = new JSONObject();
+                    data = new JSONObject();
+                    try {
+                        data.put("source", sids.get(i));
+                        data.put("target", priorhops.get(i));
+                        data.put("weight",100);
+                        data.put("id",uniqueID);
+                        uniqueID++;
+
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    edge.put("data",data);
+                    edge.put("position", new JSONObject());
+                    edge.put("group", "edges");
+                    edge.put("removed", false);
+                    edge.put("selected", false);
+                    edge.put("selectable", true);
+                    edge.put("locked", true);
+                    edge.put("grabbed", false);
+                    edge.put("grabbable", true);
+                    edge.put("classes", "");
+                    jsonArrayNetwork.put(edge);
+
+                    edges.add(sids.get(i) + " " + priorhops.get(i));
+                }
+            }
+
+        }catch(Exception e){
+            Log.e("ROUTE", e.getMessage());
+        }
+
+        /*JSONArray jsonArrayNodes = new JSONArray();
         JSONArray jsonArrayEdges = new JSONArray();
 
         //read route table
@@ -226,8 +336,8 @@ public class VisualizationActivity extends Activity {
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        }*/
 
-        return networkObj.toString();
+        return jsonArrayNetwork.toString();
     }
 }
