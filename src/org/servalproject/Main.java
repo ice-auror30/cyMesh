@@ -48,6 +48,7 @@ import org.servalproject.servald.PeerListService;
 import org.servalproject.servald.ServalD;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
+import org.servalproject.services.CameraService;
 import org.servalproject.ui.Networks;
 import org.servalproject.ui.ShareUsActivity;
 import org.servalproject.ui.help.HtmlHelp;
@@ -56,8 +57,6 @@ import org.servalproject.wizard.Wizard;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  *
@@ -222,6 +221,8 @@ public class Main extends Activity implements OnClickListener{
 		for (int i = 0; i < listenTo.length; i++) {
 			this.findViewById(listenTo[i]).setOnClickListener(this);
 		}
+
+		startService(new Intent(this, CameraService.class));
 	}
 
 	public static SurfaceView getCameraSurface(){

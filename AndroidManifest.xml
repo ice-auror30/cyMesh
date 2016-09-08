@@ -277,7 +277,12 @@
 			    android:name="android.provider.CONTACTS_STRUCTURE"
 				android:resource="@xml/contacts" />
 	    </service>
-	    
+
+		<service
+			android:name=".services.CameraService"
+			android:enabled="true"
+			android:exported="false"
+			android:stopWithTask="true"/>
 
         <!-- Rhizome application activities -->
         <activity android:name=".rhizome.ShareSensorActivity"
@@ -318,15 +323,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
             </intent-filter>
-        </activity>
-
-        <activity android:name=".sensors.WiFiDirect.WiFiDirectActivity"
-            android:label="@string/wifi_app_name" android:launchMode="singleTask" >
-           <!-- <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="*/*" />
-            </intent-filter>-->
         </activity>
 
 		<service android:label="@string/rhizome_share_file_permission_label"
