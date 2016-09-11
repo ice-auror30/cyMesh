@@ -20,6 +20,7 @@ import org.servalproject.servald.ServalD;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.SubscriberId;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
+import org.servalproject.services.CameraService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -91,7 +92,8 @@ public class VisualizationActivity extends Activity {
                 peers.get(sid);
                 SubscriberId sidObject = new SubscriberId(sid);
 
-                app.server.getRestfulClient().meshmsSendMessage(identity.sid, sidObject, "START_CAMERA");
+                CameraService.setSenderID(sidObject);
+                app.server.getRestfulClient().meshmsSendMessage(identity.sid, sidObject, sidObject.toHex());
                 return "TEST2: true"+ sid;
             } catch (Exception E){
                 E.printStackTrace();

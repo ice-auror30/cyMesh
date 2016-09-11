@@ -312,11 +312,10 @@ public class Main extends Activity implements OnClickListener{
 	}
 
 	private void sendCapturedVideo(final String currentDateandTime){
-		File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
-				+ Environment.DIRECTORY_DCIM + File.separator + "remoteVideo" + currentDateandTime + ".mp4");
-
 		try {
 			KeyringIdentity identity = ServalBatPhoneApplication.context.server.getIdentity();
+			File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
+					+ Environment.DIRECTORY_DCIM + File.separator + identity.sid.toHex() + ".mp4");
 			ServalDCommand.rhizomeAddFile(capturedVideo, null, null, identity.sid, null);
 
 		}catch(Exception e){
