@@ -55,7 +55,7 @@ public class CameraService extends Service {
                 Log.d("CameraService","RECEIVER ACTIVE");
                 try {
                     File savedDir = Rhizome.getSaveDirectory(); //doesn't work currently
-                    Log.d("CameraServce","SavedDir:" + savedDir.getName());
+                    Log.d("CameraService","SavedDir:" + savedDir.getName());
                     LinkedList<String> names = new LinkedList<String>();
                     if (savedDir.isDirectory()) {
                         String[] filenames = savedDir.list();
@@ -72,6 +72,7 @@ public class CameraService extends Service {
                                             uri = Uri.fromFile(payloadfile);
                                             Log.i(Rhizome.TAG, "Open uri='" + uri + "', contentType='" + contentType + "'");
                                             Intent newIntent = new Intent();
+                                            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                             newIntent.setAction(Intent.ACTION_VIEW);
                                             newIntent.setDataAndType(uri, contentType);
                                             getApplicationContext().startActivity(newIntent);
