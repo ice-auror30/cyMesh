@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -41,11 +42,15 @@ import android.widget.TextView;
 
 import org.servalproject.ServalBatPhoneApplication.State;
 import org.servalproject.batphone.CallDirector;
+import org.servalproject.rhizome.FilteredCursor;
 import org.servalproject.rhizome.MeshMS;
+import org.servalproject.rhizome.Rhizome;
 import org.servalproject.rhizome.RhizomeMain;
+import org.servalproject.rhizome.RhizomeManifest_File;
 import org.servalproject.sensors.RecordClick;
 import org.servalproject.servald.PeerListService;
 import org.servalproject.servald.ServalD;
+import org.servalproject.servaldna.BundleId;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
 import org.servalproject.services.CameraService;
@@ -55,8 +60,6 @@ import org.servalproject.ui.help.HtmlHelp;
 import org.servalproject.wizard.Wizard;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  *
@@ -82,7 +85,6 @@ public class Main extends Activity implements OnClickListener{
 	public static RecordClick rc = null;
 	private static boolean firstLoad = false;
 	private static RelativeLayout lm = null;
-	private static String currentDateandTime;
 	static Context c;
 	private String sidstring;
 
@@ -190,8 +192,6 @@ public class Main extends Activity implements OnClickListener{
 
 		dummySurface = (SurfaceView) findViewById(R.id.cameraView);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
-		currentDateandTime = sdf.format(new Date());
 		try {
 			sidstring = ServalBatPhoneApplication.context.server.getIdentity().sid.toString();
 			rc = new RecordClick(sidstring, app);
@@ -247,7 +247,7 @@ public class Main extends Activity implements OnClickListener{
 				stateChanged(state);
 			}
 			if(intent.getAction().equals(RecordClick.RECORDING_FINISHED)) {
-				sendCapturedVideo(currentDateandTime);
+				sendCapturedVideo();
 			}
 		}
 	};
@@ -302,8 +302,6 @@ public class Main extends Activity implements OnClickListener{
 		}
 
 		dummySurface.setVisibility(View.VISIBLE);
-		/*dummySurface = (SurfaceView) findViewById(R.id.cameraView);
-		stateChanged(app.getState());*/
 	}
 
 	@Override
@@ -316,9 +314,20 @@ public class Main extends Activity implements OnClickListener{
 		dummySurface.setVisibility(View.INVISIBLE);
 	}
 
-	private void sendCapturedVideo(final String currentDateandTime){
+	private void sendCapturedVideo(){
 		try {
+			Cursor d = ServalD.rhizomeList(RhizomeManifest_File.SERVICE, null, null, null);
+			FilteredCursor fc = new FilteredCursor(d);
 			KeyringIdentity identity = ServalBatPhoneApplication.context.server.getIdentity();
+			for (int i = 0; i < fc.getCount(); i++) {
+				fc.moveToNext();
+				if (fc.getString(fc.getColumnIndex("name")).equals(identity.sid.toString() + ".mp4")) {
+					BundleId bid = new BundleId(fc.getBlob(fc.getColumnIndex("id")));
+					Rhizome.unshareFile(bid);
+				}
+				Log.d(TAG, fc.getString(fc.getColumnIndex("name")));
+			}
+
 			File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
 					+ Environment.DIRECTORY_DCIM + File.separator + identity.sid.toString() + ".mp4");
 			ServalDCommand.rhizomeAddFile(capturedVideo, null, null, identity.sid, null);

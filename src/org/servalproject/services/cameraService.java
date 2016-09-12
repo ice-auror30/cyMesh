@@ -67,7 +67,6 @@ public class CameraService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Rhizome.ACTION_RECEIVE_FILE)) {
-                RhizomeManifest_File file = (RhizomeManifest_File) mManifest;
                 if (senderID != null) {
                     try {
                         Cursor d = ServalD.rhizomeList(RhizomeManifest_File.SERVICE, null, null, null);
