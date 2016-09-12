@@ -93,7 +93,7 @@ public class VisualizationActivity extends Activity {
                 SubscriberId sidObject = new SubscriberId(sid);
 
                 CameraService.setSenderID(sidObject);
-                app.server.getRestfulClient().meshmsSendMessage(identity.sid, sidObject, sidObject.toHex());
+                app.server.getRestfulClient().meshmsSendMessage(identity.sid, sidObject, "START_CAMERA");
                 return "TEST2: true"+ sid;
             } catch (Exception E){
                 E.printStackTrace();

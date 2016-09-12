@@ -84,6 +84,7 @@ public class Main extends Activity implements OnClickListener{
 	private static RelativeLayout lm = null;
 	private static String currentDateandTime;
 	static Context c;
+	private String sidstring;
 
 	private void openMaps() {
 		// check to see if maps is installed
@@ -174,12 +175,12 @@ public class Main extends Activity implements OnClickListener{
 		}
 	}
 
-/*	public static SurfaceView addSVtoMain(){
-		SurfaceView sv = new SurfaceView(c);
-		lm.addView(sv);
-		sv.setVisibility(View.INVISIBLE);
-		return sv;
-	}*/
+	/*	public static SurfaceView addSVtoMain(){
+            SurfaceView sv = new SurfaceView(c);
+            lm.addView(sv);
+            sv.setVisibility(View.INVISIBLE);
+            return sv;
+        }*/
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -191,8 +192,12 @@ public class Main extends Activity implements OnClickListener{
 
 		SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
 		currentDateandTime = sdf.format(new Date());
-		rc = new RecordClick(currentDateandTime, app);
-
+		try {
+			sidstring = ServalBatPhoneApplication.context.server.getIdentity().sid.toString();
+			rc = new RecordClick(sidstring, app);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 
 		// adjust the power button label on startup
 		buttonToggle = (TextView) findViewById(R.id.btntoggle);
@@ -233,7 +238,7 @@ public class Main extends Activity implements OnClickListener{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if(intent.getAction().equals(MeshMS.NEW_MESSAGES)) {
-				rc.onClick();
+				rc.onClick(sidstring);
 			}
 			if(intent.getAction().equals(ServalBatPhoneApplication.ACTION_STATE)) {
 				int stateOrd = intent.getIntExtra(
@@ -315,7 +320,7 @@ public class Main extends Activity implements OnClickListener{
 		try {
 			KeyringIdentity identity = ServalBatPhoneApplication.context.server.getIdentity();
 			File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
-					+ Environment.DIRECTORY_DCIM + File.separator + identity.sid.toHex() + ".mp4");
+					+ Environment.DIRECTORY_DCIM + File.separator + identity.sid.toString() + ".mp4");
 			ServalDCommand.rhizomeAddFile(capturedVideo, null, null, identity.sid, null);
 
 		}catch(Exception e){
