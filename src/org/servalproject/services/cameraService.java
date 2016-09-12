@@ -77,7 +77,6 @@ public class CameraService extends Service {
                             if (fc.getString(fc.getColumnIndex("name")).equals(senderID.toString() + ".mp4")) {
                                 BundleId bid = new BundleId(fc.getBlob(fc.getColumnIndex("id")));
 
-                                RhizomeManifest rm = Rhizome.readManifest(bid);
                                 File dir = Rhizome.getTempDirectoryCreated();
 
                                 final File temp = new File(dir, bid.toHex() + ".mp4");
