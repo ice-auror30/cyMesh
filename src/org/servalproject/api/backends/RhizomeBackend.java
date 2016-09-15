@@ -2,7 +2,7 @@ package org.servalproject.api.backends;
 
 import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.servald.Peer;
-import org.servalproject.servaldna.ServalDCommand;
+import org.servalproject.servaldna.BundleId;
 import org.servalproject.servaldna.ServalDInterfaceException;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class RhizomeBackend extends AbstractBackend {
         super(app);
     }
 
-    public boolean sendBytes(Peer dst, byte[] data) {
+    public boolean sendBytes(Peer dst, byte[] data, boolean persist, BundleId bundle) {
         try {
             List<String> args = new LinkedList<String>();
             args.add("rhizome");
@@ -34,15 +34,20 @@ public class RhizomeBackend extends AbstractBackend {
         }
     }
 
+    public boolean sendBytes(Peer dst, byte[] data) {
+        return sendBytes(dst, data, false, null);
+    }
+
     public boolean sendString(Peer dst, String data) {
         return false;
     }
 
-    public void sendPing(Peer dst) {
-        throw new UnsupportedOperationException("Can't PING over Rhizome");
+    public boolean sendString(Peer dst, String data, boolean persist, BundleId bundle) {
+        return sendString(dst, data);
     }
 
-    public void sendPong(Peer dst) {
-        throw new UnsupportedOperationException("Can't PONG over Rhizome");
+    @Override
+    public boolean addData(Peer dst, byte[] data, BundleId bundle) {
+        return false;
     }
 }

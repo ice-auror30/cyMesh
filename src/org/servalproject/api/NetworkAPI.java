@@ -7,13 +7,12 @@ import android.content.IntentFilter;
 
 import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.api.backends.IBackend;
-import org.servalproject.api.backends.MeshMSBackend;
+import org.servalproject.api.backends.RhizomeBackend;
 import org.servalproject.rhizome.MeshMS;
 import org.servalproject.servald.Peer;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.ServalDInterfaceException;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
-import org.servalproject.servaldna.meshms.MeshMSException;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +52,7 @@ public class NetworkAPI {
 
     private void initBackends() {
         try {
-            backends.put(MeshMSBackend.NAME, new MeshMSBackend(app));
+            backends.put(RhizomeBackend.NAME, new RhizomeBackend(app));
         }
         catch (Exception e) {
             // TODO: Get it done, then make it "clean"
@@ -86,7 +85,7 @@ public class NetworkAPI {
      * @param message The message to send
      */
     public boolean sendString(Peer peer, String message) {
-        return backends.get(MeshMSBackend.NAME).sendString(peer, message);
+        throw new UnsupportedOperationException("Not Yet Implemented");
     }
 
     /**

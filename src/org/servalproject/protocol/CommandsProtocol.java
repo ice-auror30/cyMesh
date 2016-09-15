@@ -9,10 +9,7 @@ import org.servalproject.servaldna.SubscriberId;
 
 import java.io.IOException;
 
-/**
- * Created by matt2 on 4/13/16.
- */
-public class MdpCustomProtocol extends AbstractMdpProtocol<MdpCustomProtocol.ProtocolResult> {
+public class CommandsProtocol extends AbstractMdpProtocol<CommandsProtocol.ProtocolResult> {
     public static final int PROTO_PORT = 8152;
 
     public static final byte MSG_PING = (byte) 0x01;
@@ -31,7 +28,7 @@ public class MdpCustomProtocol extends AbstractMdpProtocol<MdpCustomProtocol.Pro
         }
     }
 
-    public MdpCustomProtocol(ChannelSelector selector, int loopbackMdpPort, AsyncResult<ProtocolResult> results) throws IOException {
+    public CommandsProtocol(ChannelSelector selector, int loopbackMdpPort, AsyncResult<ProtocolResult> results) throws IOException {
         super(selector, loopbackMdpPort, results);
     }
 
