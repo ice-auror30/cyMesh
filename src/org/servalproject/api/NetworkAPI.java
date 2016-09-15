@@ -4,14 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 
 import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.api.backends.IBackend;
 import org.servalproject.api.backends.RhizomeBackend;
+import org.servalproject.protocol.CommandsProtocol;
 import org.servalproject.rhizome.MeshMS;
 import org.servalproject.servald.Peer;
+import org.servalproject.servaldna.AsyncResult;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.ServalDInterfaceException;
+import org.servalproject.servaldna.SubscriberId;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
 
 import java.io.File;
@@ -25,11 +29,14 @@ import java.util.HashMap;
  * how the data/messages are being sent, that is the job of the API.
  */
 public class NetworkAPI {
+    public static final String TAG = NetworkAPI.class.getName();
     private static NetworkAPI instance;
     private static ServalBatPhoneApplication app;
 
     private ArrayList<IMeshListener> meshListeners;
     private HashMap<String, IBackend> backends = new HashMap<String, IBackend>();
+
+    private CommandsProtocol commandSocket = null;
 
     private NetworkAPI() {
         app = ServalBatPhoneApplication.context;
@@ -37,6 +44,7 @@ public class NetworkAPI {
 
         registerReceivers();
         initBackends();
+        initCommands();
     }
 
     /**
@@ -56,6 +64,25 @@ public class NetworkAPI {
         }
         catch (Exception e) {
             // TODO: Get it done, then make it "clean"
+        }
+    }
+
+    private void initCommands() {
+        try {
+            if (commandSocket == null) {
+                commandSocket = app.server.getCommandProtocol(new AsyncResult<CommandsProtocol.ProtocolResult>() {
+                    @Override
+                    public void result(CommandsProtocol.ProtocolResult nextResult) {
+                        final byte type = nextResult.type;
+                        Log.d(TAG, "Got message of type " + type);
+                    }
+                });
+            }
+
+        } catch (ServalDInterfaceException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -145,6 +172,25 @@ public class NetworkAPI {
         }
     }
 
+    public void sendCommand(SubscriberId dst, byte[] data, CommandType type) {
+        if (commandSocket == null) {
+            initCommands();
+        }
+        try {
+            commandSocket.send(dst, data, type.value);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendRequest(SubscriberId dst, byte[] data) {
+        sendCommand(dst, data, CommandType.REQUEST);
+    }
+
+    public void sendResponse(SubscriberId dst, byte[] data) {
+        sendCommand(dst, data, CommandType.RESPONSE);
+    }
+
     /////////////////////////
     // Broadcast Receivers //
     /////////////////////////
@@ -156,4 +202,15 @@ public class NetworkAPI {
             }
         }
     };
+
+    public enum CommandType {
+        REQUEST(CommandsProtocol.MSG_REQ),
+        RESPONSE(CommandsProtocol.MSG_RESP);
+
+        public byte value;
+
+        CommandType(byte value) {
+            this.value = value;
+        }
+    }
 }

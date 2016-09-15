@@ -34,6 +34,7 @@ import android.util.Log;
 import org.servalproject.R;
 import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.batphone.CallHandler;
+import org.servalproject.protocol.CommandsProtocol;
 import org.servalproject.rhizome.Rhizome;
 import org.servalproject.servaldna.AsyncResult;
 import org.servalproject.servaldna.ChannelSelector;
@@ -169,6 +170,12 @@ public class ServalD extends ServerControl implements IJniServer
 	}
 
 	@Override
+	public CommandsProtocol getCommandProtocol(ChannelSelector selector, AsyncResult<CommandsProtocol.ProtocolResult> results) throws ServalDInterfaceException, IOException {
+		start();
+		return super.getCommandProtocol(selector, results);
+	}
+
+	@Override
 	public ServalDClient getRestfulClient() throws ServalDInterfaceException {
 		start();
 		return super.getRestfulClient();
@@ -197,6 +204,12 @@ public class ServalD extends ServerControl implements IJniServer
 		if (selector==null)
 			selector = new ChannelSelector();
 		return getMdpDnaLookup(selector, results);
+	}
+
+	public CommandsProtocol getCommandProtocol(AsyncResult<CommandsProtocol.ProtocolResult> results) throws ServalDInterfaceException, IOException {
+		if (selector == null)
+			selector = new ChannelSelector();
+		return getCommandProtocol(selector, results);
 	}
 
 	public BlueToothControl getBlueToothControl() throws IOException, ServalDInterfaceException {
