@@ -169,7 +169,6 @@ public class ServalD extends ServerControl implements IJniServer
 		return super.getMdpDnaLookup(selector, results);
 	}
 
-	@Override
 	public CommandsProtocol getCommandProtocol(ChannelSelector selector, AsyncResult<CommandsProtocol.ProtocolResult> results) throws ServalDInterfaceException, IOException {
 		start();
 		return super.getCommandProtocol(selector, results);
