@@ -87,6 +87,12 @@ a:hover {
   right: 0;
 }
 
+.custom-tip{
+	font-size:40px;
+	line-height:45px;
+}
+
+
 @media (max-width: 600px){
   #cy {
     right: 0;

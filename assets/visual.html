@@ -335,9 +335,9 @@ function initNetwork(network){
                 act: 'sensors',
                 id: sid
             }, {
-                name: 'Call',
+                name: 'Text',
                 url: '#',
-                act: 'call',
+                act: 'text',
                 id: sid
             }].map(function(link) {
                 return '<a onclick="tester(\'' + link.act + '\',\'' + link.id +  '\')" href="' + link.url + '">' + link.name + '</a>';
@@ -347,10 +347,10 @@ function initNetwork(network){
                 at: 'bottom center'
             },
             style: {
-                classes: 'qtip-bootstrap',
+                classes: 'qtip-bootstrap custom-tip',
                 tip: {
-                    width: 16,
-                    height: 8
+                    width: 50,
+                    height: 50
                 }
             }
         });
