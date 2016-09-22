@@ -325,6 +325,12 @@ public class Main extends Activity implements OnClickListener{
 			filter.addAction(MeshMS.NEW_MESSAGES);
 			filter.addAction(RecordClick.RECORDING_FINISHED);
 			this.registerReceiver(receiver, filter);
+
+			IntentFilter cmdFilter = new IntentFilter();
+			filter.addAction(CommandsProtocol.MESH_CMD);
+			filter.addAction(CommandsProtocol.MESH_REQ);
+			filter.addAction(CommandsProtocol.MESH_RESP);
+			this.registerReceiver(cmdReceiver, cmdFilter);
 			registered = true;
 		}
 
@@ -338,6 +344,7 @@ public class Main extends Activity implements OnClickListener{
 		super.onPause();
 		if (registered) {
 			this.unregisterReceiver(receiver);
+			this.unregisterReceiver(cmdReceiver);
 			registered = false;
 		}
 		dummySurface.setVisibility(View.INVISIBLE);
