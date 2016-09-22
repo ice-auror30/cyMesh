@@ -21,6 +21,7 @@ public class CommandsProtocol extends AbstractMdpProtocol<CommandsProtocol.Proto
     public static final String MESH_RESP = MESH_CMD + ".response";
 
     public static final String CMD_DATA = "data";
+    public static final String CMD_SRC = "source";
 
     public static final byte MSG_REQ = (byte) 0x01;
     public static final byte MSG_RESP = (byte) 0x02;
@@ -69,6 +70,7 @@ public class CommandsProtocol extends AbstractMdpProtocol<CommandsProtocol.Proto
             byte[] res = new byte[size];
             Intent intent;
             ProtocolResult result;
+            SubscriberId sid = response.getRemoteSid();
 
             switch (type) {
                 case MSG_REQ:
@@ -76,6 +78,7 @@ public class CommandsProtocol extends AbstractMdpProtocol<CommandsProtocol.Proto
 
                     intent = new Intent();
                     intent.setAction(MESH_REQ);
+                    intent.putExtra(CMD_SRC, sid.toHex());
                     intent.putExtra(CMD_DATA, res);
 
                     ServalBatPhoneApplication.context.sendBroadcast(intent);
@@ -88,6 +91,7 @@ public class CommandsProtocol extends AbstractMdpProtocol<CommandsProtocol.Proto
 
                     intent = new Intent();
                     intent.setAction(MESH_RESP);
+                    intent.putExtra(CMD_SRC, sid.toHex());
                     intent.putExtra(CMD_DATA, res);
 
                     ServalBatPhoneApplication.context.sendBroadcast(intent);

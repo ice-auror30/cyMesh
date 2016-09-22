@@ -43,6 +43,11 @@
         if(action == "text") {
             console.log(Android.startChat(sid));
         }
+
+        if(action == "ping") {
+            console.log("Sending Ping" + sid);
+            Android.sendCommand(sid);
+        }
     }
 	var cy;
 	var layout;
@@ -338,6 +343,11 @@ function initNetwork(network){
                 name: 'Call',
                 url: '#',
                 act: 'call',
+                id: sid
+            }, {
+                name: 'Ping',
+                url: '#',
+                act: 'ping',
                 id: sid
             }].map(function(link) {
                 return '<a onclick="tester(\'' + link.act + '\',\'' + link.id +  '\')" href="' + link.url + '">' + link.name + '</a>';

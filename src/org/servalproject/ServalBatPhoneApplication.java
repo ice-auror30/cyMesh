@@ -62,6 +62,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.servalproject.account.AccountService;
+import org.servalproject.api.NetworkAPI;
 import org.servalproject.batphone.CallHandler;
 import org.servalproject.rhizome.MeshMS;
 import org.servalproject.rhizome.Rhizome;
@@ -117,6 +118,7 @@ public class ServalBatPhoneApplication extends Application {
 	private Handler backgroundHandler;
 	private HandlerThread backgroundThread;
 	public SimpleWebServer webServer;
+	public NetworkAPI netAPI;
 	//public RecordClick rc;
 
 	public static String version="Unknown";
@@ -300,6 +302,7 @@ public class ServalBatPhoneApplication extends Application {
 					Log.e(TAG, ex.getMessage(), ex);
 				}
 
+				netAPI = NetworkAPI.getInstance();
 			}
 		});
 	}

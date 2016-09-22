@@ -165,5 +165,6 @@
     <string name="group_owner_text">"Am I the Group Owner? "</string>
     <string name="label_me">ME</string>
     <string name="label_peers">PEERS</string>
+    <string name="send_command">Send Command</string>
 
 </resources>

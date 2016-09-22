@@ -38,15 +38,20 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.servalproject.ServalBatPhoneApplication.State;
+import org.servalproject.api.NetworkAPI;
 import org.servalproject.batphone.CallDirector;
+import org.servalproject.protocol.CommandsProtocol;
 import org.servalproject.rhizome.MeshMS;
 import org.servalproject.rhizome.RhizomeMain;
 import org.servalproject.sensors.RecordClick;
 import org.servalproject.servald.PeerListService;
 import org.servalproject.servald.ServalD;
+import org.servalproject.servaldna.AbstractId;
 import org.servalproject.servaldna.ServalDCommand;
+import org.servalproject.servaldna.SubscriberId;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
 import org.servalproject.ui.Networks;
 import org.servalproject.ui.ShareUsActivity;
@@ -242,6 +247,34 @@ public class Main extends Activity implements OnClickListener{
 			}
 			if(intent.getAction().equals(RecordClick.RECORDING_FINISHED)) {
 				sendCapturedVideo(currentDateandTime);
+			}
+		}
+	};
+
+	BroadcastReceiver cmdReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent.getAction().equals(CommandsProtocol.MESH_REQ)) {
+				byte[] cmd = intent.getByteArrayExtra(CommandsProtocol.CMD_DATA);
+				if (new String(cmd).equals("PING")) {
+					Log.i(TAG, "Received PING");
+					Toast.makeText(getBaseContext(), "Received PING", Toast.LENGTH_LONG).show();
+					try {
+						SubscriberId sid = new SubscriberId(intent.getStringExtra(CommandsProtocol.CMD_SRC));
+						Log.i(TAG, "Sending PONG");
+						app.netAPI.sendResponse(sid, "PONG".getBytes());
+					} catch (AbstractId.InvalidHexException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+			else if (intent.getAction().equals(CommandsProtocol.MESH_RESP)) {
+				byte[] cmd = intent.getByteArrayExtra(CommandsProtocol.CMD_DATA);
+				if (new String(cmd).equals("PONG")) {
+					Log.i(TAG, "Received PONG");
+					Toast.makeText(getBaseContext(), "Received PONG", Toast.LENGTH_LONG).show();
+				}
 			}
 		}
 	};

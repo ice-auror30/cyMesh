@@ -194,7 +194,7 @@ public class NetworkAPI {
     /////////////////////////
     // Broadcast Receivers //
     /////////////////////////
-    BroadcastReceiver meshReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver meshReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(MeshMS.NEW_MESSAGES)) {

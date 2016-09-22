@@ -12,15 +12,19 @@ import android.webkit.WebViewClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.servalproject.api.NetworkAPI;
 import org.servalproject.batphone.CallHandler;
 import org.servalproject.messages.ShowConversationActivity;
 import org.servalproject.servald.Peer;
 import org.servalproject.servald.PeerListService;
 import org.servalproject.servald.ServalD;
+import org.servalproject.servaldna.AbstractId;
 import org.servalproject.servaldna.ServalDCommand;
+import org.servalproject.servaldna.ServalDInterfaceException;
 import org.servalproject.servaldna.SubscriberId;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
@@ -68,6 +72,28 @@ public class VisualizationActivity extends Activity {
         /** Instantiate the interface and set the context */
         JavaScriptInterface(Context c) {
             mContext = c;
+        }
+
+        @JavascriptInterface
+        public boolean sendCommand(String sid) {
+            ServalBatPhoneApplication app = ServalBatPhoneApplication.context;
+
+            try {
+                KeyringIdentity identity = app.server.getIdentity();
+                SubscriberId sidObject = new SubscriberId(sid);
+
+                app.netAPI.sendRequest(sidObject, "PING".getBytes());
+                return true;
+            } catch (ServalDInterfaceException e) {
+                e.printStackTrace();
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            } catch (AbstractId.InvalidHexException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
 
         @JavascriptInterface
