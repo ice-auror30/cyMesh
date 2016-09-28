@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -13,11 +12,8 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import org.servalproject.ServalBatPhoneApplication;
-import org.servalproject.rhizome.FilteredCursor;
 import org.servalproject.rhizome.Rhizome;
 import org.servalproject.rhizome.RhizomeManifest;
-import org.servalproject.rhizome.RhizomeManifest_File;
-import org.servalproject.servald.ServalD;
 import org.servalproject.servaldna.BundleId;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.SubscriberId;
@@ -68,40 +64,24 @@ public class CameraService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Rhizome.ACTION_RECEIVE_FILE)) {
-                Log.d(TAG,"intent.toString():" + intent.toString());
-                Log.d(TAG,"intent.getStringExtra():" + intent.getStringExtra("typ"));
                 Bundle b = intent.getExtras();
-                Log.d(TAG,"b.getString(\"typ\"):" + b.getString("typ"));
-
-
-                if (senderID != null) {
+                if (senderID != null && intent.getType().contains("mp4") && b.getString("name").equals(senderID.toString()+".mp4")) {
                     try {
-                        Cursor d = ServalD.rhizomeList(RhizomeManifest_File.SERVICE, null, null, null);
-                        FilteredCursor fc = new FilteredCursor(d);
-                        for (int i = 0; i < fc.getCount(); i++) {
-                            fc.moveToNext();
-                            if (fc.getString(fc.getColumnIndex("name")).equals(senderID.toString() + ".mp4")) {
-                                BundleId bid = new BundleId(fc.getBlob(fc.getColumnIndex("id")));
-
-                                File dir = Rhizome.getTempDirectoryCreated();
-
-                                final File temp = new File(dir, bid.toHex() + ".mp4");
-                                temp.delete();
-                                ServalDCommand.rhizomeExtractFile(bid, temp);
-
-                                String ext = temp.getName().substring(temp.getName().lastIndexOf(".") + 1);
-                                String contentType = MimeTypeMap.getSingleton()
-                                        .getMimeTypeFromExtension(ext);
-                                Uri uri = Uri.fromFile(temp);
-                                Log.i(Rhizome.TAG, "Open uri='" + uri + "', contentType='" + contentType + "'");
-                                Intent newIntent = new Intent();
-                                newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                newIntent.setAction(Intent.ACTION_VIEW);
-                                newIntent.setDataAndType(uri, contentType);
-                                getApplicationContext().startActivity(newIntent);
-                                break;
-                            }
-                        }
+                        BundleId bid = new BundleId(b.getString("id"));
+                        File dir = Rhizome.getTempDirectoryCreated();
+                        final File temp = new File(dir, bid.toHex() + ".mp4");
+                        temp.delete();
+                        ServalDCommand.rhizomeExtractFile(bid, temp);
+                        String ext = temp.getName().substring(temp.getName().lastIndexOf(".") + 1);
+                        String contentType = MimeTypeMap.getSingleton()
+                                .getMimeTypeFromExtension(ext);
+                        Uri uri = Uri.fromFile(temp);
+                        Log.d(TAG, "Open uri='" + uri + "', contentType='" + contentType + "'");
+                        Intent newIntent = new Intent();
+                        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        newIntent.setAction(Intent.ACTION_VIEW);
+                        newIntent.setDataAndType(uri, contentType);
+                        getApplicationContext().startActivity(newIntent);
                     } catch (Exception e) {
                         Log.e(Rhizome.TAG, e.toString(), e);
                         ServalBatPhoneApplication.context.displayToastMessage(e

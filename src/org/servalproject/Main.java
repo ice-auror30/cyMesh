@@ -327,7 +327,6 @@ public class Main extends Activity implements OnClickListener{
                     Rhizome.unshareFile(bid);
                     Log.d(TAG, "File Unshared");
                 }
-                Log.d(TAG, fc.getString(fc.getColumnIndex("name")));
             }
 
             File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
