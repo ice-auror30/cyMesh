@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -67,6 +68,12 @@ public class CameraService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Rhizome.ACTION_RECEIVE_FILE)) {
+                Log.d(TAG,"intent.toString():" + intent.toString());
+                Log.d(TAG,"intent.getStringExtra():" + intent.getStringExtra("typ"));
+                Bundle b = intent.getExtras();
+                Log.d(TAG,"b.getString(\"typ\"):" + b.getString("typ"));
+
+
                 if (senderID != null) {
                     try {
                         Cursor d = ServalD.rhizomeList(RhizomeManifest_File.SERVICE, null, null, null);
@@ -94,7 +101,6 @@ public class CameraService extends Service {
                                 getApplicationContext().startActivity(newIntent);
                                 break;
                             }
-                            Log.d(TAG, fc.getString(fc.getColumnIndex("name")));
                         }
                     } catch (Exception e) {
                         Log.e(Rhizome.TAG, e.toString(), e);

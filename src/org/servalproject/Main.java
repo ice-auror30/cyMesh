@@ -75,266 +75,268 @@ import java.io.File;
  * @author Romana Challans <romana@servalproject.org>
  */
 public class Main extends Activity implements OnClickListener{
-	public ServalBatPhoneApplication app;
-	private static final String TAG = "Main";
-	private TextView buttonToggle;
-	private ImageView buttonToggleImg;
-	private Drawable powerOnDrawable;
-	private Drawable powerOffDrawable;
-	public static SurfaceView dummySurface;
-	public static RecordClick rc = null;
-	private static boolean firstLoad = false;
-	private static RelativeLayout lm = null;
-	static Context c;
-	private String sidstring;
+    public ServalBatPhoneApplication app;
+    private static final String TAG = "Main";
+    private TextView buttonToggle;
+    private ImageView buttonToggleImg;
+    private Drawable powerOnDrawable;
+    private Drawable powerOffDrawable;
+    public static SurfaceView dummySurface;
+    public static RecordClick rc = null;
+    private static boolean firstLoad = false;
+    private static RelativeLayout lm = null;
+    static Context c;
+    private String sidstring;
 
-	private void openMaps() {
-		// check to see if maps is installed
-		try {
-			PackageManager mManager = getPackageManager();
-			mManager.getApplicationInfo("org.servalproject.maps",
-					PackageManager.GET_META_DATA);
+    private void openMaps() {
+        // check to see if maps is installed
+        try {
+            PackageManager mManager = getPackageManager();
+            mManager.getApplicationInfo("org.servalproject.maps",
+                    PackageManager.GET_META_DATA);
 
-			Intent mIntent = mManager
-					.getLaunchIntentForPackage("org.servalproject.maps");
-			mIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-			startActivity(mIntent);
+            Intent mIntent = mManager
+                    .getLaunchIntentForPackage("org.servalproject.maps");
+            mIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+            startActivity(mIntent);
 
-		} catch (NameNotFoundException e) {
-			startActivity(new Intent(getApplicationContext(),
-					org.servalproject.ui.MapsActivity.class));
-		}
-	}
+        } catch (NameNotFoundException e) {
+            startActivity(new Intent(getApplicationContext(),
+                    org.servalproject.ui.MapsActivity.class));
+        }
+    }
 
-	@Override
-	public void onClick(View view) {
-		// Do nothing until upgrade finished.
-		if (app.getState() != State.Running)
-			return;
+    @Override
+    public void onClick(View view) {
+        // Do nothing until upgrade finished.
+        if (app.getState() != State.Running)
+            return;
 
-		switch (view.getId()){
-			case R.id.btncall:
-				if (!PeerListService.havePeers()) {
-					app.displayToastMessage("You do not have a connection to any other phones");
-					return;
-				}
-				try {
-					startActivity(new Intent(Intent.ACTION_DIAL));
-					return;
-				} catch (ActivityNotFoundException e) {
-					Log.e(TAG, e.getMessage(), e);
-				}
-				startActivity(new Intent(app, CallDirector.class));
-				break;
-			case R.id.messageLabel:
-				if (!ServalD.isRhizomeEnabled()) {
-					app.displayToastMessage("Messaging cannot function without an sdcard");
-					return;
-				}
-				startActivity(new Intent(getApplicationContext(),
-						org.servalproject.messages.MessagesListActivity.class));
-				break;
-			case R.id.mapsLabel:
-				openMaps();
-				break;
-			case R.id.contactsLabel:
-				startActivity(new Intent(getApplicationContext(),
-						org.servalproject.ui.ContactsActivity.class));
-				break;
-			case R.id.settingsLabel:
-				startActivity(new Intent(getApplicationContext(),
-						org.servalproject.ui.SettingsScreenActivity.class));
-				break;
-			case R.id.sharingLabel:
-				startActivity(new Intent(getApplicationContext(),
-						RhizomeMain.class));
-				break;
-			case R.id.helpLabel:
-				Intent intent = new Intent(getApplicationContext(),
-						HtmlHelp.class);
-				intent.putExtra("page", "helpindex.html");
-				startActivity(intent);
-				break;
-			case R.id.servalLabel:
-				startActivity(new Intent(getApplicationContext(),
-						ShareUsActivity.class));
-				break;
-			case R.id.powerLabel:
-				startActivity(new Intent(getApplicationContext(),
-						Networks.class));
-				break;
-			case R.id.sharingSensorLabel:
-				startActivity(new Intent(getApplicationContext(),
-						org.servalproject.rhizome.ShareSensorActivity.class));
-				break;
-			case R.id.getCameraLabel:
+        switch (view.getId()){
+            case R.id.btncall:
+                if (!PeerListService.havePeers()) {
+                    app.displayToastMessage("You do not have a connection to any other phones");
+                    return;
+                }
+                try {
+                    startActivity(new Intent(Intent.ACTION_DIAL));
+                    return;
+                } catch (ActivityNotFoundException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+                startActivity(new Intent(app, CallDirector.class));
+                break;
+            case R.id.messageLabel:
+                if (!ServalD.isRhizomeEnabled()) {
+                    app.displayToastMessage("Messaging cannot function without an sdcard");
+                    return;
+                }
+                startActivity(new Intent(getApplicationContext(),
+                        org.servalproject.messages.MessagesListActivity.class));
+                break;
+            case R.id.mapsLabel:
+                openMaps();
+                break;
+            case R.id.contactsLabel:
+                startActivity(new Intent(getApplicationContext(),
+                        org.servalproject.ui.ContactsActivity.class));
+                break;
+            case R.id.settingsLabel:
+                startActivity(new Intent(getApplicationContext(),
+                        org.servalproject.ui.SettingsScreenActivity.class));
+                break;
+            case R.id.sharingLabel:
+                startActivity(new Intent(getApplicationContext(),
+                        RhizomeMain.class));
+                break;
+            case R.id.helpLabel:
+                Intent intent = new Intent(getApplicationContext(),
+                        HtmlHelp.class);
+                intent.putExtra("page", "helpindex.html");
+                startActivity(intent);
+                break;
+            case R.id.servalLabel:
+                startActivity(new Intent(getApplicationContext(),
+                        ShareUsActivity.class));
+                break;
+            case R.id.powerLabel:
+                startActivity(new Intent(getApplicationContext(),
+                        Networks.class));
+                break;
+            case R.id.sharingSensorLabel:
+                startActivity(new Intent(getApplicationContext(),
+                        org.servalproject.rhizome.ShareSensorActivity.class));
+                break;
+            case R.id.getCameraLabel:
 
-				break;
-			case R.id.visualLabel:
-				startActivity(new Intent(getApplicationContext(),
-						org.servalproject.VisualizationActivity.class));
-				break;
-		}
-	}
+                break;
+            case R.id.visualLabel:
+                startActivity(new Intent(getApplicationContext(),
+                        org.servalproject.VisualizationActivity.class));
+                break;
+        }
+    }
 
-	/*	public static SurfaceView addSVtoMain(){
+    /*	public static SurfaceView addSVtoMain(){
             SurfaceView sv = new SurfaceView(c);
             lm.addView(sv);
             sv.setVisibility(View.INVISIBLE);
             return sv;
         }*/
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		c = this;
-		this.app = (ServalBatPhoneApplication) this.getApplication();
-		setContentView(R.layout.main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        c = this;
+        this.app = (ServalBatPhoneApplication) this.getApplication();
+        setContentView(R.layout.main);
 
-		dummySurface = (SurfaceView) findViewById(R.id.cameraView);
+        dummySurface = (SurfaceView) findViewById(R.id.cameraView);
 
-		try {
-			sidstring = ServalBatPhoneApplication.context.server.getIdentity().sid.toString();
-			rc = new RecordClick(sidstring, app);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+        // adjust the power button label on startup
+        buttonToggle = (TextView) findViewById(R.id.btntoggle);
+        buttonToggleImg = (ImageView) findViewById(R.id.powerLabel);
+        buttonToggleImg.setOnClickListener(this);
 
-		// adjust the power button label on startup
-		buttonToggle = (TextView) findViewById(R.id.btntoggle);
-		buttonToggleImg = (ImageView) findViewById(R.id.powerLabel);
-		buttonToggleImg.setOnClickListener(this);
+        // load the power drawables
+        powerOnDrawable = getResources().getDrawable(
+                R.drawable.ic_launcher_power);
+        powerOffDrawable = getResources().getDrawable(
+                R.drawable.ic_launcher_power_off);
 
-		// load the power drawables
-		powerOnDrawable = getResources().getDrawable(
-				R.drawable.ic_launcher_power);
-		powerOffDrawable = getResources().getDrawable(
-				R.drawable.ic_launcher_power_off);
+        int listenTo[] = {
+                R.id.btncall,
+                R.id.messageLabel,
+                R.id.mapsLabel,
+                R.id.contactsLabel,
+                R.id.settingsLabel,
+                R.id.sharingLabel,
+                R.id.helpLabel,
+                R.id.servalLabel,
+                R.id.sharingSensorLabel,
+                R.id.getCameraLabel,
+                R.id.visualLabel
+        };
+        for (int i = 0; i < listenTo.length; i++) {
+            this.findViewById(listenTo[i]).setOnClickListener(this);
+        }
 
-		int listenTo[] = {
-				R.id.btncall,
-				R.id.messageLabel,
-				R.id.mapsLabel,
-				R.id.contactsLabel,
-				R.id.settingsLabel,
-				R.id.sharingLabel,
-				R.id.helpLabel,
-				R.id.servalLabel,
-				R.id.sharingSensorLabel,
-				R.id.getCameraLabel,
-				R.id.visualLabel
-		};
-		for (int i = 0; i < listenTo.length; i++) {
-			this.findViewById(listenTo[i]).setOnClickListener(this);
-		}
+        startService(new Intent(this, CameraService.class));
+        rc = new RecordClick(app);
+        try {
+            sidstring = app.server.getIdentity().sid.toString();
+        }catch(Exception E){
+            E.printStackTrace();
+            Log.d(TAG, "Failed to set SIDstring in Main for Camera");
+        }
 
-		startService(new Intent(this, CameraService.class));
-	}
+    }
 
-	public static SurfaceView getCameraSurface(){
-		return dummySurface;
-	}
+    public static SurfaceView getCameraSurface(){
+        return dummySurface;
+    }
 
-	BroadcastReceiver receiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if(intent.getAction().equals(MeshMS.NEW_MESSAGES)) {
-				rc.onClick(sidstring);
-			}
-			if(intent.getAction().equals(ServalBatPhoneApplication.ACTION_STATE)) {
-				int stateOrd = intent.getIntExtra(
-						ServalBatPhoneApplication.EXTRA_STATE, 0);
-				State state = State.values()[stateOrd];
-				stateChanged(state);
-			}
-			if(intent.getAction().equals(RecordClick.RECORDING_FINISHED)) {
-				sendCapturedVideo();
-			}
-		}
-	};
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(MeshMS.NEW_MESSAGES)) {
+                rc.onClick(sidstring);
+            }
+            if(intent.getAction().equals(ServalBatPhoneApplication.ACTION_STATE)) {
+                int stateOrd = intent.getIntExtra(
+                        ServalBatPhoneApplication.EXTRA_STATE, 0);
+                State state = State.values()[stateOrd];
+                stateChanged(state);
+            }
+            if(intent.getAction().equals(RecordClick.RECORDING_FINISHED)) {
+                sendCapturedVideo();
+            }
+        }
+    };
 
-	boolean registered = false;
+    boolean registered = false;
 
-	private void stateChanged(State state) {
-		switch (state){
-			case Running: case Upgrading: case Starting:
-				// change the image for the power button
-				buttonToggleImg.setImageDrawable(
-						app.isEnabled()?powerOnDrawable:powerOffDrawable);
+    private void stateChanged(State state) {
+        switch (state){
+            case Running: case Upgrading: case Starting:
+                // change the image for the power button
+                buttonToggleImg.setImageDrawable(
+                        app.isEnabled()?powerOnDrawable:powerOffDrawable);
 
-				TextView pn = (TextView) this.findViewById(R.id.mainphonenumber);
-				String id = this.getString(state.getResourceId());
-				if (state == State.Running) {
-					try {
-						KeyringIdentity identity = app.server.getIdentity();
+                TextView pn = (TextView) this.findViewById(R.id.mainphonenumber);
+                String id = this.getString(state.getResourceId());
+                if (state == State.Running) {
+                    try {
+                        KeyringIdentity identity = app.server.getIdentity();
 
-						if (identity.did != null)
-							id = identity.did;
-						else
-							id = identity.sid.abbreviation();
-					} catch (Exception e) {
-						Log.e(TAG, e.getMessage(), e);
-					}
-				}
-				pn.setText(id);
-				break;
-			case RequireDidName: case NotInstalled: case Installing:
-				this.startActivity(new Intent(this, Wizard.class));
-				finish();
-				app.startBackgroundInstall();
-				break;
-			case Broken:
-				// TODO display error?
-				break;
-		}
-	}
+                        if (identity.did != null)
+                            id = identity.did;
+                        else
+                            id = identity.sid.abbreviation();
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage(), e);
+                    }
+                }
+                pn.setText(id);
+                break;
+            case RequireDidName: case NotInstalled: case Installing:
+                this.startActivity(new Intent(this, Wizard.class));
+                finish();
+                app.startBackgroundInstall();
+                break;
+            case Broken:
+                // TODO display error?
+                break;
+        }
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-		if (!registered) {
-			IntentFilter filter = new IntentFilter();
-			filter.addAction(ServalBatPhoneApplication.ACTION_STATE);
-			filter.addAction(MeshMS.NEW_MESSAGES);
-			filter.addAction(RecordClick.RECORDING_FINISHED);
-			this.registerReceiver(receiver, filter);
-			registered = true;
-		}
+        if (!registered) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ServalBatPhoneApplication.ACTION_STATE);
+            filter.addAction(MeshMS.NEW_MESSAGES);
+            filter.addAction(RecordClick.RECORDING_FINISHED);
+            this.registerReceiver(receiver, filter);
+            registered = true;
+        }
 
-		dummySurface.setVisibility(View.VISIBLE);
-	}
+        dummySurface.setVisibility(View.VISIBLE);
+    }
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		if (registered) {
-			this.unregisterReceiver(receiver);
-			registered = false;
-		}
-		dummySurface.setVisibility(View.INVISIBLE);
-	}
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (registered) {
+            this.unregisterReceiver(receiver);
+            registered = false;
+        }
+        dummySurface.setVisibility(View.INVISIBLE);
+    }
 
-	private void sendCapturedVideo(){
-		try {
-			Cursor d = ServalD.rhizomeList(RhizomeManifest_File.SERVICE, null, null, null);
-			FilteredCursor fc = new FilteredCursor(d);
-			KeyringIdentity identity = ServalBatPhoneApplication.context.server.getIdentity();
-			for (int i = 0; i < fc.getCount(); i++) {
-				fc.moveToNext();
-				if (fc.getString(fc.getColumnIndex("name")).equals(identity.sid.toString() + ".mp4")) {
-					BundleId bid = new BundleId(fc.getBlob(fc.getColumnIndex("id")));
-					Rhizome.unshareFile(bid);
-				}
-				Log.d(TAG, fc.getString(fc.getColumnIndex("name")));
-			}
+    private void sendCapturedVideo(){
+        try {
+            Cursor d = ServalD.rhizomeList(RhizomeManifest_File.SERVICE, null, null, null);
+            FilteredCursor fc = new FilteredCursor(d);
+            KeyringIdentity identity = ServalBatPhoneApplication.context.server.getIdentity();
+            for (int i = 0; i < fc.getCount(); i++) {
+                fc.moveToNext();
+                if (fc.getString(fc.getColumnIndex("name")).equals(identity.sid.toString() + ".mp4")) {
+                    BundleId bid = new BundleId(fc.getBlob(fc.getColumnIndex("id")));
+                    Rhizome.unshareFile(bid);
+                    Log.d(TAG, "File Unshared");
+                }
+                Log.d(TAG, fc.getString(fc.getColumnIndex("name")));
+            }
 
-			File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
-					+ Environment.DIRECTORY_DCIM + File.separator + identity.sid.toString() + ".mp4");
-			ServalDCommand.rhizomeAddFile(capturedVideo, null, null, identity.sid, null);
+            File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
+                    + Environment.DIRECTORY_DCIM + File.separator + identity.sid.toString() + ".mp4");
+            ServalDCommand.rhizomeAddFile(capturedVideo, null, null, identity.sid, null);
 
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
 }

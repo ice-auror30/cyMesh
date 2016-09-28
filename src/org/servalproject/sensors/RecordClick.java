@@ -29,50 +29,34 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
     boolean recording = false;
     boolean recorded = false;
     SurfaceView cameraView;
-    static String timeStamp = null;
 
     private String sid;
     private final ServalBatPhoneApplication app;
     public static final String RECORDING_FINISHED="org.servalproject.recordclick.FINISHED";
 
-    public RecordClick(String sid, ServalBatPhoneApplication app) {
+    public RecordClick(ServalBatPhoneApplication app) {
         this.app = app;
         Log.d("RecordClickObject", "Created");
-        initRecorder(sid);
-
-        this.sid = sid;
+        initRecorder();
         cameraView = Main.getCameraSurface();
         holder = cameraView.getHolder();
         holder.addCallback(this);
     }
 
-    public static void setTimeStamp(String currentTime){
-        timeStamp = currentTime;
-    }
-
-    public static String getTimeStamp(){
-        return timeStamp;
-    }
-
-    private void initRecorder(String sid) {
+    private void initRecorder() {
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
         recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         recorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+        recorder.setVideoEncodingBitRate(3000000);
         recorder.setOrientationHint(90);
 
        /* CamcorderProfile cpHigh = CamcorderProfile
                 .get(CamcorderProfile.QUALITY_HIGH);
         recorder.setProfile(cpHigh);*/
         Log.d("Camera", "Initialized");
-
-        Log.d("Camera", Environment.getExternalStorageDirectory() + File.separator
-                        + Environment.DIRECTORY_DCIM + File.separator + sid + ".mp4");
-        recorder.setOutputFile(Environment.getExternalStorageDirectory() + File.separator
-                + Environment.DIRECTORY_DCIM + File.separator + sid + ".mp4");
-        //recorder.setMaxDuration(5000); // 5 seconds
     }
 
     private void prepareRecorder() {
@@ -90,16 +74,6 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void smallStart(){
-        try {
-            Log.d("Camera", "Trying to Start");
-            recording = true;
-            recorder.start();
-        }catch(Exception E){
-            E.printStackTrace();
         }
     }
 
@@ -125,12 +99,19 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
             }
         };
         if(recorded){
-            initRecorder(sid);
+            initRecorder();
             prepareRecorder();
             recorded = false;
         }
         if(!recording) {
+            initRecorder();
+            Log.d("Camera", Environment.getExternalStorageDirectory() + File.separator
+                    + Environment.DIRECTORY_DCIM + File.separator + sid + ".mp4");
+            recorder.setOutputFile(Environment.getExternalStorageDirectory() + File.separator
+                    + Environment.DIRECTORY_DCIM + File.separator + sid + ".mp4");
             recording = true;
+            prepareRecorder();
+
             recorder.start();
             Timer myTimer = new Timer();
 
@@ -147,7 +128,7 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
                                int height) {
-        prepareRecorder();
+        Log.d("Camera","Surface changed");
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -157,7 +138,7 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
         }
         recorder.release();
         recorder = new MediaRecorder();
-        initRecorder(sid);
+        initRecorder();
         cameraView = Main.getCameraSurface();
         holder = cameraView.getHolder();
         holder.addCallback(this);
