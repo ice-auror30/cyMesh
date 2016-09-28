@@ -94,6 +94,7 @@ public class VisualizationActivity extends Activity {
 
                 CameraService.setSenderID(sidObject);
                 app.server.getRestfulClient().meshmsSendMessage(identity.sid, sidObject, "START_CAMERA");
+                app.displayToastMessage("Please wait 10 seconds for requested video.");
                 return "TEST2: true"+ sid;
             } catch (Exception E){
                 E.printStackTrace();

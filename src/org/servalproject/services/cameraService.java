@@ -13,7 +13,6 @@ import android.webkit.MimeTypeMap;
 
 import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.rhizome.Rhizome;
-import org.servalproject.rhizome.RhizomeManifest;
 import org.servalproject.servaldna.BundleId;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.SubscriberId;
@@ -26,9 +25,6 @@ public class CameraService extends Service {
     public static SubscriberId senderID;
     private static String TAG = "CameraService";
 
-    private RhizomeManifest mManifest;
-    private File mManifestFile;
-    private File mPayloadFile;
     private IntentFilter filter;
 
 
