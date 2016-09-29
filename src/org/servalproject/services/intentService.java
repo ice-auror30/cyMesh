@@ -56,7 +56,7 @@
 //    }
 //
 //    /**
-//     * This method handles executing the requests as they come in from the broadcast receiver
+//     * This method handles executing the requests as they come in from the broadcast dataReceiver
 //     * @param request
 //     */
 //    public synchronized void processRequest(String request)

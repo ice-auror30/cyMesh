@@ -28,38 +28,25 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.servalproject.ServalBatPhoneApplication.State;
 import org.servalproject.batphone.CallDirector;
-import org.servalproject.rhizome.FilteredCursor;
-import org.servalproject.rhizome.MeshMS;
-import org.servalproject.rhizome.Rhizome;
 import org.servalproject.rhizome.RhizomeMain;
-import org.servalproject.rhizome.RhizomeManifest_File;
-import org.servalproject.sensors.RecordClick;
 import org.servalproject.servald.PeerListService;
 import org.servalproject.servald.ServalD;
-import org.servalproject.servaldna.BundleId;
-import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
 import org.servalproject.services.CameraService;
 import org.servalproject.ui.Networks;
 import org.servalproject.ui.ShareUsActivity;
 import org.servalproject.ui.help.HtmlHelp;
 import org.servalproject.wizard.Wizard;
-
-import java.io.File;
 
 /**
  *
@@ -81,12 +68,7 @@ public class Main extends Activity implements OnClickListener{
     private ImageView buttonToggleImg;
     private Drawable powerOnDrawable;
     private Drawable powerOffDrawable;
-    public static SurfaceView dummySurface;
-    public static RecordClick rc = null;
-    private static boolean firstLoad = false;
-    private static RelativeLayout lm = null;
-    static Context c;
-    private String sidstring;
+    private String SIDString;
 
     private void openMaps() {
         // check to see if maps is installed
@@ -177,20 +159,11 @@ public class Main extends Activity implements OnClickListener{
         }
     }
 
-    /*	public static SurfaceView addSVtoMain(){
-            SurfaceView sv = new SurfaceView(c);
-            lm.addView(sv);
-            sv.setVisibility(View.INVISIBLE);
-            return sv;
-        }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        c = this;
         this.app = (ServalBatPhoneApplication) this.getApplication();
         setContentView(R.layout.main);
-
-        dummySurface = (SurfaceView) findViewById(R.id.cameraView);
 
         // adjust the power button label on startup
         buttonToggle = (TextView) findViewById(R.id.btntoggle);
@@ -220,35 +193,27 @@ public class Main extends Activity implements OnClickListener{
             this.findViewById(listenTo[i]).setOnClickListener(this);
         }
 
-        startService(new Intent(this, CameraService.class));
-        rc = new RecordClick(app);
         try {
-            sidstring = app.server.getIdentity().sid.toString();
+            SIDString = app.server.getIdentity().sid.toString();
         }catch(Exception E){
             E.printStackTrace();
-            Log.d(TAG, "Failed to set SIDstring in Main for Camera");
+            Log.d(TAG, "Failed to set localSIDString in Main for Camera");
         }
 
-    }
-
-    public static SurfaceView getCameraSurface(){
-        return dummySurface;
+        Intent i = new Intent(this, CameraService.class);
+        i.putExtra("localSIDString", SIDString);
+        Log.d(CameraService.TAG, "Service Starting from Main");
+        startService(i);
     }
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(MeshMS.NEW_MESSAGES)) {
-                rc.onClick(sidstring);
-            }
             if(intent.getAction().equals(ServalBatPhoneApplication.ACTION_STATE)) {
                 int stateOrd = intent.getIntExtra(
                         ServalBatPhoneApplication.EXTRA_STATE, 0);
                 State state = State.values()[stateOrd];
                 stateChanged(state);
-            }
-            if(intent.getAction().equals(RecordClick.RECORDING_FINISHED)) {
-                sendCapturedVideo();
             }
         }
     };
@@ -296,13 +261,9 @@ public class Main extends Activity implements OnClickListener{
         if (!registered) {
             IntentFilter filter = new IntentFilter();
             filter.addAction(ServalBatPhoneApplication.ACTION_STATE);
-            filter.addAction(MeshMS.NEW_MESSAGES);
-            filter.addAction(RecordClick.RECORDING_FINISHED);
             this.registerReceiver(receiver, filter);
             registered = true;
         }
-
-        dummySurface.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -312,30 +273,5 @@ public class Main extends Activity implements OnClickListener{
             this.unregisterReceiver(receiver);
             registered = false;
         }
-        dummySurface.setVisibility(View.INVISIBLE);
     }
-
-    private void sendCapturedVideo(){
-        try {
-            Cursor d = ServalD.rhizomeList(RhizomeManifest_File.SERVICE, null, null, null);
-            FilteredCursor fc = new FilteredCursor(d);
-            KeyringIdentity identity = ServalBatPhoneApplication.context.server.getIdentity();
-            for (int i = 0; i < fc.getCount(); i++) {
-                fc.moveToNext();
-                if (fc.getString(fc.getColumnIndex("name")).equals(identity.sid.toString() + ".mp4")) {
-                    BundleId bid = new BundleId(fc.getBlob(fc.getColumnIndex("id")));
-                    Rhizome.unshareFile(bid);
-                    Log.d(TAG, "File Unshared");
-                }
-            }
-
-            File capturedVideo = new File(Environment.getExternalStorageDirectory() + File.separator
-                    + Environment.DIRECTORY_DCIM + File.separator + identity.sid.toString() + ".mp4");
-            ServalDCommand.rhizomeAddFile(capturedVideo, null, null, identity.sid, null);
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
 }

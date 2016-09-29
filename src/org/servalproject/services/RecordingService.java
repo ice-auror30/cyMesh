@@ -1,7 +1,9 @@
-package org.servalproject.sensors;
+package org.servalproject.services;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -10,12 +12,9 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import org.servalproject.Main;
-import org.servalproject.ServalBatPhoneApplication;
+import android.view.WindowManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,24 +22,36 @@ import java.util.TimerTask;
 /**
  * Created by Brad on 2/17/2016.
  */
-public class RecordClick extends Service implements SurfaceHolder.Callback {
+public class RecordingService extends Service implements SurfaceHolder.Callback {
     MediaRecorder recorder;
     SurfaceHolder holder;
     boolean recording = false;
     boolean recorded = false;
     SurfaceView cameraView;
-
-    private String sid;
-    private final ServalBatPhoneApplication app;
     public static final String RECORDING_FINISHED="org.servalproject.recordclick.FINISHED";
+    public static final String START_CAMERA="START_CAMERA";
+    private static final String TAG = "RecordingService";
 
-    public RecordClick(ServalBatPhoneApplication app) {
-        this.app = app;
-        Log.d("RecordClickObject", "Created");
-        initRecorder();
-        cameraView = Main.getCameraSurface();
+    @SuppressWarnings("deprecation")
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String SIDString = (String) intent.getExtras().get("localSIDString");
+        Log.d(TAG, "Created. SIDString passed in: "+SIDString);
+        cameraView = new SurfaceView(getApplicationContext());
         holder = cameraView.getHolder();
+        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         holder.addCallback(this);
+        WindowManager wm = (WindowManager)getApplicationContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                1, 1, //Must be at least 1x1
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                0,
+                PixelFormat.UNKNOWN);
+        wm.addView(cameraView, params);
+
+        startStopRecording(SIDString);
+        return START_STICKY;
     }
 
     private void initRecorder() {
@@ -50,62 +61,51 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         recorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
-        recorder.setVideoEncodingBitRate(5000000);
+        recorder.setVideoEncodingBitRate(3000000);
         recorder.setOrientationHint(90);
 
        /* CamcorderProfile cpHigh = CamcorderProfile
                 .get(CamcorderProfile.QUALITY_HIGH);
         recorder.setProfile(cpHigh);*/
-        Log.d("Camera", "Initialized");
+        Log.d(TAG, "initRecorder finished");
     }
 
     private void prepareRecorder() {
-        //Use to not view preview
         SurfaceTexture surfaceTexture = new SurfaceTexture(10);
         Surface sv = new Surface(surfaceTexture);
         recorder.setPreviewDisplay(sv);
-
-        //Use to view preview
-        //recorder.setPreviewDisplay(holder.getSurface());
-
         try {
             recorder.prepare();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void onClick(String sid) {
-        Log.d("OnClick","Pressed");
+    public void startStopRecording(String sid) {
+        Log.d(TAG,"startStopRecording");
         TimerTask t = new TimerTask() {
             @Override
             public void run() {
                 if (recording) {
-                    Log.d("Camera", "Stopping");
+                    Log.d(TAG, "Interrupted by new record request");
                     recorder.stop();
                     recorder.reset();
-                    recording = false;
-
-                    //Release recorder resources - we'll make a new MediaRecorder if we need to record again
                     recorder.release();
 
-                    Log.d("Camera","Stopped");
+                    Log.d(TAG,"Stopped");
+                    recording = false;
                     recorded = true;
 
-                    app.sendBroadcast(new Intent(RECORDING_FINISHED));
+                    sendBroadcast(new Intent(RECORDING_FINISHED));
                 }
             }
         };
         if(recorded){
-            initRecorder();
-            prepareRecorder();
             recorded = false;
         }
         if(!recording) {
             initRecorder();
-            Log.d("Camera", Environment.getExternalStorageDirectory() + File.separator
+            Log.d(TAG,"Output to: " + Environment.getExternalStorageDirectory() + File.separator
                     + Environment.DIRECTORY_DCIM + File.separator + sid + ".mp4");
             recorder.setOutputFile(Environment.getExternalStorageDirectory() + File.separator
                     + Environment.DIRECTORY_DCIM + File.separator + sid + ".mp4");
@@ -139,7 +139,6 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
         recorder.release();
         recorder = new MediaRecorder();
         initRecorder();
-        cameraView = Main.getCameraSurface();
         holder = cameraView.getHolder();
         holder.addCallback(this);
     }
@@ -149,15 +148,6 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
         return null;
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, flags, startId);
-
-        if (recording == false)
-            recorder.start();
-
-        return START_STICKY;
-    }
     public void onPause(){
         //cameraView = null;
     }
@@ -169,6 +159,8 @@ public class RecordClick extends Service implements SurfaceHolder.Callback {
 
         super.onDestroy();
     }
+
+
 
 
 }

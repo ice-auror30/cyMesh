@@ -97,7 +97,7 @@ public class ContactsActivity extends Activity implements OnClickListener {
 			break;
 
 		default:
-			Log.w(TAG, "unknown view called onClick method");
+			Log.w(TAG, "unknown view called startStopRecording method");
 		}
 	}
 

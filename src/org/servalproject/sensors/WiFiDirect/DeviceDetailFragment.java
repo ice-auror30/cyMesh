@@ -71,7 +71,7 @@
 //        mContentView.findViewById(R.id.btn_connect).setOnClickListener(new View.OnClickListener() {
 //
 //            @Override
-//            public void onClick(View v) {
+//            public void startStopRecording(View v) {
 //                WifiP2pConfig config = new WifiP2pConfig();
 //                config.deviceAddress = device.deviceAddress;
 //                config.wps.setup = WpsInfo.PBC;
@@ -97,7 +97,7 @@
 //                new View.OnClickListener() {
 //
 //                    @Override
-//                    public void onClick(View v) {
+//                    public void startStopRecording(View v) {
 //                        ((DeviceListFragment.DeviceActionListener) getActivity()).disconnect();
 //                    }
 //                });
@@ -106,7 +106,7 @@
 //                new View.OnClickListener() {
 //
 //                    @Override
-//                    public void onClick(View v) {
+//                    public void startStopRecording(View v) {
 //                        // Allow user to pick an image from Gallery or other
 //                        // registered apps
 //                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -119,7 +119,7 @@
 //                new View.OnClickListener() {
 //
 //                    @Override
-//                    public void onClick(View v) {
+//                    public void startStopRecording(View v) {
 //                        Intent intent = new Intent(Intent.ACTION_SEND);
 //                        intent.putExtra(Intent.EXTRA_TEXT, "START_SERVICE");
 //                        /*Bundle B = intent.getExtras();
@@ -128,9 +128,9 @@
 //                        startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
 //                        //WiFiDirectActivity wiFiDirectActivity = (WiFiDirectActivity) getActivity();
 //                        //SurfaceView dummySurface;
-////                        RecordClick rc = new RecordClick();
+////                        RecordingService rc = new RecordingService();
 ////                        try{
-////                            rc.onClick();
+////                            rc.startStopRecording();
 ////                            Toast.makeText(getActivity(), "Recording Started By Remote Device", Toast.LENGTH_SHORT).show();
 ////                        }catch(IllegalStateException E){
 ////                            E.printStackTrace();
@@ -304,7 +304,7 @@
 //                //context.startActivity(intent);
 //
 //                try {
-//                    WiFiDirectActivity.rc.onClick();
+//                    WiFiDirectActivity.rc.startStopRecording();
 //                    Toast.makeText(context, "Recording Started By Remote Device", Toast.LENGTH_SHORT).show();
 //                } catch (Exception e){
 //                    e.printStackTrace();
