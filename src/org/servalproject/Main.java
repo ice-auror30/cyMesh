@@ -43,7 +43,6 @@ import android.widget.Toast;
 import org.servalproject.ServalBatPhoneApplication.State;
 import org.servalproject.api.NetworkAPI;
 import org.servalproject.batphone.CallDirector;
-import org.servalproject.protocol.CommandsProtocol;
 import org.servalproject.rhizome.MeshMS;
 import org.servalproject.rhizome.RhizomeMain;
 import org.servalproject.sensors.RecordClick;
@@ -252,7 +251,7 @@ public class Main extends Activity implements OnClickListener{
 	BroadcastReceiver cmdReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(CommandsProtocol.MESH_REQ)) {
+			if (intent.getAction().equals(NetworkAPI.MESH_REQ)) {
 				byte[] cmd = intent.getByteArrayExtra(NetworkAPI.CMD_DATA);
 				if (new String(cmd).equals("PING")) {
 					Log.i(TAG, "Received PING");
@@ -267,7 +266,7 @@ public class Main extends Activity implements OnClickListener{
 				}
 			}
 
-			else if (intent.getAction().equals(CommandsProtocol.MESH_RESP)) {
+			else if (intent.getAction().equals(NetworkAPI.MESH_RESP)) {
 				byte[] cmd = intent.getByteArrayExtra(NetworkAPI.CMD_DATA);
 				if (new String(cmd).equals("PONG")) {
 					Log.i(TAG, "Received PONG");
@@ -325,9 +324,9 @@ public class Main extends Activity implements OnClickListener{
 			this.registerReceiver(receiver, filter);
 
 			IntentFilter cmdFilter = new IntentFilter();
-			filter.addAction(CommandsProtocol.MESH_CMD);
-			filter.addAction(CommandsProtocol.MESH_REQ);
-			filter.addAction(CommandsProtocol.MESH_RESP);
+			filter.addAction(NetworkAPI.MESH_CMD);
+			filter.addAction(NetworkAPI.MESH_REQ);
+			filter.addAction(NetworkAPI.MESH_RESP);
 			this.registerReceiver(cmdReceiver, cmdFilter);
 			registered = true;
 		}
