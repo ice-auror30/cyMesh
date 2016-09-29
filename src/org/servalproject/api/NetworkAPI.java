@@ -38,6 +38,13 @@ public class NetworkAPI {
 
     private CommandsProtocol commandSocket = null;
 
+    public static final String MESH_CMD = "org.servalproject.batphone.meshcmd";
+    public static final String MESH_REQ = MESH_CMD + ".request";
+    public static final String MESH_RESP = MESH_CMD + ".response";
+
+    public static final String CMD_DATA = "data";
+    public static final String CMD_SRC = "source";
+
     private NetworkAPI() {
         app = ServalBatPhoneApplication.context;
         meshListeners = new ArrayList<IMeshListener>();
@@ -74,7 +81,30 @@ public class NetworkAPI {
                     @Override
                     public void result(CommandsProtocol.ProtocolResult nextResult) {
                         final byte type = nextResult.type;
+                        final byte[] payload = nextResult.payload;
+                        final SubscriberId sid = nextResult.subscriberId;
                         Log.d(TAG, "Got message of type " + type);
+
+                        Intent intent = new Intent();
+
+                        switch (type) {
+                            case CommandsProtocol.MSG_REQ:
+                                intent.setAction(MESH_REQ);
+                                intent.putExtra(CMD_SRC, sid.toHex());
+                                intent.putExtra(CMD_DATA, payload);
+
+                                app.sendBroadcast(intent);
+                                break;
+                            case CommandsProtocol.MSG_RESP:
+                                intent.setAction(MESH_RESP);
+                                intent.putExtra(CMD_SRC, sid.toHex());
+                                intent.putExtra(CMD_DATA, payload);
+
+                                app.sendBroadcast(intent);
+                                break;
+                        }
+
+                        app.sendBroadcast(intent);
                     }
                 });
             }

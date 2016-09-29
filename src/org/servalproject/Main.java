@@ -61,8 +61,6 @@ import org.servalproject.wizard.Wizard;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  *
@@ -255,12 +253,12 @@ public class Main extends Activity implements OnClickListener{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equals(CommandsProtocol.MESH_REQ)) {
-				byte[] cmd = intent.getByteArrayExtra(CommandsProtocol.CMD_DATA);
+				byte[] cmd = intent.getByteArrayExtra(NetworkAPI.CMD_DATA);
 				if (new String(cmd).equals("PING")) {
 					Log.i(TAG, "Received PING");
 					Toast.makeText(getBaseContext(), "Received PING", Toast.LENGTH_LONG).show();
 					try {
-						SubscriberId sid = new SubscriberId(intent.getStringExtra(CommandsProtocol.CMD_SRC));
+						SubscriberId sid = new SubscriberId(intent.getStringExtra(NetworkAPI.CMD_SRC));
 						Log.i(TAG, "Sending PONG");
 						app.netAPI.sendResponse(sid, "PONG".getBytes());
 					} catch (AbstractId.InvalidHexException e) {
@@ -270,7 +268,7 @@ public class Main extends Activity implements OnClickListener{
 			}
 
 			else if (intent.getAction().equals(CommandsProtocol.MESH_RESP)) {
-				byte[] cmd = intent.getByteArrayExtra(CommandsProtocol.CMD_DATA);
+				byte[] cmd = intent.getByteArrayExtra(NetworkAPI.CMD_DATA);
 				if (new String(cmd).equals("PONG")) {
 					Log.i(TAG, "Received PONG");
 					Toast.makeText(getBaseContext(), "Received PONG", Toast.LENGTH_LONG).show();
