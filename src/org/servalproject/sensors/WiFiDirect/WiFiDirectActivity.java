@@ -40,7 +40,7 @@
 //import android.widget.Toast;
 //
 //import org.servalproject.R;
-//import org.servalproject.sensors.RecordClick;
+//import org.servalproject.sensors.RecordingService;
 //
 //import java.text.SimpleDateFormat;
 //import java.util.Date;
@@ -68,7 +68,7 @@
 //    public static final int MSG_SAY_HELLO = 1;
 //    public static final int MSG_SET_TEXT = 3;
 //    public static SurfaceView dummySurface;
-//    public static RecordClick rc;
+//    public static RecordingService rc;
 //
 //
 //    /** Flag indicating whether we have called bind on the service. */
@@ -91,7 +91,7 @@
 //        String currentDateandTime = sdf.format(new Date());
 //
 //
-//        rc = RecordClick.getInstance(currentDateandTime);
+//        rc = RecordingService.getInstance(currentDateandTime);
 //
 //        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 //        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -205,7 +205,7 @@
 //            @Override
 //            public void onSuccess() {
 //                //On success of the CONNECTING device
-//                //rc.onClick();
+//                //rc.startStopRecording();
 //                //Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();
 //            }
 //

@@ -228,11 +228,6 @@
 			android:id="@+id/mainphonenumber"
 			style="@style/stextright1"
 			android:layout_toRightOf="@+id/phonelabel"/>
-
-		<SurfaceView
-			android:id="@+id/cameraView"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"/>
 	</RelativeLayout>
 
 
