@@ -228,7 +228,7 @@ public class ShowConversationActivity extends ListActivity implements OnClickLis
 				try{
 					MeshMSMessageList results = app.server.getRestfulClient().meshmsListMessages(identity.sid, recipient.sid);
 					MeshMSMessage item;
-					LinkedList<Object> listItems = new LinkedList<>();
+					LinkedList<Object> listItems = new LinkedList<Object>();
 					boolean firstRead=true, firstDelivered=true, firstWindow = true;
 					DateFormat df = DateFormat.getDateInstance();
 					DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT);
