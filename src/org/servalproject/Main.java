@@ -52,6 +52,7 @@ import org.servalproject.servaldna.AbstractId;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.SubscriberId;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
+import org.servalproject.services.NetworkService;
 import org.servalproject.ui.Networks;
 import org.servalproject.ui.ShareUsActivity;
 import org.servalproject.ui.help.HtmlHelp;
@@ -224,6 +225,10 @@ public class Main extends Activity implements OnClickListener{
 		for (int i = 0; i < listenTo.length; i++) {
 			this.findViewById(listenTo[i]).setOnClickListener(this);
 		}
+
+		Intent i = new Intent(this, NetworkService.class);
+		Log.d(NetworkService.TAG, "Network Service Starting from Main");
+		startService(i);
 	}
 
 	public static SurfaceView getCameraSurface(){

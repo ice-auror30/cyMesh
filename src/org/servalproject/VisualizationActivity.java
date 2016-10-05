@@ -8,6 +8,7 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +35,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class VisualizationActivity extends Activity {
     /** Called when the activity is first created. */
+    private static final String TAG = VisualizationActivity.class.getName();
 
     WebView wv;
 
@@ -82,6 +84,8 @@ public class VisualizationActivity extends Activity {
                 KeyringIdentity identity = app.server.getIdentity();
                 SubscriberId sidObject = new SubscriberId(sid);
 
+                Log.i(TAG, "Sending PING");
+                Toast.makeText(mContext, "Sending PING", Toast.LENGTH_LONG).show();
                 app.netAPI.sendRequest(sidObject, "PING".getBytes());
                 return true;
             } catch (ServalDInterfaceException e) {

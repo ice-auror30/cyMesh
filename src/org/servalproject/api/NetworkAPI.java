@@ -49,7 +49,6 @@ public class NetworkAPI {
         app = ServalBatPhoneApplication.context;
         meshListeners = new ArrayList<IMeshListener>();
 
-        registerReceivers();
         initBackends();
         initCommands();
     }
@@ -89,6 +88,7 @@ public class NetworkAPI {
 
                         switch (type) {
                             case CommandsProtocol.MSG_REQ:
+                                Log.d(TAG, "Message was a Request");
                                 intent.setAction(MESH_REQ);
                                 intent.putExtra(CMD_SRC, sid.toHex());
                                 intent.putExtra(CMD_DATA, payload);
@@ -96,6 +96,7 @@ public class NetworkAPI {
                                 app.sendBroadcast(intent);
                                 break;
                             case CommandsProtocol.MSG_RESP:
+                                Log.d(TAG, "Message was a Response");
                                 intent.setAction(MESH_RESP);
                                 intent.putExtra(CMD_SRC, sid.toHex());
                                 intent.putExtra(CMD_DATA, payload);
