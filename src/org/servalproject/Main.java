@@ -253,34 +253,6 @@ public class Main extends Activity implements OnClickListener{
 		}
 	};
 
-	BroadcastReceiver cmdReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(NetworkAPI.MESH_REQ)) {
-				byte[] cmd = intent.getByteArrayExtra(NetworkAPI.CMD_DATA);
-				if (new String(cmd).equals("PING")) {
-					Log.i(TAG, "Received PING");
-					Toast.makeText(getBaseContext(), "Received PING", Toast.LENGTH_LONG).show();
-					try {
-						SubscriberId sid = new SubscriberId(intent.getStringExtra(NetworkAPI.CMD_SRC));
-						Log.i(TAG, "Sending PONG");
-						app.netAPI.sendResponse(sid, "PONG".getBytes());
-					} catch (AbstractId.InvalidHexException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			else if (intent.getAction().equals(NetworkAPI.MESH_RESP)) {
-				byte[] cmd = intent.getByteArrayExtra(NetworkAPI.CMD_DATA);
-				if (new String(cmd).equals("PONG")) {
-					Log.i(TAG, "Received PONG");
-					Toast.makeText(getBaseContext(), "Received PONG", Toast.LENGTH_LONG).show();
-				}
-			}
-		}
-	};
-
 	boolean registered = false;
 
 	private void stateChanged(State state) {
@@ -328,11 +300,6 @@ public class Main extends Activity implements OnClickListener{
 			filter.addAction(RecordClick.RECORDING_FINISHED);
 			this.registerReceiver(receiver, filter);
 
-			IntentFilter cmdFilter = new IntentFilter();
-			filter.addAction(NetworkAPI.MESH_CMD);
-			filter.addAction(NetworkAPI.MESH_REQ);
-			filter.addAction(NetworkAPI.MESH_RESP);
-			this.registerReceiver(cmdReceiver, cmdFilter);
 			registered = true;
 		}
 
@@ -346,7 +313,6 @@ public class Main extends Activity implements OnClickListener{
 		super.onPause();
 		if (registered) {
 			this.unregisterReceiver(receiver);
-			this.unregisterReceiver(cmdReceiver);
 			registered = false;
 		}
 		dummySurface.setVisibility(View.INVISIBLE);
