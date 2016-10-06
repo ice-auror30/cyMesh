@@ -8,6 +8,7 @@ import android.util.Log;
 
 import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.api.backends.IBackend;
+import org.servalproject.api.backends.MeshMSBackend;
 import org.servalproject.api.backends.RhizomeBackend;
 import org.servalproject.protocol.CommandsProtocol;
 import org.servalproject.rhizome.MeshMS;
@@ -41,6 +42,8 @@ public class NetworkAPI {
     public static final String MESH_CMD = "org.servalproject.batphone.meshcmd";
     public static final String MESH_REQ = MESH_CMD + ".request";
     public static final String MESH_RESP = MESH_CMD + ".response";
+    public static final String MESH_START = MESH_CMD + ".start";
+    public static final String MESH_END = MESH_CMD + ".end";
 
     public static final String CMD_DATA = "data";
     public static final String CMD_SRC = "source";
@@ -67,6 +70,7 @@ public class NetworkAPI {
     private void initBackends() {
         try {
             backends.put(RhizomeBackend.NAME, new RhizomeBackend(app));
+            backends.put(MeshMSBackend.NAME, new MeshMSBackend(app));
         }
         catch (Exception e) {
             // TODO: Get it done, then make it "clean"
@@ -98,6 +102,22 @@ public class NetworkAPI {
                             case CommandsProtocol.MSG_RESP:
                                 Log.d(TAG, "Message was a Response");
                                 intent.setAction(MESH_RESP);
+                                intent.putExtra(CMD_SRC, sid.toHex());
+                                intent.putExtra(CMD_DATA, payload);
+
+                                app.sendBroadcast(intent);
+                                break;
+                            case CommandsProtocol.MSG_START:
+                                Log.d(TAG, "Message was a Start Command");
+                                intent.setAction(MESH_START);
+                                intent.putExtra(CMD_SRC, sid.toHex());
+                                intent.putExtra(CMD_DATA, payload);
+
+                                app.sendBroadcast(intent);
+                                break;
+                            case CommandsProtocol.MSG_END:
+                                Log.d(TAG, "Message was an End Command");
+                                intent.setAction(MESH_END);
                                 intent.putExtra(CMD_SRC, sid.toHex());
                                 intent.putExtra(CMD_DATA, payload);
 
@@ -143,7 +163,7 @@ public class NetworkAPI {
      * @param message The message to send
      */
     public boolean sendString(Peer peer, String message) {
-        throw new UnsupportedOperationException("Not Yet Implemented");
+        return backends.get(MeshMSBackend.NAME).sendString(peer, message, false, null);
     }
 
     /**
@@ -236,7 +256,9 @@ public class NetworkAPI {
 
     public enum CommandType {
         REQUEST(CommandsProtocol.MSG_REQ),
-        RESPONSE(CommandsProtocol.MSG_RESP);
+        RESPONSE(CommandsProtocol.MSG_RESP),
+        START(CommandsProtocol.MSG_START),
+        END(CommandsProtocol.MSG_END);
 
         public byte value;
 

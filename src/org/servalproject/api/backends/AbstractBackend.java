@@ -1,6 +1,7 @@
 package org.servalproject.api.backends;
 
 import org.servalproject.ServalBatPhoneApplication;
+import org.servalproject.servald.Peer;
 import org.servalproject.servaldna.ServalDInterfaceException;
 import org.servalproject.servaldna.keyring.KeyringIdentity;
 
@@ -16,5 +17,10 @@ public abstract class AbstractBackend implements IBackend {
     public AbstractBackend(ServalBatPhoneApplication app) throws ServalDInterfaceException, IOException {
         this.app = app;
         this.ident = app.server.getIdentity();
+    }
+
+    @Override
+    public boolean sendBytes(Peer dst, byte[] data) {
+        return sendBytes(dst, data, false, null);
     }
 }
