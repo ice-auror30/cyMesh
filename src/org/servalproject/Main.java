@@ -214,7 +214,7 @@ public class Main extends Activity implements OnClickListener{
 		Log.d(NetworkService.TAG, "Network Service Starting from Main");
 		startService(i);
 
-        Intent i = new Intent(this, CameraService.class);
+        i = new Intent(this, CameraService.class);
         i.putExtra("localSIDString", SIDString);
         Log.d(CameraService.TAG, "Service Starting from Main");
         startService(i);
