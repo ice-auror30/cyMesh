@@ -6,7 +6,7 @@ public class SettingsAccount {
 	// btnreset = (Button) this.findViewById(R.id.btnreset);
 	// btnreset.setOnClickListener(new OnClickListener() {
 	// @Override
-	// public void onClick(View arg0) {
+	// public void startStopRecording(View arg0) {
 	// startActivity(new Intent(Main.this, Wizard.class));
 	// new Thread() {
 	// @Override

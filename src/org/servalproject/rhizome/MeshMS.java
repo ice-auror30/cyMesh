@@ -24,6 +24,7 @@ public class MeshMS {
 	private final SubscriberId sid;
 	private static final String TAG="MeshMS";
 	public static final String NEW_MESSAGES="org.servalproject.meshms.NEW";
+	public static final String START_RECORDING="org.servalproject.meshms.START_RECORDING";
 
 	public MeshMS(ServalBatPhoneApplication app, SubscriberId sid){
 		this.app=app;
@@ -34,6 +35,56 @@ public class MeshMS {
 		if (sid.equals(meshms.getRecipient())){
 			initialiseNotification();
 			app.sendBroadcast(new Intent(NEW_MESSAGES));
+			checkForRecordingRequest();
+		}
+	}
+
+	private void checkForRecordingRequest() {
+		if (app.isMainThread()){
+			app.runOnBackgroundThread(new Runnable() {
+				@Override
+				public void run() {
+					checkForRecordingRequest();
+				}
+			});
+			return;
+		}
+
+		if (!ServalD.isRhizomeEnabled())
+			return;
+
+		SubscriberId recipient=null;
+		boolean unread=false;
+		int messageHash=0;
+		try {
+			MeshMSConversationList conversations = app.server.getRestfulClient().meshmsListConversations(sid);
+			MeshMSConversation conv;
+			while ((conv = conversations.nextConversation()) != null) {
+				// detect when the number of incoming messages has changed
+				if (conv.isRead)
+					continue;
+
+				messageHash =
+						conv.theirSid.hashCode() ^
+								(int) conv.lastMessageOffset ^
+								(int) (conv.lastMessageOffset >> 32);
+
+				Log.v(TAG, conv.theirSid.abbreviation()+", lastOffset = "+conv.lastMessageOffset+", hash = "+messageHash+", read = "+conv.isRead);
+
+				// remember the recipient, if it is the only recipient with unread messages
+				if (unread) {
+					recipient = null;
+				} else {
+					recipient = conv.theirSid;
+					Log.d(TAG,"Broadcasting to start recording since we found an unread message");
+					ServalBatPhoneApplication.context.sendBroadcast(new Intent(START_RECORDING));
+					markRead(recipient);
+					break;
+				}
+				unread = true;
+			}
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage(), e);
 		}
 	}
 

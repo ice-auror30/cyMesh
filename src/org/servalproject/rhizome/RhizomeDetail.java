@@ -222,7 +222,7 @@ public class RhizomeDetail extends Dialog implements View.OnClickListener {
 			RhizomeManifest_File file = (RhizomeManifest_File) mManifest;
 			String contentType = file.getMimeType();
 
-			Uri uri = null;
+			Uri uri;
 			if (mPayloadFile != null && mPayloadFile.exists()) {
 				uri = Uri.fromFile(mPayloadFile);
 			} else {

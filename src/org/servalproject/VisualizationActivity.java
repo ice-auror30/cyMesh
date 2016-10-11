@@ -23,7 +23,8 @@ import org.servalproject.servaldna.AbstractId;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.ServalDInterfaceException;
 import org.servalproject.servaldna.SubscriberId;
-import org.servalproject.servaldna.keyring.KeyringIdentity;
+import org.servalproject.services.CameraService;
+import org.servalproject.services.RecordingService;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -116,12 +117,15 @@ public class VisualizationActivity extends Activity {
                 return "false";
             }
             try {
-                KeyringIdentity identity = app.server.getIdentity();
-
                 peers.get(sid);
+
                 SubscriberId sidObject = new SubscriberId(sid);
 
-                app.server.getRestfulClient().meshmsSendMessage(identity.sid, sidObject, "START_CAMERA");
+                Intent i = new Intent(getApplicationContext(), CameraService.class);
+                i.putExtra("recorderSIDString", sidObject.toString());
+                startService(i);
+                app.server.getRestfulClient().meshmsSendMessage(app.server.getIdentity().sid, sidObject, RecordingService.START_CAMERA);
+                app.displayToastMessage("Please wait 10 seconds for requested video.");
                 return "TEST2: true"+ sid;
             } catch (Exception E){
                 E.printStackTrace();
