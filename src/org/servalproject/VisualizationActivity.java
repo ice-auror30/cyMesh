@@ -23,6 +23,7 @@ import org.servalproject.servaldna.AbstractId;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.ServalDInterfaceException;
 import org.servalproject.servaldna.SubscriberId;
+import org.servalproject.servaldna.keyring.KeyringIdentity;
 import org.servalproject.services.CameraService;
 import org.servalproject.services.RecordingService;
 
