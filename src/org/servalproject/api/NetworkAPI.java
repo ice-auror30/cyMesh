@@ -53,7 +53,7 @@ public class NetworkAPI {
         meshListeners = new ArrayList<IMeshListener>();
 
         initBackends();
-        initCommands();
+        //initCommands();
     }
 
     /**
