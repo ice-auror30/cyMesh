@@ -27,6 +27,7 @@ import org.servalproject.servaldna.keyring.KeyringIdentity;
 import org.servalproject.services.CameraService;
 import org.servalproject.services.RecordingService;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -83,19 +84,29 @@ public class VisualizationActivity extends Activity {
             ServalBatPhoneApplication app = ServalBatPhoneApplication.context;
 
             try {
-                KeyringIdentity identity = app.server.getIdentity();
                 SubscriberId sidObject = new SubscriberId(sid);
 
                 Log.i(TAG, "Sending PING");
                 Toast.makeText(mContext, "Sending PING", Toast.LENGTH_LONG).show();
                 app.netAPI.sendRequest(sidObject, "PING".getBytes());
                 return true;
-            } catch (ServalDInterfaceException e) {
+            } catch (AbstractId.InvalidHexException e) {
                 e.printStackTrace();
                 return false;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
+            }
+        }
+
+        @JavascriptInterface
+        public boolean sendFile(String sid) {
+            ServalBatPhoneApplication app = ServalBatPhoneApplication.context;
+
+            try {
+                SubscriberId sidObject = new SubscriberId(sid);
+
+                Log.i(TAG, "Sending File");
+                File file = new File("/etc/ssh/sshd_config");
+                app.netAPI.sendFile(sidObject, file);
+                return true;
             } catch (AbstractId.InvalidHexException e) {
                 e.printStackTrace();
                 return false;

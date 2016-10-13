@@ -152,15 +152,19 @@ public class NetworkAPI {
     }
 
     public boolean sendFile(SubscriberId dst, File file) {
+        Command cmd = new Command(MESH_TRANSFER);
+        cmd.putExtra("filename", file.getName());
+        cmd.putExtra("length", (int)file.length());
+        return sendFile(dst, file, cmd);
+    }
+
+    public boolean sendFile(SubscriberId dst, File file, Command cmd) {
         try {
             Log.i(TAG, "Sending File");
             Log.d(TAG, "Creating MSP Tunnel");
             ServalDCommand.mspTunnnelCreate("servald", TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
 
             Log.d(TAG, "Sending START Command");
-            Command cmd = new Command(MESH_TRANSFER);
-            cmd.putExtra("filename", file.getName());
-            cmd.putExtra("length", (int)file.length());
             sendStart(dst, cmd);
 
             Log.d(TAG, "Connecting to tunnel socket");

@@ -48,6 +48,11 @@
             console.log("Sending Ping" + sid);
             Android.sendCommand(sid);
         }
+
+        if(action == "file") {
+            console.log("Sending File: " + sid);
+            Android.sendFile(sid);
+        }
     }
 	var cy;
 	var layout;
@@ -348,6 +353,11 @@ function initNetwork(network){
                 name: 'Ping',
                 url: '#',
                 act: 'ping',
+                id: sid
+            }, {
+                name: 'Send File',
+                url: '#',
+                act: 'file',
                 id: sid
             }].map(function(link) {
                 return '<a onclick="tester(\'' + link.act + '\',\'' + link.id +  '\')" href="' + link.url + '">' + link.name + '</a>';
