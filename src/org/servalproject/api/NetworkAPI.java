@@ -50,7 +50,7 @@ public class NetworkAPI {
         app = ServalBatPhoneApplication.context;
     }
 
-    private void initCommands() {
+    public void initCommands() {
         try {
             if (commandSocket == null) {
                 commandSocket = app.server.getCommandProtocol(new AsyncResult<CommandsProtocol.ProtocolResult>() {
@@ -162,6 +162,7 @@ public class NetworkAPI {
         try {
             Log.i(TAG, "Sending File");
             Log.d(TAG, "Creating MSP Tunnel");
+            Log.d(TAG, app.server.getExecPath());
             ServalDCommand.mspTunnnelCreate(app.server.getExecPath(), TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
 
             Log.d(TAG, "Sending START Command");
