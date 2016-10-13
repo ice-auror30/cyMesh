@@ -204,7 +204,10 @@ public class NetworkAPI {
             Log.i(TAG, "Finished File Transfer");
 
             return true;
-        } catch (IOException | ServalDFailureException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } catch (ServalDFailureException e) {
             e.printStackTrace();
             return false;
         }
@@ -234,7 +237,9 @@ public class NetworkAPI {
             inStream.close();
             tunnelSocket.close();
             Log.i(TAG, "Finished File Transfer");
-        } catch (IOException | ServalDFailureException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServalDFailureException e) {
             e.printStackTrace();
         }
     }
