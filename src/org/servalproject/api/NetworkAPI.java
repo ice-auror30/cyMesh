@@ -7,6 +7,7 @@ import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.protocol.CommandsProtocol;
 import org.servalproject.servaldna.AsyncResult;
 import org.servalproject.servaldna.ServalDCommand;
+import org.servalproject.servaldna.ServalDFailureException;
 import org.servalproject.servaldna.ServalDInterfaceException;
 import org.servalproject.servaldna.SubscriberId;
 
@@ -163,7 +164,7 @@ public class NetworkAPI {
             Log.i(TAG, "Sending File");
             Log.d(TAG, "Creating MSP Tunnel");
             Log.d(TAG, app.server.getExecPath());
-            ServalDCommand.mspTunnnelCreate(app.server.getExecPath(), TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
+            ServalDCommand.mspTunnnelCreate(TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
 
             Log.d(TAG, "Sending START Command");
             sendStart(dst, cmd);
@@ -203,7 +204,7 @@ public class NetworkAPI {
             Log.i(TAG, "Finished File Transfer");
 
             return true;
-        } catch (IOException e) {
+        } catch (IOException | ServalDFailureException e) {
             e.printStackTrace();
             return false;
         }
@@ -213,7 +214,7 @@ public class NetworkAPI {
         try {
             Log.i(TAG, "Receiving File");
             Log.d(TAG, "Opening Tunnel");
-            ServalDCommand.mspTunnelConnect(app.server.getExecPath(), TCP_TRANSFER_PORT, frm, MDP_TRANSFER_PORT);
+            ServalDCommand.mspTunnelConnect(TCP_TRANSFER_PORT, frm, MDP_TRANSFER_PORT);
 
             Socket tunnelSocket = new Socket("localhost", TCP_TRANSFER_PORT);
             tunnelSocket.getOutputStream().write("RDY".getBytes());
@@ -233,7 +234,7 @@ public class NetworkAPI {
             inStream.close();
             tunnelSocket.close();
             Log.i(TAG, "Finished File Transfer");
-        } catch (IOException e) {
+        } catch (IOException | ServalDFailureException e) {
             e.printStackTrace();
         }
     }
