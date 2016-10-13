@@ -11,7 +11,7 @@ public class Command {
     private String action;
 
     public Command(String action) {
-        extras = new HashMap<>();
+        extras = new HashMap<String, byte[]>();
         this.action = action;
     }
 
