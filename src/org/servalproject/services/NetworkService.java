@@ -24,7 +24,6 @@ public class NetworkService extends Service {
     public void onCreate() {
         Log.d(TAG, "onCreate");
         api = NetworkAPI.getInstance();
-        api.registerReceivers();
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NetworkAPI.MESH_REQ);
@@ -36,7 +35,6 @@ public class NetworkService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
-        api.unregisterReceivers();
         this.unregisterReceiver(pingReceiver);
     }
 

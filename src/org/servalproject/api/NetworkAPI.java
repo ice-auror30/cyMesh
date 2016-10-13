@@ -1,18 +1,10 @@
 package org.servalproject.api;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.util.Log;
 
 import org.servalproject.ServalBatPhoneApplication;
-import org.servalproject.api.backends.IBackend;
-import org.servalproject.api.backends.MeshMSBackend;
-import org.servalproject.api.backends.RhizomeBackend;
 import org.servalproject.protocol.CommandsProtocol;
-import org.servalproject.rhizome.MeshMS;
-import org.servalproject.servald.Peer;
 import org.servalproject.servaldna.AsyncResult;
 import org.servalproject.servaldna.ServalDCommand;
 import org.servalproject.servaldna.ServalDInterfaceException;
@@ -21,8 +13,6 @@ import org.servalproject.servaldna.keyring.KeyringIdentity;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * The entry point into the network api for sending messages across
@@ -33,9 +23,6 @@ public class NetworkAPI {
     public static final String TAG = NetworkAPI.class.getName();
     private static NetworkAPI instance;
     private static ServalBatPhoneApplication app;
-
-    private ArrayList<IMeshListener> meshListeners;
-    private HashMap<String, IBackend> backends = new HashMap<String, IBackend>();
 
     private CommandsProtocol commandSocket = null;
 
@@ -50,31 +37,6 @@ public class NetworkAPI {
 
     private NetworkAPI() {
         app = ServalBatPhoneApplication.context;
-        meshListeners = new ArrayList<IMeshListener>();
-
-        initBackends();
-        //initCommands();
-    }
-
-    /**
-     * Call to register the APIs broadcast receivers. This is done
-     * automatically by the constructor but needs to be done again
-     * if unregisterReceivers is called.
-     */
-    public void registerReceivers() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(MeshMS.NEW_MESSAGES);
-        app.registerReceiver(meshReceiver, filter);
-    }
-
-    private void initBackends() {
-        try {
-            backends.put(RhizomeBackend.NAME, new RhizomeBackend(app));
-            backends.put(MeshMSBackend.NAME, new MeshMSBackend(app));
-        }
-        catch (Exception e) {
-            // TODO: Get it done, then make it "clean"
-        }
     }
 
     private void initCommands() {
@@ -137,50 +99,12 @@ public class NetworkAPI {
         }
     }
 
-    /**
-     * Unregister the API's broadcast receivers.
-     */
-    public void unregisterReceivers() {
-        app.unregisterReceiver(meshReceiver);
-    }
-
     public static NetworkAPI getInstance() {
         if (instance == null) {
             instance = new NetworkAPI();
         }
 
         return instance;
-    }
-
-    ////////////////////
-    // MeshMS Methods //
-    ////////////////////
-
-    /**
-     * Send a MeshMS message to the specified peer
-     *
-     * @param peer The peer to send to
-     * @param message The message to send
-     */
-    public boolean sendString(Peer peer, String message) {
-        return backends.get(MeshMSBackend.NAME).sendString(peer, message, false, null);
-    }
-
-    /**
-     * Register a callback to be called when a mew message is received.
-     */
-    public void registerMeshListener(IMeshListener l) {
-        meshListeners.add(l);
-    }
-
-    public void unregisterMeshListener(IMeshListener l) {
-        meshListeners.remove(l);
-    }
-
-    protected void notifyMeshListeners() {
-        for (IMeshListener l : meshListeners) {
-            l.onMeshMSMessage();
-        }
     }
 
     /////////////
@@ -241,18 +165,6 @@ public class NetworkAPI {
     public void sendResponse(SubscriberId dst, byte[] data) {
         sendCommand(dst, data, CommandType.RESPONSE);
     }
-
-    /////////////////////////
-    // Broadcast Receivers //
-    /////////////////////////
-    private BroadcastReceiver meshReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(MeshMS.NEW_MESSAGES)) {
-                notifyMeshListeners();
-            }
-        }
-    };
 
     public enum CommandType {
         REQUEST(CommandsProtocol.MSG_REQ),
