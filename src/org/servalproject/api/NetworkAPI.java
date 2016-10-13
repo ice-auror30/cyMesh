@@ -162,7 +162,7 @@ public class NetworkAPI {
         try {
             Log.i(TAG, "Sending File");
             Log.d(TAG, "Creating MSP Tunnel");
-            ServalDCommand.mspTunnnelCreate("servald", TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
+            ServalDCommand.mspTunnnelCreate(app.server.getExecPath(), TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
 
             Log.d(TAG, "Sending START Command");
             sendStart(dst, cmd);
@@ -212,7 +212,7 @@ public class NetworkAPI {
         try {
             Log.i(TAG, "Receiving File");
             Log.d(TAG, "Opening Tunnel");
-            ServalDCommand.mspTunnelConnect("servald", TCP_TRANSFER_PORT, frm, MDP_TRANSFER_PORT);
+            ServalDCommand.mspTunnelConnect(app.server.getExecPath(), TCP_TRANSFER_PORT, frm, MDP_TRANSFER_PORT);
 
             Socket tunnelSocket = new Socket("localhost", TCP_TRANSFER_PORT);
             tunnelSocket.getOutputStream().write("RDY".getBytes());
