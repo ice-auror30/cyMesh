@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.api.NetworkAPI;
 
 public class NetworkService extends Service {
@@ -43,9 +44,24 @@ public class NetworkService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(NetworkAPI.MESH_REQ)) {
                 byte[] cmd = intent.getByteArrayExtra(NetworkAPI.CMD_DATA);
-                if (new String(cmd).equals("PING")) {
-                    Log.i(TAG, "Received PING");
-                    Toast.makeText(NetworkService.this, "Received PING", Toast.LENGTH_LONG).show();
+                try {
+                    if (new String(cmd).equals("PING")) {
+                        Log.i(TAG, "Received PING");
+                        Toast.makeText(NetworkService.this, "Received PING", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (new String(cmd).equals(NetworkAPI.CMD_SENSORS)) {
+                        Log.i(TAG, "Received Request to Start Broadcasting Sensor Data");
+                        ServalBatPhoneApplication.context.displayToastMessage("Received Request to Start Broadcasting" +
+                                "Sensor Data");
+                        Intent i = new Intent(context, SensorService.class);
+                        startService(i);
+                    } else {
+                        Log.i(TAG, "Received Unrecognized Command");
+                        Log.i(TAG, new String(cmd));
+                    }
+                }catch(Exception E){
+                    E.printStackTrace();
                 }
             }
         }

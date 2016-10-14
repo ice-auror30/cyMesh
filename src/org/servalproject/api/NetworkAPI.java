@@ -38,7 +38,9 @@ public class NetworkAPI {
     public static final String MESH_START = MESH_CMD + ".start";
     public static final String MESH_END = MESH_CMD + ".end";
     public static final String MESH_TRANSFER = MESH_CMD + ".transfer";
+    public static final String MESH_SENSORS = MESH_CMD + ".sensors";
 
+    public static final String CMD_SENSORS = "sensors";
     public static final String CMD_DATA = "data";
     public static final String CMD_SRC = "source";
     public static final String CMD_COMMAND = "cmd";
@@ -102,6 +104,14 @@ public class NetworkAPI {
 
                                 app.sendBroadcast(intent);
                                 break;
+                            case CommandsProtocol.MSG_SENSORS:
+                                Log.d(TAG, "Message was Sensor Data");
+                                intent.setAction(MESH_SENSORS);
+                                intent.putExtra(CMD_SRC, sid.toHex());
+                                intent.putExtra(CMD_DATA, payload);
+
+                                app.sendBroadcast(intent);
+                                break;
                         }
 
                         app.sendBroadcast(intent);
@@ -133,6 +143,9 @@ public class NetworkAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void sendSensors(SubscriberId dst, byte[] data) {
+        sendCommand(dst, data, CommandType.SENSORDATA);
     }
 
     public void sendRequest(SubscriberId dst, byte[] data) {
@@ -241,7 +254,8 @@ public class NetworkAPI {
         REQUEST(CommandsProtocol.MSG_REQ),
         RESPONSE(CommandsProtocol.MSG_RESP),
         START(CommandsProtocol.MSG_START),
-        END(CommandsProtocol.MSG_END);
+        END(CommandsProtocol.MSG_END),
+        SENSORDATA(CommandsProtocol.MSG_SENSORS);
 
         public byte value;
 

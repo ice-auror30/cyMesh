@@ -19,48 +19,48 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.servalproject" android:versionName="@string/version"
-      android:installLocation="auto">
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="21"/>
-    
-    <!-- Batphone permissions -->
-    <permission 
-        android:label="@string/rhizome_share_file_permission_label" 
-        android:protectionLevel="dangerous" 
-        android:description="@string/rhizome_share_file_permission_description" 
-        android:name="org.servalproject.rhizome.ADD_FILE">
-    </permission>
-    <permission 
-        android:label="@string/rhizome_receive_file_permission_label" 
-        android:protectionLevel="dangerous" 
-        android:description="@string/rhizome_receive_file_permission_description" 
-        android:name="org.servalproject.rhizome.RECEIVE_FILE">
-    </permission>
-    <permission android:description="@string/system_permission_control_label" 
-        android:icon="@drawable/ic_launcher" 
-        android:label="@string/system_permission_control_label" 
-        android:protectionLevel="signature" 
-        android:name="org.servalproject.START_STOP"
-        />
-    
-    <!-- Serval MeshMS Permissions -->
-    <permission android:name="org.servalproject.meshms.SEND_MESHMS" 
-        android:description="@string/system_permission_meshms_send_description" 
-        android:protectionLevel="dangerous" 
-        android:permissionGroup="android.permission-group.MESSAGES" 
-        android:label="@string/system_permission_meshms_send_label"
-        />
+	package="org.servalproject" android:versionName="@string/version"
+	android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="14" android:targetSdkVersion="21"/>
 
-    <!-- Serval Specific permissions -->
-    <uses-permission android:name="org.servalproject.meshms.SEND_MESHMS"/>
-    <uses-permission android:name="org.servalproject.rhizome.RECEIVE_FILE"/>
-    
-    <!-- Commotion's mesh tether permissions -->
-    <uses-permission android:name="net.commotionwireless.meshtether.ACCESS_STATE"/>
-    <uses-permission android:name="net.commotionwireless.meshtether.CHANGE_STATE"/>
+	<!-- Batphone permissions -->
+	<permission
+		android:label="@string/rhizome_share_file_permission_label"
+		android:protectionLevel="dangerous"
+		android:description="@string/rhizome_share_file_permission_description"
+		android:name="org.servalproject.rhizome.ADD_FILE">
+	</permission>
+	<permission
+		android:label="@string/rhizome_receive_file_permission_label"
+		android:protectionLevel="dangerous"
+		android:description="@string/rhizome_receive_file_permission_description"
+		android:name="org.servalproject.rhizome.RECEIVE_FILE">
+	</permission>
+	<permission android:description="@string/system_permission_control_label"
+		android:icon="@drawable/ic_launcher"
+		android:label="@string/system_permission_control_label"
+		android:protectionLevel="signature"
+		android:name="org.servalproject.START_STOP"
+		/>
 
-    <!--  android permissions -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<!-- Serval MeshMS Permissions -->
+	<permission android:name="org.servalproject.meshms.SEND_MESHMS"
+		android:description="@string/system_permission_meshms_send_description"
+		android:protectionLevel="dangerous"
+		android:permissionGroup="android.permission-group.MESSAGES"
+		android:label="@string/system_permission_meshms_send_label"
+		/>
+
+	<!-- Serval Specific permissions -->
+	<uses-permission android:name="org.servalproject.meshms.SEND_MESHMS"/>
+	<uses-permission android:name="org.servalproject.rhizome.RECEIVE_FILE"/>
+
+	<!-- Commotion's mesh tether permissions -->
+	<uses-permission android:name="net.commotionwireless.meshtether.ACCESS_STATE"/>
+	<uses-permission android:name="net.commotionwireless.meshtether.CHANGE_STATE"/>
+
+	<!--  android permissions -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -78,27 +78,27 @@
 	<uses-permission android:name="android.permission.CALL_PHONE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 	<uses-permission android:name="android.permission.BROADCAST_STICKY" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
 	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
 	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_PROFILE"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.READ_PROFILE"/>
+	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
-    <!-- uses features -->
-    <uses-feature android:name="android.hardware.wifi.direct" android:required="true"/>
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+	<!-- uses features -->
+	<uses-feature android:name="android.hardware.wifi.direct" android:required="true"/>
+	<uses-feature android:name="android.hardware.camera" android:required="true" />
 	<uses-feature android:name="android.hardware.wifi" android:required="true" />
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
 	<uses-feature android:name="android.hardware.telephony" android:required="false" />
@@ -108,182 +108,187 @@
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
-    <service android:enabled="true" android:name="org.servalproject.sensors.WiFiDirect.FileTransferService"/>
-	
-    <application
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:allowBackup="true"
+	<service android:enabled="true" android:name="org.servalproject.sensors.WiFiDirect.FileTransferService"/>
+
+	<application
+		android:icon="@drawable/ic_launcher"
+		android:label="@string/app_name"
+		android:allowBackup="true"
 		android:name=".ServalBatPhoneApplication">
-        
-        <activity android:name="PreparationWizard"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.PREPARATION" />
 
-            </intent-filter>
-        </activity>
-        <activity android:name=".Main"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"
-            >
-        <intent-filter>   
-            	<action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ui.ShareUsActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
-  		<activity android:name=".ui.SettingsScreenActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
+		<activity android:name="PreparationWizard"
+			android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.PREPARATION" />
+
+			</intent-filter>
+		</activity>
+		<activity android:name=".Main"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTask"
+			>
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".ui.ShareUsActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".ui.SettingsScreenActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
 		<activity android:name=".ui.SettingsMeshMSScreenActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
-        <activity android:name="VisualizationActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name="VisualizationActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".sensors.Graphs.GravityGraphActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
 
-        <activity android:name=".ui.AccountsSettingsActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />   
-    <activity android:name=".ui.Networks"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-        />
-    <activity android:name=".ui.AdhocPreferences"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />             
-    <activity android:name=".ui.SetupActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />             
-      
- 		<activity android:name=".ui.help.HtmlHelp"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
+		<activity android:name=".ui.AccountsSettingsActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".ui.Networks"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".ui.AdhocPreferences"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".ui.SetupActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
 
-        <activity android:name=".wizard.Wizard"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
-        <activity android:name=".wizard.SetPhoneNumber"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
+		<activity android:name=".ui.help.HtmlHelp"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
 
-        <activity android:name=".batphone.CallDirector"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:taskAffinity="org.servalproject.Call"
-            />
+		<activity android:name=".wizard.Wizard"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".wizard.SetPhoneNumber"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
 
-        <activity android:name=".batphone.UnsecuredCall"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"
-            android:taskAffinity="org.servalproject.Call"
-            >
-            <intent-filter>
-	            <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT" />
-	            <data android:mimeType="vnd.android.cursor.item/org.servalproject.unsecuredSid"/>
-	        </intent-filter>
-	    </activity>
+		<activity android:name=".batphone.CallDirector"
+			android:excludeFromRecents="true"
+			android:screenOrientation="portrait"
+			android:taskAffinity="org.servalproject.Call"
+			/>
 
-        <activity android:name=".LogActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
-        <activity android:name=".PeerList" 
-            android:label="Serval BatPhone - Peer List"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            >
-            <intent-filter>
-                <action android:name="org.servalproject.PICK_FROM_PEER_LIST" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".NeighborList"
-            android:label="Serval BatPhone - Neighbor List"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            >
-            <intent-filter>
-                <action android:name="org.servalproject.PICK_FROM_NEIGHBOR_LIST" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-	    <receiver android:name="org.servalproject.batphone.BatPhone">
-	        <intent-filter android:priority="1">
-	        	<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
- 	        </intent-filter>
-	        <intent-filter>
-	        	<action android:name="android.intent.action.BOOT_COMPLETED" />
-	        	<action android:name="android.intent.action.AIRPLANE_MODE" />
-	        	<action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-	        	<action android:name="android.net.wifi.WIFI_AP_STATE_CHANGED" />
-	        	<action android:name="android.net.wifi.supplicant.STATE_CHANGE" />
-	        	<action android:name="android.net.wifi.STATE_CHANGE"/>
-	        	<action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-	        	<action android:name="android.net.wifi.SCAN_RESULTS"/>
-	        	<action android:name="org.servalproject.ADHOC_STATE_CHANGED_ACTION" />
-	        	<action android:name="org.servalproject.MODE_ALARM"/>
-	        	<action android:name="net.commotionwireless.meshtether.STATE_CHANGED"/>
-                <action android:name="android.bluetooth.device.action.FOUND"/>
-                <action android:name="android.bluetooth.device.action.NAME_CHANGED"/>
-                <action android:name="android.bluetooth.adapter.action.DISCOVERY_STARTED"/>
-                <action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED"/>
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
-                <action android:name="android.bluetooth.adapter.action.SCAN_MODE_CHANGED" />
-                <action android:name="android.bluetooth.adapter.action.LOCAL_NAME_CHANGED"/>
-	        </intent-filter>
-	        <intent-filter>
-	        	<action android:name="android.intent.action.MEDIA_EJECT" />
-	        	<action android:name="android.intent.action.MEDIA_MOUNTED" />
-	        	<action android:name="android.intent.action.MEDIA_UNMOUNTED" />
-                <data android:scheme="file" />
-	        </intent-filter>
-	    </receiver>
-		 
-	    <service android:name=".Control"
-	             android:enabled="true"/>
-	    
-	    <service android:name=".account.AccountService">  
-	        <intent-filter>  
-	            <action android:name="android.accounts.AccountAuthenticator" />
-	        </intent-filter>  
-	        <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator" />  
-	    </service>
-	    
-	    <service 
-	        android:name=".account.SyncService"
-	        android:exported="true">
+		<activity android:name=".batphone.UnsecuredCall"
+			android:excludeFromRecents="true"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTask"
+			android:taskAffinity="org.servalproject.Call"
+			>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="vnd.android.cursor.item/org.servalproject.unsecuredSid"/>
+			</intent-filter>
+		</activity>
+
+		<activity android:name=".LogActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".PeerList"
+			android:label="Serval BatPhone - Peer List"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			>
+			<intent-filter>
+				<action android:name="org.servalproject.PICK_FROM_PEER_LIST" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".NeighborList"
+			android:label="Serval BatPhone - Neighbor List"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			>
+			<intent-filter>
+				<action android:name="org.servalproject.PICK_FROM_NEIGHBOR_LIST" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		<receiver android:name="org.servalproject.batphone.BatPhone">
+			<intent-filter android:priority="1">
+				<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<action android:name="android.intent.action.AIRPLANE_MODE" />
+				<action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+				<action android:name="android.net.wifi.WIFI_AP_STATE_CHANGED" />
+				<action android:name="android.net.wifi.supplicant.STATE_CHANGE" />
+				<action android:name="android.net.wifi.STATE_CHANGE"/>
+				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+				<action android:name="android.net.wifi.SCAN_RESULTS"/>
+				<action android:name="org.servalproject.ADHOC_STATE_CHANGED_ACTION" />
+				<action android:name="org.servalproject.MODE_ALARM"/>
+				<action android:name="net.commotionwireless.meshtether.STATE_CHANGED"/>
+				<action android:name="android.bluetooth.device.action.FOUND"/>
+				<action android:name="android.bluetooth.device.action.NAME_CHANGED"/>
+				<action android:name="android.bluetooth.adapter.action.DISCOVERY_STARTED"/>
+				<action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED"/>
+				<action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+				<action android:name="android.bluetooth.adapter.action.SCAN_MODE_CHANGED" />
+				<action android:name="android.bluetooth.adapter.action.LOCAL_NAME_CHANGED"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.MEDIA_EJECT" />
+				<action android:name="android.intent.action.MEDIA_MOUNTED" />
+				<action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+				<data android:scheme="file" />
+			</intent-filter>
+		</receiver>
+
+		<service android:name=".Control"
+			android:enabled="true"/>
+
+		<service android:name=".account.AccountService">
+			<intent-filter>
+				<action android:name="android.accounts.AccountAuthenticator" />
+			</intent-filter>
+			<meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator" />
+		</service>
+
+		<service
+			android:name=".account.SyncService"
+			android:exported="true">
 			<intent-filter>
 				<action android:name="android.content.SyncAdapter" />
 			</intent-filter>
 			<meta-data
-			    android:name="android.content.SyncAdapter"
+				android:name="android.content.SyncAdapter"
 				android:resource="@xml/sync_contacts" />
 			<meta-data
-			    android:name="android.provider.CONTACTS_STRUCTURE"
+				android:name="android.provider.CONTACTS_STRUCTURE"
 				android:resource="@xml/contacts" />
-	    </service>
+		</service>
 
 		<service
 			android:name=".services.NetworkService"
 			android:enabled="true" />
-
-
+		<service
+			android:name=".services.SensorService"
+			android:enabled="true" />
 		<service
 			android:name=".services.CameraService"
 			android:enabled="true"/>
@@ -293,91 +298,91 @@
 			android:exported="false"
 			android:stopWithTask="false"/>
 
-        <!-- Rhizome application activities -->
-        <activity android:name=".rhizome.ShareSensorActivity"
-            android:label="@string/rhizome_share_sensor_appname"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
-        <activity android:name=".rhizome.RhizomeMain"
-            android:label="@string/rhizome_main_appname"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
+		<!-- Rhizome application activities -->
+		<activity android:name=".rhizome.ShareSensorActivity"
+			android:label="@string/rhizome_share_sensor_appname"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".rhizome.RhizomeMain"
+			android:label="@string/rhizome_main_appname"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
 
-        <activity android:name=".rhizome.SensorList"
-            android:label="@string/rhizome_sensor_list_appname"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
-        <activity android:name=".rhizome.RhizomeList" 
-            android:label="@string/rhizome_list_appname"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
-        <activity android:name=".rhizome.RhizomeSaved" 
-            android:label="@string/rhizome_saved_appname"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            />
-    	<activity android:name=".rhizome.RhizomeStorage" 
-    	    android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-    	    />
+		<activity android:name=".rhizome.SensorList"
+			android:label="@string/rhizome_sensor_list_appname"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".rhizome.RhizomeList"
+			android:label="@string/rhizome_list_appname"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".rhizome.RhizomeSaved"
+			android:label="@string/rhizome_saved_appname"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
+		<activity android:name=".rhizome.RhizomeStorage"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
 
-    	<activity android:name=".rhizome.ShareFileActivity" 
-    	    android:label="@string/sf_name">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="*/*" />
-            </intent-filter>
-        </activity>
+		<activity android:name=".rhizome.ShareFileActivity"
+			android:label="@string/sf_name">
+			<intent-filter>
+				<action android:name="android.intent.action.SEND" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="*/*" />
+			</intent-filter>
+		</activity>
 
 		<service android:label="@string/rhizome_share_file_permission_label"
-		    android:name=".rhizome.RhizomeIntentService" 
-		    android:permission="org.servalproject.rhizome.ADD_FILE">
+			android:name=".rhizome.RhizomeIntentService"
+			android:permission="org.servalproject.rhizome.ADD_FILE">
 			<intent-filter>
 				<action android:name="org.servalproject.rhizome.ADD_FILE"/>
 			</intent-filter>
 		</service>
 
-        <provider android:authorities="org.servalproject.files"
-                  android:name=".provider.RhizomeProvider"
-                  android:exported="true"
-                  android:enabled="true"
-                  android:label="Shared Files"
-                  />
+		<provider android:authorities="org.servalproject.files"
+			android:name=".provider.RhizomeProvider"
+			android:exported="true"
+			android:enabled="true"
+			android:label="Shared Files"
+			/>
 
-        <!-- serval meshms service -->
+		<!-- serval meshms service -->
 
-        <activity android:name=".messages.MessagesListActivity"
-		    android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-		    />
+		<activity android:name=".messages.MessagesListActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
 		<activity android:name=".messages.ShowConversationActivity"
-		    android:screenOrientation="portrait"
-		    >
-		    <intent-filter>
-		        <action android:name="android.intent.action.SENDTO" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="sms" />
+			android:screenOrientation="portrait"
+			>
+			<intent-filter>
+				<action android:name="android.intent.action.SENDTO" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="sms" />
 			</intent-filter>
-		    		    <intent-filter>
-		        <action android:name="android.intent.action.SENDTO" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="smsto" />
+			<intent-filter>
+				<action android:name="android.intent.action.SENDTO" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="smsto" />
 			</intent-filter>
 		</activity>
 		<activity android:name=".ui.ContactsActivity"
-		    android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-		    />
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
 		<activity android:name=".ui.MapsActivity"
-		    android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-		    />
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop"
+			/>
 
-    </application>
+	</application>
 
 </manifest>

@@ -16,19 +16,17 @@ import org.json.JSONObject;
 import org.servalproject.api.NetworkAPI;
 import org.servalproject.batphone.CallHandler;
 import org.servalproject.messages.ShowConversationActivity;
+import org.servalproject.sensors.Graphs.GravityGraphActivity;
 import org.servalproject.servald.Peer;
 import org.servalproject.servald.PeerListService;
 import org.servalproject.servald.ServalD;
 import org.servalproject.servaldna.AbstractId;
 import org.servalproject.servaldna.ServalDCommand;
-import org.servalproject.servaldna.ServalDInterfaceException;
 import org.servalproject.servaldna.SubscriberId;
-import org.servalproject.servaldna.keyring.KeyringIdentity;
 import org.servalproject.services.CameraService;
 import org.servalproject.services.RecordingService;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
@@ -116,6 +114,18 @@ public class VisualizationActivity extends Activity {
         @JavascriptInterface
         public String requestSensor(String sid)
         {
+            ServalBatPhoneApplication app = ServalBatPhoneApplication.context;
+            try {
+                SubscriberId sidObject = new SubscriberId(sid);
+
+                Log.i(TAG, "Sending request for " + sid + " to begin broadcasting sensor data");
+                app.displayToastMessage("Sending request for " + sid + " to begin broadcasting sensor data");
+                app.netAPI.sendRequest(sidObject, NetworkAPI.CMD_SENSORS.getBytes());
+                // TODO: Open RemoteSensorActivity from here
+                startActivity(new Intent(getApplicationContext(), GravityGraphActivity.class));
+            } catch (AbstractId.InvalidHexException e) {
+                e.printStackTrace();
+            }
             return "TEST1: " + sid;
         }
 
@@ -148,6 +158,19 @@ public class VisualizationActivity extends Activity {
         @JavascriptInterface
         public String requestAudio(String sid)
         {
+            ServalBatPhoneApplication app = ServalBatPhoneApplication.context;
+            app.displayToastMessage("sensor stuff happening");
+            try {
+                SubscriberId sidObject = new SubscriberId(sid);
+
+                Log.i(TAG, "Sending request for " + sid + " to begin broadcasting sensor data");
+                app.displayToastMessage("Sending request for " + sid + " to begin broadcasting sensor data");
+                JSONObject jo = new JSONObject();
+                jo.put("gravity", "5");
+                app.netAPI.sendRequest(sidObject, jo.toString().getBytes());
+            } catch (AbstractId.InvalidHexException | JSONException e) {
+                e.printStackTrace();
+            }
             return "TEST3: " + sid;
         }
 

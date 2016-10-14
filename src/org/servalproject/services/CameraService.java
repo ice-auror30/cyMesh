@@ -60,13 +60,15 @@ public class CameraService extends Service {
     }
 
     public int onStartCommand (Intent intent, int flags, int startId) {
-        if (intent.getExtras().getString("localSIDString") != null && !intent.getExtras().getString("localSIDString").equals("null")) {
-            localSIDString = intent.getExtras().getString("localSIDString");
-            Log.d(TAG, "onStartCommand. localSIDString passed in: " + localSIDString);
-        }
-        if (intent.getExtras().getString("recorderSIDString") != null && !intent.getExtras().getString("recorderSIDString").equals("null")) {
-            recorderSIDString = intent.getExtras().getString("recorderSIDString");
-            Log.d(TAG, "onStartCommand. recorderSIDString passed in: " + recorderSIDString);
+        if(intent != null) {
+            if (intent.getExtras().getString("localSIDString") != null && !intent.getExtras().getString("localSIDString").equals("null")) {
+                localSIDString = intent.getExtras().getString("localSIDString");
+                Log.d(TAG, "onStartCommand. localSIDString passed in: " + localSIDString);
+            }
+            if (intent.getExtras().getString("recorderSIDString") != null && !intent.getExtras().getString("recorderSIDString").equals("null")) {
+                recorderSIDString = intent.getExtras().getString("recorderSIDString");
+                Log.d(TAG, "onStartCommand. recorderSIDString passed in: " + recorderSIDString);
+            }
         }
         return START_STICKY;
     }
@@ -92,9 +94,6 @@ public class CameraService extends Service {
                     Intent i = new Intent(getApplicationContext(), RecordingService.class);
                     i.putExtra("localSIDString", localSIDString);
                     startService(i);
-//                } else {
-//                    Log.d(TAG, "Broadcast Receiver Triggered on own message sent");
-//                }
                 }
             }
             if(intent.getAction().equals(RecordingService.RECORDING_FINISHED)) {
