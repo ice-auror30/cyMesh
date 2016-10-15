@@ -12,15 +12,13 @@ import org.servalproject.sensors.SensorCollector;
 import org.servalproject.servaldna.SubscriberId;
 
 /**
- * Created by Brad on 10/14/2016.
+ * Created by banson on 10/14/2016.
  */
 public class SensorService extends Service{
     public static final String TAG = SensorCollector.class.getName();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        ServalBatPhoneApplication.context.displayToastMessage("STARTED " + TAG);
-        Log.d(TAG, "Started");
         SensorCollector sc = new SensorCollector(this);
         sc.registerSensors();
         Service thisService = this;

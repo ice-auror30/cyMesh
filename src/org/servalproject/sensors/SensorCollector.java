@@ -10,6 +10,7 @@ import android.util.Log;
 
 /**
  * Created by ejfett4 on 2/14/2016.
+ * Adapted for CyMesh by banson on 10/14/2016.
  */
 public class SensorCollector implements SensorEventListener {
     public static final String SENSOR_BROADCAST = "org.servalproject.batphone.sensors_broadcast";

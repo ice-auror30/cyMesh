@@ -20,7 +20,7 @@ import org.servalproject.sensors.SensorData;
 /**
  * Created by banson on 10/14/2016.
  */
-public class GravityGraphActivity extends BasicGraphActivity implements
+public class AccelerometerGraphActivity extends BasicGraphActivity implements
         OnChartValueSelectedListener,
         SensorEventListener {
 
@@ -28,7 +28,7 @@ public class GravityGraphActivity extends BasicGraphActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SensorManager mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        Sensor gSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        Sensor gSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, gSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         IntentFilter filter = new IntentFilter();
@@ -56,9 +56,9 @@ public class GravityGraphActivity extends BasicGraphActivity implements
                 sensorData.fromJSONString(new String(intent.getByteArrayExtra(NetworkAPI.CMD_DATA)));
                 float timeDiff = ((int) System.currentTimeMillis()) / 100 - beginTime;
                 timeDiff = timeDiff / 10;
-                list.get(0).addSensorEntry(timeDiff, (float) sensorData.gravityData[0], "Gravity");
-                list.get(1).addSensorEntry(timeDiff, (float) sensorData.gravityData[1], "Gravity");
-                list.get(2).addSensorEntry(timeDiff, (float) sensorData.gravityData[2], "Gravity");
+                list.get(0).addSensorEntry(timeDiff, (float) sensorData.accelerometerData[0], "Accelerometer");
+                list.get(1).addSensorEntry(timeDiff, (float) sensorData.accelerometerData[1], "Accelerometer");
+                list.get(2).addSensorEntry(timeDiff, (float) sensorData.accelerometerData[2], "Accelerometer");
             }
         }
     };
@@ -84,13 +84,13 @@ public class GravityGraphActivity extends BasicGraphActivity implements
             }
             case R.id.actionUseLocal: {
                 for(LineChartItem l : list) {
-                    catchGravity(l);
+                    catchAccelerometer(l);
                 }
                 break;
             }
             case R.id.actionSaveGraph: {
                 for(LineChartItem l : list) {
-                    l.saveToGallery("GravityGraph_" + l.axis, 0);
+                    l.saveToGallery("AccelerometerGraph_" + l.axis, 0);
                 }
                 break;
             }
@@ -98,11 +98,9 @@ public class GravityGraphActivity extends BasicGraphActivity implements
         return true;
     }
 
-
-    private void catchGravity(LineChartItem l) {
-        super.captureLocalSensors(l, "Gravity");
+    private void catchAccelerometer(LineChartItem l) {
+        super.captureLocalSensors(l, "Accelerometer");
     }
-
 
     @Override
     protected void onPause() {

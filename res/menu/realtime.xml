@@ -7,15 +7,11 @@
     </item>
     <item
         android:id="@+id/actionClear"
-        android:title="Clear Values">
+        android:title="Clear Values; Stop Gathering">
     </item>
     <item
-        android:id="@+id/actionFeedMultiple"
-        android:title="Fast feed multiple">
-    </item>
-    <item
-        android:id="@+id/actionUseGravity"
-        android:title="Use Gravity Sensor">
+        android:id="@+id/actionUseLocal"
+        android:title="Use Local Sensor">
     </item>
     <item
         android:id="@+id/actionSaveGraph"

@@ -97,7 +97,6 @@
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
 	<!-- uses features -->
-	<uses-feature android:name="android.hardware.wifi.direct" android:required="true"/>
 	<uses-feature android:name="android.hardware.camera" android:required="true" />
 	<uses-feature android:name="android.hardware.wifi" android:required="true" />
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
@@ -107,8 +106,6 @@
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-
-	<service android:enabled="true" android:name="org.servalproject.sensors.WiFiDirect.FileTransferService"/>
 
 	<application
 		android:icon="@drawable/ic_launcher"
@@ -125,8 +122,7 @@
 		</activity>
 		<activity android:name=".Main"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTask"
-			>
+			android:launchMode="singleTask">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -134,62 +130,53 @@
 		</activity>
 		<activity android:name=".ui.ShareUsActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".ui.SettingsScreenActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".ui.SettingsMeshMSScreenActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name="VisualizationActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
+		<activity android:name=".sensors.Graphs.BasicGraphActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop" />
 		<activity android:name=".sensors.Graphs.GravityGraphActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
-
+			android:launchMode="singleTop"/>
+		<activity android:name=".sensors.Graphs.AccelerometerGraphActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop" />
+		<activity android:name=".sensors.Graphs.GyroscopeGraphActivity"
+			android:screenOrientation="portrait"
+			android:launchMode="singleTop" />
 		<activity android:name=".ui.AccountsSettingsActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".ui.Networks"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".ui.AdhocPreferences"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".ui.SetupActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
-
+			android:launchMode="singleTop" />
 		<activity android:name=".ui.help.HtmlHelp"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
-
+			android:launchMode="singleTop" />
 		<activity android:name=".wizard.Wizard"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".wizard.SetPhoneNumber"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
-
+			android:launchMode="singleTop" />
 		<activity android:name=".batphone.CallDirector"
 			android:excludeFromRecents="true"
 			android:screenOrientation="portrait"
-			android:taskAffinity="org.servalproject.Call"
-			/>
-
+			android:taskAffinity="org.servalproject.Call" />
 		<activity android:name=".batphone.UnsecuredCall"
 			android:excludeFromRecents="true"
 			android:screenOrientation="portrait"
@@ -205,13 +192,11 @@
 
 		<activity android:name=".LogActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".PeerList"
 			android:label="Serval BatPhone - Peer List"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			>
+			android:launchMode="singleTop">
 			<intent-filter>
 				<action android:name="org.servalproject.PICK_FROM_PEER_LIST" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -220,8 +205,7 @@
 		<activity android:name=".NeighborList"
 			android:label="Serval BatPhone - Neighbor List"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			>
+			android:launchMode="singleTop">
 			<intent-filter>
 				<action android:name="org.servalproject.PICK_FROM_NEIGHBOR_LIST" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -313,22 +297,18 @@
 		<activity android:name=".rhizome.SensorList"
 			android:label="@string/rhizome_sensor_list_appname"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".rhizome.RhizomeList"
 			android:label="@string/rhizome_list_appname"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".rhizome.RhizomeSaved"
 			android:label="@string/rhizome_saved_appname"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".rhizome.RhizomeStorage"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 
 		<activity android:name=".rhizome.ShareFileActivity"
 			android:label="@string/sf_name">
@@ -358,11 +338,9 @@
 
 		<activity android:name=".messages.MessagesListActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".messages.ShowConversationActivity"
-			android:screenOrientation="portrait"
-			>
+			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.SENDTO" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -376,12 +354,10 @@
 		</activity>
 		<activity android:name=".ui.ContactsActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 		<activity android:name=".ui.MapsActivity"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"
-			/>
+			android:launchMode="singleTop" />
 
 	</application>
 
