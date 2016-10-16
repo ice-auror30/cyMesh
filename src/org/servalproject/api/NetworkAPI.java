@@ -260,13 +260,15 @@ public class NetworkAPI {
     }
 
     // Dirty, Dirty Hacks
-    class MspListener extends AsyncTask<Void, Void, Void> {
+    private class MspListener extends AsyncTask<Void, Void, Void> {
         protected Void doInBackground(Void... v) {
             try {
                 ServalDCommand.mspTunnnelCreate(TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
             } catch (ServalDFailureException e) {
                 e.printStackTrace();
             }
+
+            return null;
         }
     }
 
@@ -281,6 +283,8 @@ public class NetworkAPI {
             } catch (ServalDFailureException e) {
                 e.printStackTrace();
             }
+
+            return null;
         }
     }
 }
