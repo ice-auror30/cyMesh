@@ -164,7 +164,6 @@ public class NetworkAPI {
         try {
             Log.i(TAG, "Sending File");
             Log.d(TAG, "Creating MSP Tunnel");
-            Log.d(TAG, app.server.getExecPath());
             MspListener listener = new MspListener();
             listener.execute();
 
