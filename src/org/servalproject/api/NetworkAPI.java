@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
@@ -163,16 +164,18 @@ public class NetworkAPI {
     public boolean sendFile(SubscriberId dst, File file, Command cmd) {
         try {
             Log.i(TAG, "Sending File");
+
+            Log.d(TAG, "Connecting to tunnel socket");
+            Socket tunneledSocket = new Socket();
+            tunneledSocket.bind(new InetSocketAddress(TCP_TRANSFER_PORT));
+            InputStream inStream = tunneledSocket.getInputStream();
+
             Log.d(TAG, "Creating MSP Tunnel");
             MspListener listener = new MspListener();
             listener.execute();
 
             Log.d(TAG, "Sending START Command");
             sendStart(dst, cmd);
-
-            Log.d(TAG, "Connecting to tunnel socket");
-            Socket tunneledSocket = new Socket("localhost", TCP_TRANSFER_PORT);
-            InputStream inStream = tunneledSocket.getInputStream();
 
             Log.d(TAG, "Waiting for RDY command");
             // Wait for the receiving socket to be ready
