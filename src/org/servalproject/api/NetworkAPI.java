@@ -1,6 +1,7 @@
 package org.servalproject.api;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.servalproject.ServalBatPhoneApplication;
@@ -164,7 +165,8 @@ public class NetworkAPI {
             Log.i(TAG, "Sending File");
             Log.d(TAG, "Creating MSP Tunnel");
             Log.d(TAG, app.server.getExecPath());
-            ServalDCommand.mspTunnnelCreate(TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
+            MspListener listener = new MspListener();
+            listener.execute();
 
             Log.d(TAG, "Sending START Command");
             sendStart(dst, cmd);
@@ -203,11 +205,10 @@ public class NetworkAPI {
             sendEnd(dst, MESH_TRANSFER);
             Log.i(TAG, "Finished File Transfer");
 
+            listener.cancel(true);
+
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } catch (ServalDFailureException e) {
             e.printStackTrace();
             return false;
         }
@@ -217,7 +218,8 @@ public class NetworkAPI {
         try {
             Log.i(TAG, "Receiving File");
             Log.d(TAG, "Opening Tunnel");
-            ServalDCommand.mspTunnelConnect(TCP_TRANSFER_PORT, frm, MDP_TRANSFER_PORT);
+            MspConnector connector = new MspConnector();
+            connector.execute(frm);
 
             Socket tunnelSocket = new Socket("localhost", TCP_TRANSFER_PORT);
             tunnelSocket.getOutputStream().write("RDY".getBytes());
@@ -237,9 +239,9 @@ public class NetworkAPI {
             inStream.close();
             tunnelSocket.close();
             Log.i(TAG, "Finished File Transfer");
+
+            connector.cancel(true);
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ServalDFailureException e) {
             e.printStackTrace();
         }
     }
@@ -254,6 +256,31 @@ public class NetworkAPI {
 
         CommandType(byte value) {
             this.value = value;
+        }
+    }
+
+    // Dirty, Dirty Hacks
+    class MspListener extends AsyncTask<Void, Void, Void> {
+        protected Void doInBackground(Void... v) {
+            try {
+                ServalDCommand.mspTunnnelCreate(TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
+            } catch (ServalDFailureException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class MspConnector extends AsyncTask<SubscriberId, Void, Void> {
+        protected Void doInBackground(SubscriberId... s) {
+            if (s.length != 1) {
+                throw new IllegalArgumentException("Needs 1 subscriber id");
+            }
+
+            try {
+                ServalDCommand.mspTunnelConnect(TCP_TRANSFER_PORT, s[0], MDP_TRANSFER_PORT);
+            } catch (ServalDFailureException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
