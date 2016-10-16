@@ -2,6 +2,7 @@ package org.servalproject.api;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 
 import org.servalproject.ServalBatPhoneApplication;
@@ -233,7 +234,8 @@ public class NetworkAPI {
 
             InputStream inStream = tunnelSocket.getInputStream();
             byte[] buffer = new byte[cmd.getExtraInt("length")];
-            File file = new File(cmd.getExtraString("filename"));
+            File file = new File(Environment.getExternalStorageDirectory() + File.separator
+                    + cmd.getExtraString("filename"));
             FileOutputStream fos = new FileOutputStream(file);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
 

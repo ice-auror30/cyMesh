@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -104,7 +105,8 @@ public class VisualizationActivity extends Activity {
                 SubscriberId sidObject = new SubscriberId(sid);
 
                 Log.i(TAG, "Sending File");
-                File file = new File("/etc/ssh/sshd_config");
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator
+                    + Environment.DIRECTORY_DCIM + File.separator + "remoteVideo002215.mp4");
                 app.netAPI.sendFile(sidObject, file);
                 return true;
             } catch (AbstractId.InvalidHexException e) {
