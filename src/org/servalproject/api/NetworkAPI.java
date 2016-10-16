@@ -172,12 +172,12 @@ public class NetworkAPI {
             MspListener listener = new MspListener();
             listener.execute();
 
+            Log.d(TAG, "Sending START Command");
+            sendStart(dst, cmd);
+
             Log.d(TAG, "Accepting tunnel socket");
             Socket tunneledSocket = ss.accept();
             InputStream inStream = tunneledSocket.getInputStream();
-
-            Log.d(TAG, "Sending START Command");
-            sendStart(dst, cmd);
 
             Log.d(TAG, "Waiting for RDY command");
             // Wait for the receiving socket to be ready
