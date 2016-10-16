@@ -168,13 +168,13 @@ public class NetworkAPI {
 
             ServerSocket ss = new ServerSocket(TCP_TRANSFER_PORT);
 
-            Log.d(TAG, "Connecting to tunnel socket");
-            Socket tunneledSocket = ss.accept();
-            InputStream inStream = tunneledSocket.getInputStream();
-
             Log.d(TAG, "Creating MSP Tunnel");
             MspListener listener = new MspListener();
             listener.execute();
+
+            Log.d(TAG, "Accepting tunnel socket");
+            Socket tunneledSocket = ss.accept();
+            InputStream inStream = tunneledSocket.getInputStream();
 
             Log.d(TAG, "Sending START Command");
             sendStart(dst, cmd);
