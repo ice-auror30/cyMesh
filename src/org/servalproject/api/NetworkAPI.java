@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -165,9 +166,10 @@ public class NetworkAPI {
         try {
             Log.i(TAG, "Sending File");
 
+            ServerSocket ss = new ServerSocket(TCP_TRANSFER_PORT);
+
             Log.d(TAG, "Connecting to tunnel socket");
-            Socket tunneledSocket = new Socket();
-            tunneledSocket.bind(new InetSocketAddress(TCP_TRANSFER_PORT));
+            Socket tunneledSocket = ss.accept();
             InputStream inStream = tunneledSocket.getInputStream();
 
             Log.d(TAG, "Creating MSP Tunnel");
@@ -208,6 +210,9 @@ public class NetworkAPI {
             Log.i(TAG, "Finished File Transfer");
 
             listener.cancel(true);
+
+            if (!ss.isClosed())
+                ss.close();
 
             return true;
         } catch (IOException e) {
