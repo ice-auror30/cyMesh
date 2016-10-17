@@ -15,6 +15,10 @@ public class Command {
         this.action = action;
     }
 
+    public boolean contains(String key) {
+        return this.extras.containsKey(key);
+    }
+
     /////////////
     // Setters //
     /////////////

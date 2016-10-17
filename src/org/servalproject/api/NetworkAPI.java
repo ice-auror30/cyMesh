@@ -232,10 +232,18 @@ public class NetworkAPI {
             Socket tunnelSocket = new Socket("localhost", TCP_TRANSFER_PORT);
             tunnelSocket.getOutputStream().write("RDY".getBytes());
 
+            String filename = "";
+            if (cmd.contains("dstPath")) {
+                filename = Environment.getExternalStorageDirectory() + File.separator
+                        + cmd.getExtraString("dstPath") + File.separator + cmd.getExtraString("filename");
+            } else {
+                filename = Environment.getExternalStorageDirectory() + File.separator
+                        + cmd.getExtraString("filename");
+            }
+
             InputStream inStream = tunnelSocket.getInputStream();
             byte[] buffer = new byte[cmd.getExtraInt("length")];
-            File file = new File(Environment.getExternalStorageDirectory() + File.separator
-                    + cmd.getExtraString("filename"));
+            File file = new File(filename);
             FileOutputStream fos = new FileOutputStream(file);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
 
