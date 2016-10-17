@@ -298,6 +298,7 @@ public class ServalBatPhoneApplication extends Application {
 				}
 
 				netAPI = NetworkAPI.getInstance();
+				netAPI.initCommands();
 			}
 		});
 	}

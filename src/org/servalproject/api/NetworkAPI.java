@@ -1,12 +1,15 @@
 package org.servalproject.api;
 
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 
 import org.servalproject.ServalBatPhoneApplication;
 import org.servalproject.protocol.CommandsProtocol;
 import org.servalproject.servaldna.AsyncResult;
 import org.servalproject.servaldna.ServalDCommand;
+import org.servalproject.servaldna.ServalDFailureException;
 import org.servalproject.servaldna.ServalDInterfaceException;
 import org.servalproject.servaldna.SubscriberId;
 
@@ -18,6 +21,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -52,7 +57,7 @@ public class NetworkAPI {
         app = ServalBatPhoneApplication.context;
     }
 
-    private void initCommands() {
+    public void initCommands() {
         try {
             if (commandSocket == null) {
                 commandSocket = app.server.getCommandProtocol(new AsyncResult<CommandsProtocol.ProtocolResult>() {
@@ -174,14 +179,18 @@ public class NetworkAPI {
     public boolean sendFile(SubscriberId dst, File file, Command cmd) {
         try {
             Log.i(TAG, "Sending File");
+
+            ServerSocket ss = new ServerSocket(TCP_TRANSFER_PORT);
+
             Log.d(TAG, "Creating MSP Tunnel");
-            ServalDCommand.mspTunnnelCreate("servald", TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
+            MspListener listener = new MspListener();
+            listener.execute();
 
             Log.d(TAG, "Sending START Command");
             sendStart(dst, cmd);
 
-            Log.d(TAG, "Connecting to tunnel socket");
-            Socket tunneledSocket = new Socket("localhost", TCP_TRANSFER_PORT);
+            Log.d(TAG, "Accepting tunnel socket");
+            Socket tunneledSocket = ss.accept();
             InputStream inStream = tunneledSocket.getInputStream();
 
             Log.d(TAG, "Waiting for RDY command");
@@ -214,6 +223,11 @@ public class NetworkAPI {
             sendEnd(dst, MESH_TRANSFER);
             Log.i(TAG, "Finished File Transfer");
 
+            listener.cancel(true);
+
+            if (!ss.isClosed())
+                ss.close();
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -225,14 +239,24 @@ public class NetworkAPI {
         try {
             Log.i(TAG, "Receiving File");
             Log.d(TAG, "Opening Tunnel");
-            ServalDCommand.mspTunnelConnect("servald", TCP_TRANSFER_PORT, frm, MDP_TRANSFER_PORT);
+            MspConnector connector = new MspConnector();
+            connector.execute(frm);
 
             Socket tunnelSocket = new Socket("localhost", TCP_TRANSFER_PORT);
             tunnelSocket.getOutputStream().write("RDY".getBytes());
 
+            String filename = "";
+            if (cmd.contains("dstPath")) {
+                filename = Environment.getExternalStorageDirectory() + File.separator
+                        + cmd.getExtraString("dstPath") + File.separator + cmd.getExtraString("filename");
+            } else {
+                filename = Environment.getExternalStorageDirectory() + File.separator
+                        + cmd.getExtraString("filename");
+            }
+
             InputStream inStream = tunnelSocket.getInputStream();
             byte[] buffer = new byte[cmd.getExtraInt("length")];
-            File file = new File(cmd.getExtraString("filename"));
+            File file = new File(filename);
             FileOutputStream fos = new FileOutputStream(file);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
 
@@ -245,6 +269,8 @@ public class NetworkAPI {
             inStream.close();
             tunnelSocket.close();
             Log.i(TAG, "Finished File Transfer");
+
+            connector.cancel(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -261,6 +287,35 @@ public class NetworkAPI {
 
         CommandType(byte value) {
             this.value = value;
+        }
+    }
+
+    // Dirty, Dirty Hacks
+    private class MspListener extends AsyncTask<Void, Void, Void> {
+        protected Void doInBackground(Void... v) {
+            try {
+                ServalDCommand.mspTunnnelCreate(TCP_TRANSFER_PORT, MDP_TRANSFER_PORT);
+            } catch (ServalDFailureException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+    }
+
+    class MspConnector extends AsyncTask<SubscriberId, Void, Void> {
+        protected Void doInBackground(SubscriberId... s) {
+            if (s.length != 1) {
+                throw new IllegalArgumentException("Needs 1 subscriber id");
+            }
+
+            try {
+                ServalDCommand.mspTunnelConnect(TCP_TRANSFER_PORT, s[0], MDP_TRANSFER_PORT);
+            } catch (ServalDFailureException e) {
+                e.printStackTrace();
+            }
+
+            return null;
         }
     }
 }
