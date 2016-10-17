@@ -19,15 +19,15 @@ public class SensorService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        SensorCollector sc = new SensorCollector(this);
+        final SensorCollector sc = new SensorCollector(this);
         sc.registerSensors();
-        Service thisService = this;
+        final Service thisService = this;
 
         HandlerThread mHandlerThread = new HandlerThread("sensor-handler");
         mHandlerThread.start();
-        Handler handler = new Handler(mHandlerThread.getLooper());
+        final Handler handler = new Handler(mHandlerThread.getLooper());
 
-        Runnable starter = new Runnable() {
+        final Runnable starter = new Runnable() {
             @Override
             public void run() {
                 if (sc.getSensorData() != null) {

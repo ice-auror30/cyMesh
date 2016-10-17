@@ -661,8 +661,8 @@ ${manifest.id.line}${manifest.bk.line}${manifest.version.line}</echo>
 	srcdir="jni/serval-dna/java"
 	excludes="org/servalproject/test/**"
 	destdir="bin/classes"
-	target="1.5"
-	source="1.5"
+	target="1.7"
+	source="1.7"
 	debug="true"
       />
     </target>

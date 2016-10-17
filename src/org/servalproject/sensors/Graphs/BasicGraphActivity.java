@@ -70,7 +70,7 @@ public class BasicGraphActivity extends Activity implements
         return true;
     }
 
-    public void captureLocalSensors(LineChartItem l, String sensorType) {
+    public void captureLocalSensors(final LineChartItem l, final String sensorType) {
 
         beginTime = ((int) System.currentTimeMillis()) / 100;
         run = true;
